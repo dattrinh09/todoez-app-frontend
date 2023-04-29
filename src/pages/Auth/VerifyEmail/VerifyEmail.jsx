@@ -12,6 +12,7 @@ const VerifyEmail = () => {
   const [isVerify, setIsVerify] = useState(false);
   useEffect(() => {
     const verifyUrl = async () => {
+      setIsLoading(true);
       const email = searchParams.get("email");
       const token = searchParams.get("token");
       if (email && token) {
@@ -20,9 +21,9 @@ const VerifyEmail = () => {
             `http://localhost:8080/api/auth/verify/${email}/${token}`
           );
           setIsVerify(true);
-          setIsLoading(false);
         } catch {
           setIsVerify(false);
+        } finally {
           setIsLoading(false);
         }
       }

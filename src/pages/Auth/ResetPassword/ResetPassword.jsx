@@ -7,13 +7,15 @@ import {
   SubmitBtn,
 } from "../auth-styles";
 import { Form, Input, Result } from "antd";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../../components/Loader/Loader";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
+import { notificationShow } from "../../../utils/notificationShow";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isVerify, setIsVerify] = useState(false);
   const [error, setError] = useState("");
@@ -21,15 +23,16 @@ const ResetPassword = () => {
   const token = searchParams.get("token");
   useEffect(() => {
     const verifyUrl = async () => {
+      setIsLoading(true);
       if (email && token) {
         try {
           await axios.get(
             `http://localhost:8080/api/auth/verify/${email}/${token}`
           );
           setIsVerify(true);
-          setIsLoading(false);
         } catch {
           setIsVerify(false);
+        } finally {
           setIsLoading(false);
         }
       }
@@ -43,6 +46,12 @@ const ResetPassword = () => {
         `http://localhost:8080/api/auth/reset-password/${email}`,
         { password: values.password }
       );
+      notificationShow(
+        "success",
+        "Reset password successfully",
+        "From now on you can use new password to signin."
+      );
+      navigate(ConstantsPath.SIGN_IN);
     } catch (e) {
       setError(e.response.data.message);
     }
