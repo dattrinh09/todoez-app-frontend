@@ -11,6 +11,7 @@ import { Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
 import axios from "axios";
+import { PhoneNumberFormat } from "../../../constants/Constants";
 
 const SignUp = () => {
   const [error, setError] = useState();
@@ -76,8 +77,17 @@ const SignUp = () => {
               {
                 required: true,
                 message: "Please fill in your phone number.",
-                whitespace: true,
               },
+              () => ({
+                validator(_, value) {
+                  if (!value || value.match(PhoneNumberFormat)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Phone number not valid")
+                  );
+                },
+              })
             ]}
           >
             <Input />

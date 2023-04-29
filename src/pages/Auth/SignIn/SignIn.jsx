@@ -11,13 +11,15 @@ import {
   LinkContainer,
   SubmitBtn,
 } from "../auth-styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
 import axios from "axios";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleConstants } from "../../../constants/Constants";
+import { notificationShow } from "../../../utils/notificationShow";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const handleFinish = async (values) => {
     try {
@@ -26,6 +28,7 @@ const SignIn = () => {
         values
       );
       localStorage.setItem("token", res.data.access_token);
+      navigate(ConstantsPath.PROFILE);
     } catch (e) {
       setError(e.response.data.message);
     }
@@ -37,9 +40,10 @@ const SignIn = () => {
         "http://localhost:8080/api/auth/google/signin",
         { googleToken: credentialResponse.credential }
       );
-      console.log(res);
+      localStorage.setItem("token", res.data.access_token);
+      navigate(ConstantsPath.PROFILE);
     } catch (e) {
-      console.log(e);
+      setError(e.response.data.message);
     }
   };
 
@@ -107,7 +111,7 @@ const SignIn = () => {
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => {
-                  console.log("Google sign in error");
+                  notificationShow("error", "Google sign in unsuccessfully", "Something went wrong");
                 }}
               />
             </GoogleOAuthProvider>
