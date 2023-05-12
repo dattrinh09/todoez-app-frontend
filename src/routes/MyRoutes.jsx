@@ -14,6 +14,7 @@ import Profile from "../pages/Profile/Profile";
 import ProjectList from "../pages/Project/ProjectList/ProjectList";
 import Loader from "../components/Loader/Loader";
 import TeamList from "../pages/Team/TeamList/TeamList";
+import TeamDetail from "../pages/Team/TeamDetail/TeamDetail";
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useLogin();
@@ -50,6 +51,7 @@ const MyRoutes = () => {
           <Route path={ConstantsPath.PROFILE} element={<Profile />} />
           <Route path={ConstantsPath.PROJECT_LIST} element={<ProjectList />} />
           <Route path={ConstantsPath.TEAM_LIST} element={<TeamList />} />
+          <Route path={ConstantsPath.TEAM_DETAIL} element={<TeamDetail />} />
         </Route>
       </Routes>
     </Suspense>

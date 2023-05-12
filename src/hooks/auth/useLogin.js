@@ -6,7 +6,7 @@ import { userInfoStore } from "../../stores/reducers/userSlice";
 const useLogin = () => {
   const dispatch = useDispatch();
   const [isChecking, setIsChecking] = useState(true);
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState(null);
   const isLogin = useMemo(() => {
     return !!userInfo;
   }, [userInfo]);
