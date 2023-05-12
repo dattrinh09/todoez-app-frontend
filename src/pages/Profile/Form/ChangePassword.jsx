@@ -12,12 +12,13 @@ const ChangePassword = ({ open, onClose }) => {
       .validateFields()
       .then(async (values) => {
         try {
-          await axiosInstance.post("users/change-password", values);
+          await axiosInstance.put("users/change-password", values);
           notificationShow(
             "success",
             "Change password successfully",
             "From now on you can use new password to signin."
           );
+          changeForm.resetFields();
           onClose();
         } catch (e) {
           setError(e.response.data.message);

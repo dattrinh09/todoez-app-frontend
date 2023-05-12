@@ -23,7 +23,7 @@ const EditProfile = ({ open, onClose, info }) => {
       .then(async (values) => {
         console.log(values);
         try {
-          const res = await axiosInstance.post("users/update-profile", values);
+          const res = await axiosInstance.put("users/update-profile", values);
           notificationShow(
             "success",
             "Update profile successfully",

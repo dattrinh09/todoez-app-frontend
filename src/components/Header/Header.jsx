@@ -18,7 +18,7 @@ import axiosInstance from "../../request/axiosInstance";
 import { userInfoRemove } from "../../stores/reducers/userSlice";
 
 const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { userInfo } = useSelector(userSelector);
   const dispatch = useDispatch();
   const handleSignout = async () => {
@@ -50,6 +50,9 @@ const Header = () => {
         <Menu>
           {userInfo ? (
             <>
+              <Link to="">
+                <Item>Tasks</Item>
+              </Link>
               <Link to={ConstantsPath.PROJECT_LIST}>
                 <Item>Projects</Item>
               </Link>

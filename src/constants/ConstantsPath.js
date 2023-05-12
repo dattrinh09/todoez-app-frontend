@@ -10,4 +10,5 @@ export const ConstantsPath = {
     PROFILE: "/profile",
     PROJECT_LIST: "/project",
     TEAM_LIST: "/team",
+    TEAM_DETAIL: "/team/:team_id",
 }
