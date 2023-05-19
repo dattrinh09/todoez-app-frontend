@@ -4,7 +4,7 @@ import { ErrorMsg } from "../team-detail-styles";
 import axiosInstance from "../../../../request/axiosInstance";
 import { notificationShow } from "../../../../utils/notificationShow";
 
-const AddUser = ({ open, teamId, onClose, reFetch }) => {
+const AddUser = ({ open, teamId, onClose, teamRefetch, teamUsersRefetch }) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [addForm] = Form.useForm();
   const handleAddUser = () => {
@@ -20,7 +20,8 @@ const AddUser = ({ open, teamId, onClose, reFetch }) => {
           );
           addForm.resetFields();
           onClose();
-          reFetch();
+          teamRefetch();
+          teamUsersRefetch();
         } catch (e) {
           setErrorMsg(e.response.data.message);
         }

@@ -14,11 +14,17 @@ import {
   SubTitle,
   Title,
 } from "./hero-page-styles";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ConstantsPath } from "../../constants/ConstantsPath";
 import image from "../../assets/image1.svg";
 
 const HeroPage = () => {
+  const navigate = useNavigate();
+  const handleClickStart = () => {
+    const token = localStorage.getItem("token");
+    if (token) navigate(ConstantsPath.MY_PAGE);
+    else navigate(ConstantsPath.SIGN_UP);
+  };
   return (
     <MainLayout>
       <HeroLayout>
@@ -49,13 +55,15 @@ const HeroPage = () => {
                 Manage your project
               </Item>
             </Menu>
-            <Link to={ConstantsPath.SIGN_UP}>
-              <HeroButton>Get Started</HeroButton>
-            </Link>
+            <HeroButton onClick={handleClickStart}>Get Started</HeroButton>
           </Section>
           <HeroPhoto>
             <Photo>
-              <img src={image} alt="work" style={{ height: "100%", width: "100%" }} />
+              <img
+                src={image}
+                alt="work"
+                style={{ height: "100%", width: "100%" }}
+              />
             </Photo>
           </HeroPhoto>
         </Container>

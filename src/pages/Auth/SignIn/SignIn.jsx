@@ -28,7 +28,7 @@ const SignIn = () => {
         values
       );
       localStorage.setItem("token", res.data.access_token);
-      navigate(ConstantsPath.PROFILE);
+      navigate(ConstantsPath.MY_PAGE);
     } catch (e) {
       setError(e.response.data.message);
     }
@@ -41,7 +41,7 @@ const SignIn = () => {
         { googleToken: credentialResponse.credential }
       );
       localStorage.setItem("token", res.data.access_token);
-      navigate(ConstantsPath.PROFILE);
+      navigate(ConstantsPath.MY_PAGE);
     } catch (e) {
       setError(e.response.data.message);
     }

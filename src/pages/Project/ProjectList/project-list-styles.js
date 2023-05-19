@@ -1,15 +1,14 @@
 import styled from "styled-components";
 
-export const TeamListLayout = styled.div``;
+export const ProjectListLayout = styled.div``;
 
 export const Container = styled.div`
-  padding-top: 30px;
   width: 1200px;
   margin: 0 auto;
 `;
 
 export const Heading = styled.div`
-  margin-bottom: 30px;
+  padding: 30px 0;
   font-size: 24px;
   font-weight: 700;
   color: #1677ff;
@@ -25,7 +24,6 @@ export const Items = styled.ul`
 
 export const Item = styled.li`
   width: 200px;
-  background-color: #e6f7ff;
   border-radius: 5px;
   border: 1px solid #aaa;
   padding: 10px;

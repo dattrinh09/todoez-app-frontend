@@ -1,44 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { FormContainer, FormLayout, SubmitBtn } from "../auth-styles";
 import { Link, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import { Result } from "antd";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
 import Loader from "../../../components/Loader/Loader";
+import useVerifyAccount from "../../../hooks/auth/useVerifyAccount";
 
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isVerify, setIsVerify] = useState(false);
-  useEffect(() => {
-    const verifyUrl = async () => {
-      setIsLoading(true);
-      const email = searchParams.get("email");
-      const token = searchParams.get("token");
-      if (email && token) {
-        try {
-          await axios.get(
-            `http://localhost:8080/api/auth/verify/${email}/${token}`
-          );
-          setIsVerify(true);
-        } catch {
-          setIsVerify(false);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-    verifyUrl();
-  }, [searchParams]);
+  const email = searchParams.get("email");
+  const token = searchParams.get("token");
+  const { isAccountVerifying, isAccountVerified } = useVerifyAccount(email, token);
 
   return (
     <FormLayout>
       <FormContainer>
-        {isLoading ? (
+        {isAccountVerifying ? (
           <Loader />
         ) : (
           <>
-            {isVerify ? (
+            {isAccountVerified ? (
               <Result
                 status="success"
                 title="Verify e-mail success!"

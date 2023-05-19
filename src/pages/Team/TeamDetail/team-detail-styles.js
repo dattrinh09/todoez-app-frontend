@@ -1,4 +1,3 @@
-import { Button } from "antd";
 import styled from "styled-components";
 
 export const TeamDetailLayout = styled.div``;
@@ -9,22 +8,39 @@ export const Container = styled.div`
 `;
 
 export const Heading = styled.div`
-  margin: 30px 0;
+  padding-top: 30px;
   display: flex;
-  gap: 10px;
+  gap: 20px;
 `;
 
 export const Title = styled.div`
   font-size: 24px;
   font-weight: 700;
   color: #1677ff;
-`
+`;
 
 export const BtnGroup = styled.div`
   margin-top: 7px;
   display: flex;
   gap: 5px;
-`
+`;
+
+export const Sub = styled.div`
+  margin-top: 5px;
+  margin-bottom: 30px;
+  font-weight: 600;
+  display: flex;
+  gap: 5px;
+`;
+
+export const SubIcon = styled.div`
+  color: #1677ff;
+`;
+
+export const SubText = styled.span`
+  font-size: 18px;
+  color: #888;
+`;
 
 export const Section = styled.div``;
 
@@ -39,7 +55,7 @@ export const Item = styled.li`
 
 export const ItemTitle = styled.p`
   font-size: 18px;
-  font-weight: ${props => props.isCreator ? "600" : ""};
+  font-weight: ${(props) => (props.isCreator ? "600" : "")};
   width: 200px;
   color: #333;
 `;

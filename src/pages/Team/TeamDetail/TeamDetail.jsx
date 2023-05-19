@@ -9,28 +9,38 @@ import {
   Section,
   TeamDetailLayout,
   Title,
+  Sub,
+  SubIcon,
+  SubText,
 } from "./team-detail-styles";
 import Loader from "../../../components/Loader/Loader";
 import NotFoundPage from "../../NotFoundPage/NotFoundPage";
 import TeamUsers from "./TeamUsers";
 import { Button, Modal } from "antd";
 import {
-  PlusCircleOutlined,
   EditOutlined,
   DeleteOutlined,
+  UserOutlined,
+  UserAddOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import AddUser from "./Form/AddUser";
 import ChangeName from "./Form/ChangeName";
 import axiosInstance from "../../../request/axiosInstance";
 import { notificationShow } from "../../../utils/notificationShow";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
+import useGetTeamUsers from "../../../hooks/team/user/useGetTeamUsers";
+import { formatDate } from "../../../utils/formatInfo";
 
 const { confirm } = Modal;
 
 const TeamDetail = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { isLoading, teamInfo, setIsFetch } = useGetTeam(params.team_id);
+  const { isTeamLoading, teamInfo, teamFetch } = useGetTeam(params.team_id);
+  const { isTeamUsersLoading, teamUsers, teamUsersFetch } = useGetTeamUsers(
+    params.team_id
+  );
   const [isAdd, setIsAdd] = useState(false);
   const [isChange, setIsChange] = useState(false);
   const handleDelete = async (id) => {
@@ -57,7 +67,7 @@ const TeamDetail = () => {
     <MainLayout>
       <TeamDetailLayout>
         <Container>
-          {isLoading ? (
+          {isTeamLoading ? (
             <Loader />
           ) : (
             <>
@@ -67,37 +77,51 @@ const TeamDetail = () => {
                 <>
                   <Heading>
                     <Title>{teamInfo.team.name}</Title>
+                  </Heading>
+                  <Sub>
+                    <SubIcon>
+                      <CalendarOutlined />
+                    </SubIcon>
+                    <SubText>
+                      {formatDate(teamInfo.team.create_time).toLocaleString()}
+                    </SubText>
+                    <SubIcon>
+                      <UserOutlined />
+                    </SubIcon>
+                    <SubText>{teamInfo.user_number}</SubText>
                     {teamInfo.is_creator && (
-                      <BtnGroup>
+                      <>
                         <Button
                           shape="circle"
                           size="small"
+                          type="primary"
                           icon={<EditOutlined />}
                           onClick={() => setIsChange(true)}
                         />
                         <Button
                           shape="circle"
                           size="small"
+                          type="primary"
                           danger
                           icon={<DeleteOutlined />}
                           onClick={() => handleDelete(params.team_id)}
                         />
-                      </BtnGroup>
+                      </>
                     )}
-                  </Heading>
+                  </Sub>
                   {isChange && (
                     <ChangeName
                       open={isChange}
                       teamId={teamInfo.team.id}
                       onClose={() => setIsChange(false)}
-                      reFetch={() => setIsFetch(true)}
+                      teamRefetch={() => teamFetch(true)}
                     />
                   )}
                   {teamInfo.is_creator && (
                     <Button
                       size="large"
                       type="primary"
-                      icon={<PlusCircleOutlined />}
+                      icon={<UserAddOutlined />}
                       onClick={() => setIsAdd(true)}
                     >
                       Add user
@@ -108,11 +132,21 @@ const TeamDetail = () => {
                       open={isAdd}
                       teamId={teamInfo.team.id}
                       onClose={() => setIsAdd(false)}
-                      reFetch={() => setIsFetch(true)}
+                      teamRefetch={() => teamFetch(true)}
+                      teamUsersRefetch={() => teamUsersFetch(true)}
                     />
                   )}
                   <Section>
-                    <TeamUsers teamId={teamInfo.team.id} />
+                    {isTeamUsersLoading ? (
+                      <Loader />
+                    ) : (
+                      <TeamUsers
+                        teamId={teamInfo.team.id}
+                        teamUsers={teamUsers}
+                        teamRefetch={() => teamFetch(true)}
+                        teamUsersRefetch={() => teamUsersFetch(true)}
+                      />
+                    )}
                   </Section>
                 </>
               )}

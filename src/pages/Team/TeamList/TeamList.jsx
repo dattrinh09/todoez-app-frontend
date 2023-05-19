@@ -21,7 +21,7 @@ import { getTeamRoute } from "../../../utils/route";
 
 const TeamList = () => {
   const [open, setOpen] = useState(false);
-  const { isLoading, teams, setIsFetch } = useGetTeams();
+  const { isTeamsLoading, teams, teamsFetch } = useGetTeams();
   const [createForm] = Form.useForm();
   const [error, setError] = useState("");
   const handleCreateTeam = () => {
@@ -37,7 +37,7 @@ const TeamList = () => {
           );
           createForm.resetFields();
           setOpen(false);
-          setIsFetch(true);
+          teamsFetch(true);
         } catch (e) {
           setError(e.response.data.message);
         }
@@ -89,7 +89,7 @@ const TeamList = () => {
             </Form>
           </Modal>
           <Section>
-            {isLoading ? (
+            {isTeamsLoading ? (
               <Loader />
             ) : (
               <Items>

@@ -55,6 +55,7 @@ export const HeroButton = styled.div`
     padding: 5px 0;
     margin: 50px auto;
     border-radius: 10px;
+    cursor: pointer;
 `
 
 export const HeroPhoto = styled.div`
