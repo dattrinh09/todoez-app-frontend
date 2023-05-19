@@ -4,15 +4,15 @@ import axiosInstance from "../../request/axiosInstance";
 const useGetTeam = (id) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFetch, setIsFetch] = useState(true);
-  const [teamInfo, setTeamInfo] = useState(null);
+  const [data, setData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const res = await axiosInstance.get(`teams/${id}`);
-        setTeamInfo(res.data);
+        setData(res.data);
       } catch {
-        setTeamInfo(null);
+        setData(null);
       } finally {
         setIsLoading(false);
       }
@@ -21,7 +21,11 @@ const useGetTeam = (id) => {
     return () => setIsFetch(false);
   }, [isFetch]);
 
-  return { isLoading, teamInfo, setIsFetch };
+  return { 
+    isTeamLoading: isLoading, 
+    teamInfo: data, 
+    teamFetch: setIsFetch, 
+  };
 };
 
 export default useGetTeam;

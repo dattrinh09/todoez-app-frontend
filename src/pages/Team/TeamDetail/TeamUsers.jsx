@@ -1,6 +1,4 @@
 import React from "react";
-import useGetTeamUsers from "../../../hooks/team/user/useGetTeamUsers";
-import Loader from "../../../components/Loader/Loader";
 import { Button, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Item, ItemTitle, Items } from "./team-detail-styles";
@@ -9,8 +7,7 @@ import { notificationShow } from "../../../utils/notificationShow";
 
 const { confirm } = Modal;
 
-const TeamUsers = ({ teamId }) => {
-  const { isLoading, teamUsers, setIsFetch } = useGetTeamUsers(teamId);
+const TeamUsers = ({ teamId, teamUsers, teamUsersRefetch, teamRefetch }) => {
   const handleDelete = async (id) => {
     confirm({
       title: "Do you want to remove this user from this team ?",
@@ -19,11 +16,12 @@ const TeamUsers = ({ teamId }) => {
       onOk: async () => {
         try {
           await axiosInstance.delete(`team-users/${teamId}/${id}`);
+          teamUsersRefetch();
+          teamRefetch();
           notificationShow(
             "success",
             "Remove user successfully",
           );
-          setIsFetch(true);
         } catch (e) {
           notificationShow(
             "error",
@@ -36,8 +34,8 @@ const TeamUsers = ({ teamId }) => {
   };
   return (
     <>
-      {isLoading ? (
-        <Loader />
+      {!teamUsers ? (
+        <div>No data</div>
       ) : (
         <Items>
           {teamUsers.map((user) => (

@@ -2,11 +2,8 @@ import { Button } from "antd"
 import styled from "styled-components"
 
 export const FormLayout = styled.div`
-    //background: url('https://media.istockphoto.com/id/1444033730/video/3d-animation-cartoon-its-almost-snow-season-view-background.jpg?s=640x640&k=20&c=o60_gDuF5x7mBK763m7F6EwK9uEC8RWwnHEaYXoP2Es=') no-repeat;
-    background-image: linear-gradient( to left, #00ffff, #00bfff ,#1e90ff);
+    background-color: #bae7ff;
     background-size: cover;
-    /* opacity: 0.5;
-    background-color: #f1f1f1; */
     height: 100vh;
     display: flex;
     justify-content: center;

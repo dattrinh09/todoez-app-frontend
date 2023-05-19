@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ErrorMessage,
   FormContainer,
@@ -12,33 +12,16 @@ import axios from "axios";
 import Loader from "../../../components/Loader/Loader";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
 import { notificationShow } from "../../../utils/notificationShow";
+import useVerifyAccount from "../../../hooks/auth/useVerifyAccount";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isVerify, setIsVerify] = useState(false);
-  const [error, setError] = useState("");
   const email = searchParams.get("email");
   const token = searchParams.get("token");
-  useEffect(() => {
-    const verifyUrl = async () => {
-      setIsLoading(true);
-      if (email && token) {
-        try {
-          await axios.get(
-            `http://localhost:8080/api/auth/verify/${email}/${token}`
-          );
-          setIsVerify(true);
-        } catch {
-          setIsVerify(false);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-    verifyUrl();
-  }, [searchParams]);
+  const { isAccountVerifying, isAccountVerified } = useVerifyAccount(email, token);
+
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleFinish = async (values) => {
     try {
@@ -60,11 +43,11 @@ const ResetPassword = () => {
   return (
     <FormLayout>
       <FormContainer>
-        {isLoading ? (
+        {isAccountVerifying ? (
           <Loader />
         ) : (
           <>
-            {isVerify ? (
+            {isAccountVerified ? (
               <>
                 <FormHeading>Reset Password</FormHeading>
                 <Form

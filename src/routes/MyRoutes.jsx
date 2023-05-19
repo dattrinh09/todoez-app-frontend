@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 import { ConstantsPath } from "../constants/ConstantsPath";
-import HomePage from "../pages/HomePage/HomePage";
 import SignIn from "../pages/Auth/SignIn/SignIn";
 import SignUp from "../pages/Auth/SignUp/SignUp";
 import ForgotPassword from "../pages/Auth/ForgotPassword/ForgotPassword";
@@ -15,6 +14,8 @@ import ProjectList from "../pages/Project/ProjectList/ProjectList";
 import Loader from "../components/Loader/Loader";
 import TeamList from "../pages/Team/TeamList/TeamList";
 import TeamDetail from "../pages/Team/TeamDetail/TeamDetail";
+import MyPage from "../pages/MyPage/MyPage";
+import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useLogin();
@@ -33,8 +34,7 @@ const MyRoutes = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
-        <Route path={ConstantsPath.HERO_PAGE} element={<HeroPage />} index />
-        <Route path={ConstantsPath.HOME_PAGE} element={<HomePage />} />
+        <Route path={ConstantsPath.HERO_PAGE} element={<HeroPage />} />
         <Route path={ConstantsPath.SIGN_IN} element={<SignIn />} />
         <Route path={ConstantsPath.SIGN_UP} element={<SignUp />} />
         <Route path={ConstantsPath.SUCCESS} element={<SuccessPage />} />
@@ -48,11 +48,13 @@ const MyRoutes = () => {
           element={<ResetPassword />}
         />
         <Route element={<PrivateRoute />}>
+          <Route path={ConstantsPath.MY_PAGE} element={<MyPage />} index />
           <Route path={ConstantsPath.PROFILE} element={<Profile />} />
           <Route path={ConstantsPath.PROJECT_LIST} element={<ProjectList />} />
           <Route path={ConstantsPath.TEAM_LIST} element={<TeamList />} />
           <Route path={ConstantsPath.TEAM_DETAIL} element={<TeamDetail />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );
