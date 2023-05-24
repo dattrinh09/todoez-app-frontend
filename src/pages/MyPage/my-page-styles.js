@@ -36,4 +36,5 @@ export const CardPhoto = styled.div`
 export const CardTitle = styled.span`
   font-size: 18px;
   font-weight: 600;
+  color: #333;
 `;

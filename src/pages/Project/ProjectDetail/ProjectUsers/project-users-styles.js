@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const TeamDetailLayout = styled.div``;
+export const ProjectUsersLayout = styled.div``;
 
 export const Container = styled.div`
   width: 1200px;
@@ -27,7 +27,6 @@ export const BtnGroup = styled.div`
 
 export const Sub = styled.div`
   margin-top: 5px;
-  margin-bottom: 30px;
   font-weight: 600;
   display: flex;
   gap: 5px;
@@ -39,6 +38,11 @@ export const SubIcon = styled.div`
 
 export const SubText = styled.span`
   font-size: 18px;
+  color: #888;
+`;
+
+export const Description = styled.div`
+  margin: 20px 0;
   color: #888;
 `;
 
