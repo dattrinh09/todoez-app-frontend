@@ -4,9 +4,7 @@ import MainLayout from "../../../components/Layout/MainLayout/MainLayout";
 import useGetTeam from "../../../hooks/team/useGetTeam";
 import {
   Container,
-  BtnGroup,
   Heading,
-  Section,
   TeamDetailLayout,
   Title,
   Sub,
@@ -14,7 +12,6 @@ import {
   SubText,
 } from "./team-detail-styles";
 import Loader from "../../../components/Loader/Loader";
-import NotFoundPage from "../../NotFoundPage/NotFoundPage";
 import TeamUsers from "./TeamUsers";
 import { Button, Modal } from "antd";
 import {
@@ -31,6 +28,7 @@ import { notificationShow } from "../../../utils/notificationShow";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
 import useGetTeamUsers from "../../../hooks/team/user/useGetTeamUsers";
 import { formatDate } from "../../../utils/formatInfo";
+import CanNotAccessPage from "../../CanNotAccessPage/CanNotAccessPage";
 
 const { confirm } = Modal;
 
@@ -72,7 +70,7 @@ const TeamDetail = () => {
           ) : (
             <>
               {!teamInfo ? (
-                <NotFoundPage />
+                <CanNotAccessPage />
               ) : (
                 <>
                   <Heading>
@@ -136,7 +134,7 @@ const TeamDetail = () => {
                       teamUsersRefetch={() => teamUsersFetch(true)}
                     />
                   )}
-                  <Section>
+                  <section>
                     {isTeamUsersLoading ? (
                       <Loader />
                     ) : (
@@ -147,7 +145,7 @@ const TeamDetail = () => {
                         teamUsersRefetch={() => teamUsersFetch(true)}
                       />
                     )}
-                  </Section>
+                  </section>
                 </>
               )}
             </>

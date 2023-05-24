@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../request/axiosInstance";
 
-const useGetTeamUsers = (teamId) => {
+const useGetProjectUsers = (projectId) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFetch, setIsFetch] = useState(true);
   const [data, setData] = useState(null);
@@ -9,7 +9,7 @@ const useGetTeamUsers = (teamId) => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const res = await axiosInstance.get(`team-users/${teamId}`);
+        const res = await axiosInstance.get(`project-users/${projectId}`);
         setData(res.data);
       } catch {
         setData(null);
@@ -21,11 +21,11 @@ const useGetTeamUsers = (teamId) => {
     return () => setIsFetch(false);
   }, [isFetch]);
 
-  return { 
-    isTeamUsersLoading: isLoading, 
-    teamUsers: data, 
-    teamUsersFetch: setIsFetch
+  return {
+    isProjectUsersLoading: isLoading,
+    projectUsers: data,
+    projectUsersFetch: setIsFetch
   };
 };
 
-export default useGetTeamUsers;
+export default useGetProjectUsers;

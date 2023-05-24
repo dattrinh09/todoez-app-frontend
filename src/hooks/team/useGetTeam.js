@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../request/axiosInstance";
 
-const useGetTeam = (id) => {
+const useGetTeam = (teamId) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFetch, setIsFetch] = useState(true);
   const [data, setData] = useState(null);
@@ -9,7 +9,7 @@ const useGetTeam = (id) => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const res = await axiosInstance.get(`teams/${id}`);
+        const res = await axiosInstance.get(`teams/${teamId}`);
         setData(res.data);
       } catch {
         setData(null);
