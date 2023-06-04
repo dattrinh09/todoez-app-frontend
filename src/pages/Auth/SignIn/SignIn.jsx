@@ -8,6 +8,7 @@ import {
   FormHeading,
   FormLayout,
   GoogleContainer,
+  Line,
   LinkContainer,
   SubmitBtn,
 } from "../auth-styles";
@@ -106,6 +107,7 @@ const SignIn = () => {
             Don't have an account?
             <Link to={ConstantsPath.SIGN_UP}> Sign up</Link>
           </LinkContainer>
+          <Line orientation="center">Or sign in with google</Line>
           <GoogleContainer>
             <GoogleOAuthProvider clientId={GoogleConstants.clientId}>
               <GoogleLogin

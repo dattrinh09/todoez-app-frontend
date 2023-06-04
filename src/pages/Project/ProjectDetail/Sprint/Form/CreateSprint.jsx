@@ -1,15 +1,12 @@
 import { DatePicker, Form, Input, Modal } from "antd";
 import React, { useState } from "react";
-import { formatDate } from "../../../../../utils/formatInfo";
-import { useParams } from "react-router-dom";
 import axiosInstance from "../../../../../request/axiosInstance";
 import { notificationShow } from "../../../../../utils/notificationShow";
 import { ErrorMsg } from "../sprint-styles";
 
 const { RangePicker } = DatePicker;
 
-const CreateSprint = ({ open, onClose }) => {
-  const params = useParams();
+const CreateSprint = ({ open, onClose, projectId, projectRefetch, sprintsRefetch }) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [createForm] = Form.useForm();
   const handleCreateSprint = () => {
@@ -20,13 +17,13 @@ const CreateSprint = ({ open, onClose }) => {
           title: values.title,
           start_time: new Date(values.range[0].$d).toString(),
           end_time: new Date(values.range[1].$d).toString(),
-          project_id: Number(params.project_id), 
         };
-        console.log(newSprint);
         try {
-          await axiosInstance.post('sprints', newSprint);
+          await axiosInstance.post(`sprints/${projectId}`, newSprint);
           notificationShow("success", "Create sprint successfully");
           createForm.resetFields();
+          sprintsRefetch();
+          projectRefetch();
           onClose();
         } catch (e) {
           setErrorMsg(e.response.data.message);
@@ -69,7 +66,6 @@ const CreateSprint = ({ open, onClose }) => {
           ]}
         >
           <RangePicker
-            //showTime={{ format: "HH:mm:ss" }}
             format="YYYY-MM-DD"
           />
         </Form.Item>

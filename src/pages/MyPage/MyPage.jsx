@@ -8,9 +8,9 @@ import {
   MyPageLayout,
 } from "./my-page-styles";
 // Image
-import projectImg from "../../assets/image2.svg";
-import taskImg from "../../assets/image3.svg";
-import teamImg from "../../assets/image4.svg";
+import projectImg from "/src/assets/image2.svg";
+import taskImg from "/src/assets/image3.svg";
+import teamImg from "/src/assets/image4.svg";
 import { Link } from "react-router-dom";
 import { ConstantsPath } from "../../constants/ConstantsPath";
 
