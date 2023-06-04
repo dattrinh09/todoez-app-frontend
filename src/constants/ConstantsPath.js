@@ -17,9 +17,9 @@ export const ConstantsPath = {
   PROJECT_DETAIL: "/project/:project_id",
   PROJECT_SPRINT_LIST: "/project/:project_id/sprint",
   PROJECT_SPRINT_DETAL: "/project/:project_id/sprint/:sprint_id",
-  PROJECT_TASK_LIST: "project/:project_id/task",
-  PROJECT_TASK_DETAIL: "project/:project_id/task/:task_id",
-  PROJECT_USER_LIST: "project/:project_id/user",
+  PROJECT_TASK_LIST: "/project/:project_id/task",
+  PROJECT_TASK_DETAIL: "/project/:project_id/task/:task_id",
+  PROJECT_USER_LIST: "/project/:project_id/user",
   // Team:
   TEAM_LIST: "/team",
   TEAM_DETAIL: "/team/:team_id",
