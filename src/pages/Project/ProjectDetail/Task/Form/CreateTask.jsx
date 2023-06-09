@@ -26,9 +26,8 @@ const CreateTask = ({
       .then(async (values) => {
         const newTask = {
           ...values,
-          end_time: new Date(values.end_time.$d).toString(),
+          end_at: new Date(values.end_at.$d).toString(),
         };
-
         try {
           await axiosInstance.post(`tasks/${projectId}`, newTask);
           notificationShow("success", "Create tasks successfully");
@@ -64,6 +63,18 @@ const CreateTask = ({
           ]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={[
+            {
+              required: true,
+              message: "Please enter task description.",
+            },
+          ]}
+        >
+          <Input.TextArea allowClear rows={3} />
         </Form.Item>
         <Form.Item
           name="type"
@@ -131,14 +142,14 @@ const CreateTask = ({
         >
           <Select allowClear>
             {assignees.map((option) => (
-              <Select.Option key={option.id} value={option.user.id}>
+              <Select.Option key={option.id} value={option.id}>
                 {option.user.fullname}
               </Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item
-          name="end_time"
+          name="end_at"
           label="Due date"
           dependencies={["sprint_id"]}
           rules={[
@@ -153,8 +164,8 @@ const CreateTask = ({
                 );
                 const isInRange = checkDateInRange(
                   value.$d,
-                  s.start_time,
-                  s.end_time
+                  s.start_at,
+                  s.end_at
                 );
 
                 if (!value || isInRange) {

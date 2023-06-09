@@ -6,7 +6,7 @@ import { ErrorMsg } from "../sprint-styles";
 
 const { RangePicker } = DatePicker;
 
-const CreateSprint = ({ open, onClose, projectId, projectRefetch, sprintsRefetch }) => {
+const CreateSprint = ({ open, onClose, projectId, sprintsRefetch }) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [createForm] = Form.useForm();
   const handleCreateSprint = () => {
@@ -15,15 +15,14 @@ const CreateSprint = ({ open, onClose, projectId, projectRefetch, sprintsRefetch
       .then(async (values) => {
         const newSprint = {
           title: values.title,
-          start_time: new Date(values.range[0].$d).toString(),
-          end_time: new Date(values.range[1].$d).toString(),
+          start_at: new Date(values.range[0].$d).toString(),
+          end_at: new Date(values.range[1].$d).toString(),
         };
         try {
           await axiosInstance.post(`sprints/${projectId}`, newSprint);
           notificationShow("success", "Create sprint successfully");
           createForm.resetFields();
           sprintsRefetch();
-          projectRefetch();
           onClose();
         } catch (e) {
           setErrorMsg(e.response.data.message);
@@ -42,7 +41,12 @@ const CreateSprint = ({ open, onClose, projectId, projectRefetch, sprintsRefetch
       onOk={handleCreateSprint}
       onCancel={onClose}
     >
-      <Form form={createForm} layout="vertical" name="create_sprint">
+      <Form
+        form={createForm}
+        layout="vertical"
+        name="create_sprint"
+        onFocus={() => setErrorMsg("")}
+      >
         <Form.Item
           name="title"
           label="Sprint title"
@@ -65,9 +69,7 @@ const CreateSprint = ({ open, onClose, projectId, projectRefetch, sprintsRefetch
             },
           ]}
         >
-          <RangePicker
-            format="YYYY-MM-DD"
-          />
+          <RangePicker format="YYYY-MM-DD" />
         </Form.Item>
         {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </Form>

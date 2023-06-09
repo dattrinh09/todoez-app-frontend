@@ -1,16 +1,17 @@
-import { Button, Dropdown, Modal, Space, Table, Tag, Tooltip } from "antd";
+import { Button, Dropdown, Modal, Space, Table } from "antd";
 import React, { useState } from "react";
 import {
   PRIORITY_OPTIONS,
   STATUS_OPTIONS,
   TYPE_OPTIONS,
 } from "../../../../constants/Constants";
-import { Icon } from "./task-styles";
 import { Link } from "react-router-dom";
 import { getTaskDetailRoute } from "../../../../utils/route";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { notificationShow } from "../../../../utils/notificationShow";
 import axiosInstance from "../../../../request/axiosInstance";
+import MyTag from "../../../../components/MyTag/MyTag";
+import MyTooltip from "../../../../components/MyTooltip/MyTooltip";
 
 const { confirm } = Modal;
 
@@ -20,19 +21,16 @@ const Tasks = ({
   data,
   isLoading,
   current,
-  pageSize,
   onTableChange,
 }) => {
-  const [selected, setSelected] = useState(0);
-
-  const handleDeleteTask = () => {
+  const handleDeleteTask = (id) => {
     confirm({
       title: "Do you want to remove this task from this project?",
       okText: "Yes",
       cancelText: "No",
       onOk: async () => {
         try {
-          await axiosInstance.delete(`tasks/${projectId}/${selected}`);
+          await axiosInstance.delete(`tasks/${projectId}/${id}`);
           notificationShow("success", "Remove user successfully");
           tasksRefetch();
         } catch (e) {
@@ -46,19 +44,6 @@ const Tasks = ({
     });
   };
 
-  const items = [
-    {
-      key: "1",
-      label: (
-        <Link to={getTaskDetailRoute(projectId, selected)}>View task</Link>
-      ),
-    },
-    {
-      key: "2",
-      label: <div onClick={handleDeleteTask}>Delete</div>,
-    },
-  ];
-
   const columns = [
     {
       title: "Type",
@@ -69,15 +54,7 @@ const Tasks = ({
         const t = TYPE_OPTIONS.find((i) => i.value === type);
         return (
           <Space size="small">
-            <Tooltip title={t.label} color={t.color}>
-              <Icon>
-                <img
-                  src={t.icon}
-                  alt="icon"
-                  style={{ height: "100%", width: "100%" }}
-                />
-              </Icon>
-            </Tooltip>
+            <MyTooltip tooltip={t} />
           </Space>
         );
       },
@@ -95,7 +72,7 @@ const Tasks = ({
       key: "status",
       render: (status) => {
         const s = STATUS_OPTIONS.find((i) => i.value === status);
-        return <Tag color={s.color}>{s.label}</Tag>;
+        return <MyTag tag={s} />;
       },
     },
     {
@@ -104,17 +81,7 @@ const Tasks = ({
       key: "priority",
       render: (priority) => {
         const p = PRIORITY_OPTIONS.find((i) => i.value === priority);
-        return (
-          <Tooltip title={p.label} color={p.color}>
-            <Icon>
-              <img
-                src={p.icon}
-                alt="icon"
-                style={{ height: "100%", width: "100%" }}
-              />
-            </Icon>
-          </Tooltip>
-        );
+        return <MyTooltip tooltip={p} />;
       },
     },
     {
@@ -148,11 +115,25 @@ const Tasks = ({
       render: ({ id }) => (
         <Space size="small">
           <Dropdown
-            menu={{ items }}
+            menu={{
+              items: [
+                {
+                  key: "1",
+                  label: (
+                    <Link to={getTaskDetailRoute(projectId, id)}>
+                      View task
+                    </Link>
+                  ),
+                },
+                {
+                  key: "2",
+                  label: <div onClick={() => handleDeleteTask(id)}>Delete</div>,
+                },
+              ],
+            }}
             trigger={["click"]}
             placement="bottom"
             arrow
-            onClick={() => setSelected(id)}
           >
             <Button size="small" icon={<EllipsisOutlined />} />
           </Dropdown>
@@ -166,8 +147,8 @@ const Tasks = ({
       dataSource={data.list}
       loading={isLoading}
       pagination={{
-        current,
-        pageSize,
+        current: current,
+        pageSize: 10,
         total: data.total,
         position: ["bottomCenter"],
       }}

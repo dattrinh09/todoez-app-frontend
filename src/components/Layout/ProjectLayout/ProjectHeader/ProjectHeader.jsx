@@ -12,7 +12,7 @@ const ProjectHeader = ({ project }) => {
           <CalendarOutlined />
         </SubIcon>
         <SubText>
-          {formatDate2(project.create_time)}
+          {formatDate2(project.create_at, "DD-MM-YYYY")}
         </SubText>
       </Sub>
     </Heading>

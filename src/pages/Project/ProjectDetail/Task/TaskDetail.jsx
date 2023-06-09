@@ -3,8 +3,8 @@ import ProjectLayout from "../../../../components/Layout/ProjectLayout/ProjectLa
 import { useParams } from "react-router-dom";
 import useGetTask from "../../../../hooks/project/task/useGetTask";
 import Loader from "../../../../components/Loader/Loader";
-import { Bar, BarTitle, Detail, Icon, Info, Label, TitleText } from "./task-styles";
-import { Button, Space, Tag, Tooltip } from "antd";
+import { Bar, Detail, Info, Label, TitleText } from "./task-styles";
+import { Button, Space } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import useGetSprints from "../../../../hooks/project/sprint/useGetSprints";
 import useGetProjectUsers from "../../../../hooks/project/user/useGetProjectUsers";
@@ -15,6 +15,8 @@ import {
   TYPE_OPTIONS,
 } from "../../../../constants/Constants";
 import { formatDate2 } from "../../../../utils/formatInfo";
+import MyTooltip from "../../../../components/MyTooltip/MyTooltip";
+import MyTag from "../../../../components/MyTag/MyTag";
 
 const TaskDetail = () => {
   const params = useParams();
@@ -37,6 +39,12 @@ const TaskDetail = () => {
       : null;
   }, [task]);
 
+  const users = useMemo(() => {
+    return projectUsers
+      ? projectUsers.list.filter((user) => !user.delete_at)
+      : [];
+  }, [projectUsers]);
+
   return (
     <ProjectLayout>
       <>
@@ -50,23 +58,10 @@ const TaskDetail = () => {
               <>
                 <Detail>
                   <Bar>
-                    <BarTitle>
+                    <Space>
+                      {taskInfo && <MyTooltip tooltip={taskInfo.type} />}
                       <TitleText>{task.content}</TitleText>
-                      {taskInfo && (
-                        <Tooltip
-                          title={taskInfo.type.label}
-                          color={taskInfo.type.color}
-                        >
-                          <Icon>
-                            <img
-                              src={taskInfo.type.icon}
-                              alt="icon"
-                              style={{ height: "100%", width: "100%" }}
-                            />
-                          </Icon>
-                        </Tooltip>
-                      )}
-                    </BarTitle>
+                    </Space>
                     <Button
                       type="primary"
                       icon={<EditOutlined />}
@@ -82,29 +77,32 @@ const TaskDetail = () => {
                         taskId={taskId}
                         task={task}
                         sprints={sprints ? sprints : []}
-                        users={projectUsers ? projectUsers : []}
+                        users={users}
                         taskRefetch={() => taskFetch(true)}
                       />
                     )}
                   </Bar>
-                  <Info>
-                    {taskInfo && (
-                      <Tag color={taskInfo.status.color}>
-                        {taskInfo.status.label}
-                      </Tag>
-                    )}
-                  </Info>
+                  <Info>{taskInfo && <MyTag tag={taskInfo.status} />}</Info>
+
                   <Space>
-                    <Label>Create at:</Label>
-                    {formatDate2(task.create_time, "DD-MM-YYYY")}
+                    <Label>Reporter: </Label>
+                    {task.reporter.user.fullname}
                   </Space>
                   <Space>
-                    <Label>Update at:</Label>
-                    {formatDate2(task.update_time, "DD-MM-YYYY")}
+                    <Label>Assignee: </Label>
+                    {task.assignee.user.fullname}
                   </Space>
+
                   <Space>
-                    <Label>End at:</Label>
-                    {formatDate2(task.end_time, "DD-MM-YYYY")}
+                    <Space>
+                      Create at: {formatDate2(task.create_at, "DD-MM-YYYY")} |
+                    </Space>
+                    <Space>
+                      Update at: {formatDate2(task.update_at, "DD-MM-YYYY")} |
+                    </Space>
+                    <Space>
+                      End at: {formatDate2(task.end_at, "DD-MM-YYYY")}
+                    </Space>
                   </Space>
                 </Detail>
               </>

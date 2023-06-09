@@ -16,7 +16,7 @@ import {
 } from "./hero-page-styles";
 import { useNavigate } from "react-router-dom";
 import { ConstantsPath } from "../../constants/ConstantsPath";
-import image from "../../assets/image1.svg";
+import image from "/src/assets/images/hero-img.svg";
 
 const HeroPage = () => {
   const navigate = useNavigate();

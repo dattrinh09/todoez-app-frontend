@@ -4,7 +4,7 @@ import { ErrorMsg } from "../project-users-styles";
 import axiosInstance from "../../../../../request/axiosInstance";
 import { notificationShow } from "../../../../../utils/notificationShow";
 
-const AddUser = ({ open, projectId, onClose, projectRefetch, projectUsersRefetch }) => {
+const AddUser = ({ open, onClose, projectId, projectUsersRefetch }) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [addForm] = Form.useForm();
   const handleAddUser = () => {
@@ -20,7 +20,6 @@ const AddUser = ({ open, projectId, onClose, projectRefetch, projectUsersRefetch
           );
           addForm.resetFields();
           onClose();
-          projectRefetch();
           projectUsersRefetch();
         } catch (e) {
           setErrorMsg(e.response.data.message);

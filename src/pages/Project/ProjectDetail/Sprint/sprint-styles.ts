@@ -1,28 +1,24 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-    width: 1200px;
-    margin: 0 auto;
-`
-
-export const Heading = styled.div`
-  padding-top: 30px;
+export const Bar = styled.div`
   display: flex;
-  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-export const Title = styled.div`
+export const SprintTitle = styled.div`
   font-size: 24px;
   font-weight: 700;
-  color: #1677ff;
+  color: #555;
 `;
 
 export const Sub = styled.div`
-  margin-top: 5px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
   display: flex;
-  gap: 5px;
-  margin-bottom: 30px;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
 `;
 
 export const SubIcon = styled.div`
@@ -30,35 +26,71 @@ export const SubIcon = styled.div`
 `;
 
 export const SubText = styled.span`
-  font-size: 18px;
-  color: #888;
+  padding-top: 2px;
+  color: #555;
 `;
 
-export const Items = styled.ul`
-  list-style: none;
+export const ListBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
-export const Item = styled.li`
-  width: 200px;
-  border-radius: 5px;
+export const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const BoxHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const BoxTitle = styled.p`
+  font-size: 16px;
+  font-weight: 700;
+  color: #555;
+`;
+
+export const ListItem = styled.div`
+  display: flex;
+  flex-direction: column;
   border: 1px solid #aaa;
+`;
+
+export const Item = styled.div`
   padding: 10px;
-  margin: 20px 0;
-  &:hover {
-    scale: 1.05;
-    box-shadow: 0 2px 5px 0 rgba(51, 62, 73, 0.1);
+  display: flex;
+  justify-content: space-between;
+  background-color: #e6f4ff;
+  &:hover{
+    background-color: #bae0ff;
+  }
+  &:last-child{
+    border: none;
   }
 `;
 
-export const ItemTitle = styled.p`
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
+export const ItemSec = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 `;
 
-export const ItemSub = styled.span`
+export const Content = styled.div`
   font-weight: 500;
-  color: #888;
+  font-size: 16px;
+  color: #1677ff;
+`;
+
+export const SubContent = styled.div`
+  margin-left: 20px;
+`;
+
+export const ItemExtra = styled.div`
+  display: flex;
+  gap: 5px;
 `;
 
 export const ErrorMsg = styled.div`

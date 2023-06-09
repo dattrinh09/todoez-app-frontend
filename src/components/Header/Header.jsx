@@ -44,7 +44,7 @@ const Header = () => {
   return (
     <HeaderLayout>
       <Container>
-        <Link to={ConstantsPath.HERO_PAGE}>
+        <Link to={ConstantsPath.MY_PAGE}>
           <Logo>TodoEZ</Logo>
         </Link>
         <Menu>

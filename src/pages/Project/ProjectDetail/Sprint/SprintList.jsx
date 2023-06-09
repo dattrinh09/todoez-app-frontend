@@ -1,42 +1,33 @@
 import React, { useState } from "react";
-import MainLayout from "../../../../components/Layout/MainLayout/MainLayout";
-import { Container, Heading, Item, ItemSub, ItemTitle, Items, Sub, SubText, Title } from "./sprint-styles";
-import { Button } from "antd";
-import CreateSprint from "./Form/CreateSprint";
+import ProjectLayout from "../../../../components/Layout/ProjectLayout/ProjectLayout";
 import { useParams } from "react-router-dom";
-import useGetProject from "../../../../hooks/project/useGetProject";
 import Loader from "../../../../components/Loader/Loader";
-import CanNotAccessPage from "../../../CanNotAccessPage/CanNotAccessPage";
+import { Bar, SprintTitle } from "./sprint-styles";
+import { Button } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import useGetSprints from "../../../../hooks/project/sprint/useGetSprints";
-import { formatRange } from "../../../../utils/formatInfo";
+import CreateSprint from "./Form/CreateSprint";
+import Sprints from "./Sprints";
+import useGetFilterSprints from "../../../../hooks/project/sprint/useGetFilterSprints";
 
 const SprintList = () => {
   const params = useParams();
-  const projectId = params.project_id;
-  const { isProjectLoading, project, projectFetch } = useGetProject(projectId);
-  const { isSprintsLoading, sprints, sprintsFetch } = useGetSprints(projectId);
+  const projectId = params["project_id"];
+
   const [isCreate, setIsCreate] = useState(false);
+
+  const { isFSprintsLoading, fSprints, fSprintsFetch } = useGetFilterSprints(projectId);
+
   return (
-    <MainLayout>
-      <Container>
-        {isProjectLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {!project ? (
-              <CanNotAccessPage />
-            ) : (
-              <>
-                <Heading>
-                  <Title>{project.project.name}</Title>
-                </Heading>
-                <Sub>
-                  <SubText>Sprint:</SubText>
-                  <SubText>{project.sprint_number}</SubText>
-                </Sub>
+    <ProjectLayout>
+      {isFSprintsLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {fSprints && (
+            <>
+              <Bar>
+                <SprintTitle>Sprint list</SprintTitle>
                 <Button
-                  size="large"
                   type="primary"
                   icon={<PlusCircleOutlined />}
                   onClick={() => setIsCreate(true)}
@@ -48,41 +39,20 @@ const SprintList = () => {
                     open={isCreate}
                     onClose={() => setIsCreate(false)}
                     projectId={projectId}
-                    projectRefetch={() => projectFetch(true)}
-                    sprintsRefetch={() => sprintsFetch(true)}
+                    sprintsRefetch={() => fSprintsFetch(true)}
                   />
                 )}
-                <section>
-                    {isSprintsLoading ? (
-                        <Loader />
-                    ) : (
-                        <>
-                        {!sprints ? (
-                            <div>No data</div>
-                        ) : (
-                            <Items>
-                                {sprints.map((sprint) => (
-                                    <Item key={sprint.id}>
-                                        <ItemTitle>
-                                            {sprint.title}
-                                        </ItemTitle>
-                                        <ItemSub>
-                                            {formatRange(sprint.start_time, sprint.end_time)}
-                                        </ItemSub>
-                                    </Item>
-                                ))}
-                            </Items>
-                        ) 
-                        }
-                        </>
-                    )}
-                </section>
-              </>
-            )}
-          </>
-        )}
-      </Container>
-    </MainLayout>
+              </Bar>
+              <Sprints
+                projectId={projectId}
+                sprints={fSprints}
+                sprintsRefetch={() => fSprintsFetch(true)}
+              />
+            </>
+          )}
+        </>
+      )}
+    </ProjectLayout>
   );
 };
 
