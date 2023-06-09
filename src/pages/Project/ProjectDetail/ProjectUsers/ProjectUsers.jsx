@@ -1,138 +1,68 @@
-import React, { useState } from "react";
-import {
-  Container,
-  Description,
-  Heading,
-  ProjectUsersLayout,
-  Sub,
-  SubIcon,
-  SubText,
-  Title,
-} from "./project-users-styles";
-import MainLayout from "../../../../components/Layout/MainLayout/MainLayout";
-import useGetProject from "../../../../hooks/project/useGetProject";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import useGetProjectUsers from "../../../../hooks/project/user/useGetProjectUsers";
+import ProjectLayout from "../../../../components/Layout/ProjectLayout/ProjectLayout";
 import Loader from "../../../../components/Loader/Loader";
-import CanNotAccessPage from "../../../CanNotAccessPage/CanNotAccessPage";
-import {
-  CalendarOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  UserAddOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { formatDate } from "../../../../utils/formatInfo";
-import { Button } from "antd";
+import { Bar, TitleBar } from "./project-users-styles";
 import UserList from "./UserList";
+import { Button } from "antd";
+import { UserAddOutlined } from "@ant-design/icons";
 import AddUser from "./Form/AddUser";
-import UpdateInfo from "./Form/UpdateInfo";
 
 const ProjectUsers = () => {
   const params = useParams();
-  const { isProjectLoading, project, projectFetch } = useGetProject(
-    params.project_id
-  );
-  const { isProjectUsersLoading, projectUsers, projectUsersFetch } =
-    useGetProjectUsers(params.project_id);
+  const projectId = params["project_id"];
+
   const [isAdd, setIsAdd] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false);
+
+  const { isProjectUsersLoading, projectUsers, projectUsersFetch } =
+    useGetProjectUsers(projectId);
+
+  const list = useMemo(() => {
+    return projectUsers
+      ? projectUsers.list.filter((user) => !user.delete_at)
+      : [];
+  }, [projectUsers]);
+
   return (
-    <MainLayout>
-      <ProjectUsersLayout>
-        <Container>
-          {isProjectLoading ? (
-            <Loader />
-          ) : (
+    <ProjectLayout>
+      {isProjectUsersLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {projectUsers && (
             <>
-              {!project ? (
-                <CanNotAccessPage />
-              ) : (
-                <>
-                  <Heading>
-                    <Title>{project.project.name}</Title>
-                  </Heading>
-                  <Sub>
-                    <SubIcon>
-                      <CalendarOutlined />
-                    </SubIcon>
-                    <SubText>
-                      {formatDate(project.project.create_time).toLocaleString()}
-                    </SubText>
-                    <SubIcon>
-                      <UserOutlined />
-                    </SubIcon>
-                    <SubText>{project.user_number}</SubText>
-                    {project.is_creator && (
-                      <>
-                        <Button
-                          shape="circle"
-                          size="small"
-                          type="primary"
-                          icon={<EditOutlined />}
-                          onClick={() => setIsUpdate(true)}
-                        />
-                        <Button
-                          shape="circle"
-                          size="small"
-                          type="primary"
-                          danger
-                          icon={<DeleteOutlined />}
-                          onClick={() => handleDelete(params.team_id)}
-                        />
-                      </>
-                    )}
-                  </Sub>
-                  <Description>
-                    <span>{project.project.description}</span>
-                  </Description>
-                  {project.is_creator && (
-                    <Button
-                      size="large"
-                      type="primary"
-                      icon={<UserAddOutlined />}
-                      onClick={() => setIsAdd(true)}
-                    >
-                      Add user
-                    </Button>
-                  )}
-                  <section>
-                    {isProjectUsersLoading ? (
-                      <Loader />
-                    ) : (
-                      <UserList
-                        projectId={project.project.id}
-                        projectUsers={projectUsers}
-                        projectUsersRefetch={() => projectUsersFetch(true)}
-                        projectRefetch={() => projectFetch(true)}
-                      />
-                    )}
-                  </section>
-                  {isAdd && (
-                    <AddUser
-                      open={isAdd}
-                      projectId={project.project.id}
-                      onClose={() => setIsAdd(false)}
-                      projectRefetch={() => projectFetch(true)}
-                      projectUsersRefetch={() => projectUsersFetch(true)}
-                    />
-                  )}
-                  {isUpdate && (
-                    <UpdateInfo
-                      open={isUpdate}
-                      projectId={project.project.id}
-                      projectInfo={project.project}
-                      onClose={() => setIsUpdate(false)}
-                      projectRefetch={() => projectFetch(true)}
-                    />
-                  )}
-                </>
-              )}
+              <Bar>
+                <TitleBar>User list</TitleBar>
+                {projectUsers.creator && (
+                  <Button
+                    type="primary"
+                    icon={<UserAddOutlined />}
+                    onClick={() => setIsAdd(true)}
+                  >
+                    Add user
+                  </Button>
+                )}
+                {isAdd && (
+                  <AddUser
+                    open={isAdd}
+                    onClose={() => setIsAdd(false)}
+                    projectId={projectId}
+                    projectUsersRefetch={() => projectUsersFetch(true)}
+                  />
+                )}
+              </Bar>
+              <UserList
+                projectId={projectId}
+                isCreator={projectUsers.creator}
+                projectUsers={list}
+                projectUsersRefetch={() => projectUsersFetch(true)}
+              />
             </>
           )}
-        </Container>
-      </ProjectUsersLayout>
-    </MainLayout>
+        </>
+      )}
+    </ProjectLayout>
   );
 };
 

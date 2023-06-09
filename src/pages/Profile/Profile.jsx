@@ -19,7 +19,7 @@ import {
   UserPhoto,
 } from "./profile-styles";
 import {
-  formatDate,
+  formatDate2,
   formatDisplayName,
   formatPhoneNumber,
 } from "../../utils/formatInfo";
@@ -55,15 +55,15 @@ const Profile = () => {
             </InfoItem>
             <InfoItem>
               <Label>
-                <CalendarOutlined /> Create time:
+                <CalendarOutlined /> Create at:
               </Label>
-              {formatDate(userInfo.create_time).toLocaleString()}
+              {formatDate2(userInfo.create_at, "DD-MM-YYYY")}
             </InfoItem>
             <InfoItem>
               <Label>
-                <CalendarOutlined /> Update time:
+                <CalendarOutlined /> Update at:
               </Label>
-              {formatDate(userInfo.update_time).toLocaleString()}
+              {formatDate2(userInfo.update_at, "DD-MM-YYYY")}
             </InfoItem>
           </Info>
           <ChangePass>

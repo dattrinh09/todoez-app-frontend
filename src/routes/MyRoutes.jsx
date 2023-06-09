@@ -20,6 +20,7 @@ import ProjectUsers from "../pages/Project/ProjectDetail/ProjectUsers/ProjectUse
 import SprintList from "../pages/Project/ProjectDetail/Sprint/SprintList";
 import TaskList from "../pages/Project/ProjectDetail/Task/TaskList";
 import TaskDetail from "../pages/Project/ProjectDetail/Task/TaskDetail";
+import ProjectDetail from "../pages/Project/ProjectDetail/ProjectDetail";
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useLogin();
@@ -55,10 +56,26 @@ const MyRoutes = () => {
           <Route path={ConstantsPath.MY_PAGE} element={<MyPage />} index />
           <Route path={ConstantsPath.PROFILE} element={<Profile />} />
           <Route path={ConstantsPath.PROJECT_LIST} element={<ProjectList />} />
-          <Route path={ConstantsPath.PROJECT_SPRINT_LIST} element={<SprintList />} />
-          <Route path={ConstantsPath.PROJECT_TASK_LIST} element={<TaskList />} />
-          <Route path={ConstantsPath.PROJECT_TASK_DETAIL} element={<TaskDetail />} />
-          <Route path={ConstantsPath.PROJECT_USER_LIST} element={<ProjectUsers />} />
+          <Route
+            path={ConstantsPath.PROJECT_DETAIL}
+            element={<ProjectDetail />}
+          />
+          <Route
+            path={ConstantsPath.PROJECT_SPRINT_LIST}
+            element={<SprintList />}
+          />
+          <Route
+            path={ConstantsPath.PROJECT_TASK_LIST}
+            element={<TaskList />}
+          />
+          <Route
+            path={ConstantsPath.PROJECT_TASK_DETAIL}
+            element={<TaskDetail />}
+          />
+          <Route
+            path={ConstantsPath.PROJECT_USER_LIST}
+            element={<ProjectUsers />}
+          />
           <Route path={ConstantsPath.TEAM_LIST} element={<TeamList />} />
           <Route path={ConstantsPath.TEAM_DETAIL} element={<TeamDetail />} />
         </Route>

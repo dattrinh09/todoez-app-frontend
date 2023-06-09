@@ -23,7 +23,7 @@ const ProjectLayout = ({ children }) => {
               <CanNotAccessPage />
             ) : (
               <>
-                <ProjectHeader project={project.project} />
+                <ProjectHeader project={project.information} />
                 { children }
               </>
             )}

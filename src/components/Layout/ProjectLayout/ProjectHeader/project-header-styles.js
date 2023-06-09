@@ -11,7 +11,6 @@ export const Title = styled.div`
   color: #1677ff;
 `;
 
-
 export const Sub = styled.div`
   margin-top: 5px;
   font-weight: 600;

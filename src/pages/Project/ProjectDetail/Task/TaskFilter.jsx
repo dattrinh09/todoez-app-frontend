@@ -18,10 +18,10 @@ const TaskFilter = ({ filter, users }) => {
       status: filter.status ? filter.status : null,
       priority: filter.priority ? filter.priority : null,
       assignee: filter.assignee
-        ? users.find((item) => item.id === Number(filter.assignee)).label
+        ? users.find((item) => item.value === Number(filter.assignee)).label
         : null,
       reporter: filter.reporter
-        ? users.find((item) => item.id === Number(filter.reporter)).label
+        ? users.find((item) => item.value === Number(filter.reporter)).label
         : null,
     };
   }, [filter, users]);

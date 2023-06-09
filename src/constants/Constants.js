@@ -9,21 +9,21 @@ export const TYPE_OPTIONS = [
         id: 1,
         label: 'Task',
         value: 'task',
-        icon: '/src/assets/task.svg',
+        icon: '/src/assets/images/task.svg',
         color: 'blue'
     },
     {
         id: 2,
         label: 'Sub-Task',
         value: 'sub_task',
-        icon: '/src/assets/sub-task.svg',
+        icon: '/src/assets/images/sub-task.svg',
         color: 'green'
     },
     {
         id: 3,
         label: 'Bug',
         value: 'bug',
-        icon: '/src/assets/bug.svg',
+        icon: '/src/assets/images/bug.svg',
         color: 'red'
     },
 ]
@@ -73,35 +73,35 @@ export const PRIORITY_OPTIONS = [
         id: 1,
         label: 'Lowest',
         value: 'lowest',
-        icon: '/src/assets/lowest.svg',
+        icon: '/src/assets/images/lowest.svg',
         color: 'blue',
     },
     {
         id: 2,
         label: 'Low',
         value: 'low',
-        icon: '/src/assets/low.svg',
+        icon: '/src/assets/images/low.svg',
         color: 'blue',
     },
     {
         id: 3,
         label: 'Medium',
         value: 'medium',
-        icon: '/src/assets/medium.svg',
+        icon: '/src/assets/images/medium.svg',
         color: 'orange',
     },
     {
         id: 4,
         label: 'High',
         value: 'high',
-        icon: '/src/assets/high.svg',
+        icon: '/src/assets/images/high.svg',
         color: 'red',
     },
     {
         id: 5,
         label: 'Highest',
         value: 'highest',
-        icon: '/src/assets/highest.svg',
+        icon: '/src/assets/images/highest.svg',
         color: 'red',
     }
 ]

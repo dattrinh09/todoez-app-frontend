@@ -12,12 +12,6 @@ export const Bar = styled.div`
   justify-content: space-between;
 `;
 
-export const BarTitle = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
 export const TitleText = styled.div`
   font-size: 24px;
   font-weight: 700;
@@ -38,11 +32,6 @@ export const Label = styled.div`
 export const FilterBar = styled.div`
   display: flex;
   gap: 20px;
-`;
-
-export const Icon = styled.div`
-  height: 15px;
-  width: 15px;
 `;
 
 export const ErrorMsg = styled.div`

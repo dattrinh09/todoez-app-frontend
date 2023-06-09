@@ -25,14 +25,18 @@ const UpdateTask = ({
   const [updateForm] = Form.useForm();
 
   useEffect(() => {
+    const assignee = users.find((user) => user.id === task.assignee.id);
+    const reporter = users.find((user) => user.id === task.reporter.id);
+
     updateForm.setFieldsValue({
       content: task.content,
+      description: task.description,
       sprint_id: task.sprint.id,
       type: task.type,
       status: task.status,
       priority: task.priority,
-      assignee_id: task.assignee.id,
-      reporter_id: task.reporter.id,
+      assignee_id: assignee ? task.assignee.id : undefined,
+      reporter_id: reporter ? task.reporter.id : undefined,
     });
   }, [task]);
 
@@ -42,10 +46,13 @@ const UpdateTask = ({
       .then(async (values) => {
         const newTask = {
           content: values.content ? values.content : task.content,
+          description: values.description
+            ? values.description
+            : task.description,
           sprint_id: values.sprint_id ? values.sprint_id : task.sprint.id,
-          end_time: values.end_time
-            ? new Date(values.end_time.$d).toString()
-            : task.end_time,
+          end_at: values.end_at
+            ? new Date(values.end_at.$d).toString()
+            : task.end_at,
           type: values.type ? values.type : task.type,
           status: values.status ? values.status : task.status,
           priority: values.priority ? values.priority : task.priority,
@@ -56,8 +63,6 @@ const UpdateTask = ({
             ? values.reporter_id
             : task.reporter.id,
         };
-
-        console.log(newTask);
 
         try {
           await axiosInstance.put(`tasks/${projectId}/${taskId}`, newTask);
@@ -89,11 +94,14 @@ const UpdateTask = ({
           span: 4,
         }}
         wrapperCol={{
-          span: 18,
+          span: 20,
         }}
       >
         <Form.Item name="content" label="Content">
           <Input placeholder="Content..." />
+        </Form.Item>
+        <Form.Item name="description" label="Description">
+          <Input.TextArea allowClear rows={3} placeholder="Description..." />
         </Form.Item>
         <Form.Item name="sprint_id" label="Sprint">
           <Select allowClear>
@@ -105,7 +113,7 @@ const UpdateTask = ({
           </Select>
         </Form.Item>
         <Form.Item
-          name="end_time"
+          name="end_at"
           dependencies={["sprint_id"]}
           label="Due date"
           rules={[
@@ -114,12 +122,8 @@ const UpdateTask = ({
                 const s = sprints.find(
                   (i) => i.id === getFieldValue("sprint_id")
                 );
-                const date = value ? value.$d : task.end_time;
-                const isInRange = checkDateInRange(
-                  date,
-                  s.start_time,
-                  s.end_time
-                );
+                const date = value ? value.$d : task.end_at;
+                const isInRange = checkDateInRange(date, s.start_at, s.end_at);
 
                 if (isInRange) {
                   return Promise.resolve();
@@ -133,7 +137,7 @@ const UpdateTask = ({
           ]}
         >
           <DatePicker
-            placeholder={moment(task.end_time).format("YYYY-MM-DD")}
+            placeholder={moment(task.end_at).format("YYYY-MM-DD")}
             format="YYYY-MM-DD"
           />
         </Form.Item>
@@ -167,7 +171,7 @@ const UpdateTask = ({
         <Form.Item name="assignee_id" label="Assignee">
           <Select allowClear>
             {users.map((option) => (
-              <Select.Option key={option.id} value={option.user.id}>
+              <Select.Option key={option.id} value={option.id}>
                 {option.user.fullname}
               </Select.Option>
             ))}
@@ -176,7 +180,7 @@ const UpdateTask = ({
         <Form.Item name="reporter_id" label="Reporter">
           <Select allowClear>
             {users.map((option) => (
-              <Select.Option key={option.id} value={option.user.id}>
+              <Select.Option key={option.id} value={option.id}>
                 {option.user.fullname}
               </Select.Option>
             ))}

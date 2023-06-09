@@ -10,14 +10,9 @@ const useGetTasks = (projectId, enable) => {
     const fetchData = async () => {
       setIsLoading(true);
       const params = {
-        page: 1,
+        ...filter,
         limit: 10,
       };
-      if (filter) {
-        for (const f in filter) {
-          if (filter[f]) params[f] = filter[f];
-        }
-      }
       try {
         const res = await axiosInstance.get(`tasks/${projectId}`, { params });
         setData(res.data);

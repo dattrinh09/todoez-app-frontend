@@ -1,0 +1,40 @@
+import React, { useMemo } from "react";
+import ProjectLayout from "../../../components/Layout/ProjectLayout/ProjectLayout";
+import CardList from "../../../components/CardList/CardList";
+import { getProjectUsersRoute, getSprintListlRoute, getTaskListRoute } from "../../../utils/route";
+import { useParams } from "react-router-dom";
+
+const ProjectDetail = () => {
+  const params = useParams();
+  const projectId = params["project_id"];
+
+  const PROJECT_DETAIL_OPTIONS = useMemo(() => {
+    return [
+      {
+        key: 1,
+        title: "Sprint list",
+        route: getSprintListlRoute(projectId),
+        image: "/src/assets/images/sprint-list.svg",
+      },
+      {
+        key: 2,
+        title: "Task list",
+        route: getTaskListRoute(projectId),
+        image: "/src/assets/images/task-list.svg",
+      },
+      {
+        key: 3,
+        title: "User list",
+        route: getProjectUsersRoute(projectId),
+        image: "/src/assets/images/user-list.svg",
+      },
+    ];
+  }, [projectId]);
+  return (
+    <ProjectLayout>
+      <CardList options={PROJECT_DETAIL_OPTIONS} />
+    </ProjectLayout>
+  );
+};
+
+export default ProjectDetail;

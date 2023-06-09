@@ -15,7 +15,7 @@ import TaskFilter from "./TaskFilter";
 
 const TaskList = () => {
   const params = useParams();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const projectId = params["project_id"];
 
   const { isSprintsLoading, sprints } = useGetSprints(projectId);
@@ -28,56 +28,45 @@ const TaskList = () => {
 
   const [isCreate, setIsCreate] = useState(false);
 
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-  });
-
   const filterParams = useMemo(() => {
-    setPagination({
-      ...pagination,
-      page: 1,
-      limit: 10,
-    });
-    const type = searchParams.get("type") ? searchParams.get("type") : "";
-    const keyword = searchParams.get("keyword")
-      ? searchParams.get("keyword").replaceAll("%", " ")
-      : "";
-    const status = searchParams.get("status") ? searchParams.get("status") : "";
-    const priority = searchParams.get("priority")
-      ? searchParams.get("priority")
-      : "";
-    const assignee = searchParams.get("assignee")
-      ? searchParams.get("assignee")
-      : 0;
-    const reporter = searchParams.get("reporter")
-      ? searchParams.get("reporter")
-      : 0;
     return {
-      type,
-      keyword,
-      status,
-      priority,
-      assignee,
-      reporter,
+      page: searchParams.get("page") ? searchParams.get("page") : 1,
+      type: searchParams.get("type") ? searchParams.get("type") : undefined,
+      keyword: searchParams.get("keyword")
+        ? searchParams.get("keyword").replaceAll("%", " ")
+        : undefined,
+      status: searchParams.get("status")
+        ? searchParams.get("status")
+        : undefined,
+      priority: searchParams.get("priority")
+        ? searchParams.get("priority")
+        : undefined,
+      assignee: searchParams.get("assignee")
+        ? searchParams.get("assignee")
+        : undefined,
+      reporter: searchParams.get("reporter")
+        ? searchParams.get("reporter")
+        : undefined,
     };
   }, [searchParams]);
 
   useEffect(() => {
-    const filter = {
-      ...filterParams,
-      ...pagination,
-    };
-    tasksFilter(filter);
-  }, [filterParams, pagination]);
+    tasksFilter(filterParams);
+  }, [filterParams]);
 
   const USER_OPTIONS = useMemo(() => {
     return projectUsers
-      ? projectUsers.map((user) => ({
+      ? projectUsers.list.map((user) => ({
           id: user.id,
-          value: user.user.id,
+          value: user.id,
           label: user.user.fullname,
         }))
+      : [];
+  }, [projectUsers]);
+
+  const assignees = useMemo(() => {
+    return projectUsers
+      ? projectUsers.list.filter((user) => !user.delete_at)
       : [];
   }, [projectUsers]);
 
@@ -91,29 +80,28 @@ const TaskList = () => {
             content: value.content,
             status: value.status,
             priority: value.priority,
-            reporter: value.reporter.fullname,
-            assignee: value.assignee.fullname,
-            create: formatDate2(value.create_time, "DD-MM"),
-            update: formatDate2(value.update_time, "DD-MM"),
-            duedate: formatDate2(value.end_time, "DD-MM"),
+            reporter: value.reporter.user.fullname,
+            assignee: value.assignee.user.fullname,
+            create: formatDate2(value.create_at, "DD-MM"),
+            update: formatDate2(value.update_at, "DD-MM"),
+            duedate: formatDate2(value.end_at, "DD-MM"),
           }))
         : [],
       total: tasks ? tasks.total : 0,
     };
   }, [tasks]);
 
-  const handleTableChange = (p) => {
-    setPagination({
-      ...pagination,
-      page: p.current,
-      limit: p.pageSize,
-    });
+  const handleTableChange = (page) => {
+    if (page.current !== 1) searchParams.set("page", page.current);
+    else searchParams.delete("page");
+
+    setSearchParams(searchParams);
   };
 
   return (
     <ProjectLayout>
       <>
-        {isTasksLoading && isSprintsLoading && isProjectUsersLoading ? (
+        {isSprintsLoading || isProjectUsersLoading ? (
           <Loader />
         ) : (
           <>
@@ -131,13 +119,15 @@ const TaskList = () => {
                   open={isCreate}
                   onClose={() => setIsCreate(false)}
                   sprints={sprints ? sprints : []}
-                  assignees={projectUsers ? projectUsers : []}
+                  assignees={assignees}
                   projectId={projectId}
                   tasksRefetch={() => tasksFetch(true)}
                 />
               )}
             </Bar>
-            {USER_OPTIONS.length > 0 && <TaskFilter filter={filterParams} users={USER_OPTIONS} />}
+            {USER_OPTIONS.length > 0 && (
+              <TaskFilter filter={filterParams} users={USER_OPTIONS} />
+            )}
             <section>
               {isTasksLoading ? (
                 <Loader />
@@ -147,8 +137,7 @@ const TaskList = () => {
                   tasksRefetch={() => tasksFetch(true)}
                   data={data}
                   isLoading={isTasksLoading}
-                  current={pagination.page}
-                  pageSize={pagination.limit}
+                  current={filterParams.page}
                   onTableChange={handleTableChange}
                 />
               )}
