@@ -9,12 +9,14 @@ import {
 import { Form, Input } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ConstantsPath } from "../../../constants/ConstantsPath";
+import { ConstantsPath } from "@/constants/ConstantsPath";
 
 const ForgotPassword = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleFinish = async (values) => {
+    setIsLoading(true);
     try {
       await axios.get(`http://localhost:8080/api/auth/forgot/${values.email}`);
       navigate(ConstantsPath.SUCCESS, {
@@ -25,6 +27,8 @@ const ForgotPassword = () => {
       });
     } catch (e) {
       setError(e.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,7 +63,7 @@ const ForgotPassword = () => {
             {error && <span style={{ color: "red" }}>{error}</span>}
           </ErrorMessage>
           <Form.Item style={{ paddingTop: "10px" }}>
-            <SubmitBtn htmlType="submit" type="primary">
+            <SubmitBtn htmlType="submit" type="primary" loading={isLoading}>
               Submit
             </SubmitBtn>
           </Form.Item>

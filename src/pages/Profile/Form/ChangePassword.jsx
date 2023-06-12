@@ -1,12 +1,11 @@
 import { Form, Input, Modal } from "antd";
-import React, { useState } from "react";
-import axiosInstance from "../../../request/axiosInstance";
-import { notificationShow } from "../../../utils/notificationShow";
-import { ErrorMsg } from "../profile-styles";
+import React from "react";
+import axiosInstance from "@/request/axiosInstance";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const ChangePassword = ({ open, onClose }) => {
   const [changeForm] = Form.useForm();
-  const [error, setError] = useState("");
   const handleChangePassword = () => {
     changeForm
       .validateFields()
@@ -15,13 +14,12 @@ const ChangePassword = ({ open, onClose }) => {
           await axiosInstance.put("users/change-password", values);
           notificationShow(
             "success",
-            "Change password successfully",
-            "From now on you can use new password to signin."
+            "Change password successfully"
           );
           changeForm.resetFields();
           onClose();
         } catch (e) {
-          setError(e.response.data.message);
+          errorResponse(e.response);
         }
       })
       .catch((info) => {
@@ -41,7 +39,6 @@ const ChangePassword = ({ open, onClose }) => {
         form={changeForm}
         layout="vertical"
         name="change_password"
-        onFocus={() => setError("")}
       >
         <Form.Item
           name="currentPassword"
@@ -93,7 +90,6 @@ const ChangePassword = ({ open, onClose }) => {
         >
           <Input.Password />
         </Form.Item>
-        {error && <ErrorMsg>{error}</ErrorMsg>}
       </Form>
     </Modal>
   );

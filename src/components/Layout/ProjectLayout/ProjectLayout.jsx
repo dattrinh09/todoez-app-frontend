@@ -1,11 +1,10 @@
 import React from "react";
-import MainLayout from "../MainLayout/MainLayout";
 import { Container } from "./project-layout-styles";
-import useGetProject from "../../../hooks/project/useGetProject";
+import useGetProject from "@/hooks/project/useGetProject";
 import { useParams } from "react-router-dom";
-import Loader from "../../Loader/Loader";
-import CanNotAccessPage from "../../../pages/CanNotAccessPage/CanNotAccessPage";
+import Loader from "@/components/Loader/Loader";
 import ProjectHeader from "./ProjectHeader/ProjectHeader";
+import MainLayout from "@/components/Layout/MainLayout/MainLayout";
 
 const ProjectLayout = ({ children }) => {
   const params = useParams();
@@ -19,12 +18,10 @@ const ProjectLayout = ({ children }) => {
           <Loader />
         ) : (
           <>
-            {!project ? (
-              <CanNotAccessPage />
-            ) : (
+            {project && (
               <>
                 <ProjectHeader project={project.information} />
-                { children }
+                {children}
               </>
             )}
           </>

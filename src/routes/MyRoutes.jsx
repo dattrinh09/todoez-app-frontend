@@ -1,26 +1,26 @@
 import React, { Suspense } from "react";
 import { Route, Routes, Outlet, Navigate } from "react-router-dom";
-import { ConstantsPath } from "../constants/ConstantsPath";
-import SignIn from "../pages/Auth/SignIn/SignIn";
-import SignUp from "../pages/Auth/SignUp/SignUp";
-import ForgotPassword from "../pages/Auth/ForgotPassword/ForgotPassword";
-import ResetPassword from "../pages/Auth/ResetPassword/ResetPassword";
-import SuccessPage from "../pages/Auth/SuccessPage/SuccessPage";
-import VerifyEmail from "../pages/Auth/VerifyEmail/VerifyEmail";
-import HeroPage from "../pages/HeroPage/HeroPage";
-import useLogin from "../hooks/auth/useLogin";
-import Profile from "../pages/Profile/Profile";
-import ProjectList from "../pages/Project/ProjectList/ProjectList";
-import Loader from "../components/Loader/Loader";
-import TeamList from "../pages/Team/TeamList/TeamList";
-import TeamDetail from "../pages/Team/TeamDetail/TeamDetail";
-import MyPage from "../pages/MyPage/MyPage";
-import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
-import ProjectUsers from "../pages/Project/ProjectDetail/ProjectUsers/ProjectUsers";
-import SprintList from "../pages/Project/ProjectDetail/Sprint/SprintList";
-import TaskList from "../pages/Project/ProjectDetail/Task/TaskList";
-import TaskDetail from "../pages/Project/ProjectDetail/Task/TaskDetail";
-import ProjectDetail from "../pages/Project/ProjectDetail/ProjectDetail";
+import { ConstantsPath } from "@/constants/ConstantsPath";
+import SignIn from "@/pages/Auth/SignIn/SignIn";
+import SignUp from "@/pages/Auth/SignUp/SignUp";
+import ForgotPassword from "@/pages/Auth/ForgotPassword/ForgotPassword";
+import ResetPassword from "@/pages/Auth/ResetPassword/ResetPassword";
+import SuccessPage from "@/pages/Auth/SuccessPage/SuccessPage";
+import VerifyEmail from "@/pages/Auth/VerifyEmail/VerifyEmail";
+import HeroPage from "@/pages/HeroPage/HeroPage";
+import useLogin from "@/hooks/auth/useLogin";
+import Profile from "@/pages/Profile/Profile";
+import ProjectList from "@/pages/Project/ProjectList/ProjectList";
+import Loader from "@/components/Loader/Loader";
+import TeamList from "@/pages/Team/TeamList/TeamList";
+import TeamDetail from "@/pages/Team/TeamDetail/TeamDetail";
+import MyPage from "@/pages/MyPage/MyPage";
+import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
+import ProjectUsers from "@/pages/Project/ProjectDetail/ProjectUsers/ProjectUsers";
+import SprintList from "@/pages/Project/ProjectDetail/Sprint/SprintList";
+import TaskList from "@/pages/Project/ProjectDetail/Task/TaskList";
+import TaskDetail from "@/pages/Project/ProjectDetail/Task/TaskDetail";
+import ProjectDetail from "@/pages/Project/ProjectDetail/ProjectDetail";
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useLogin();
@@ -29,7 +29,7 @@ const PrivateRoute = () => {
       {isChecking ? (
         <Loader />
       ) : (
-        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.HERO_PAGE} />}</>
+        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.SIGN_IN} />}</>
       )}
     </>
   );

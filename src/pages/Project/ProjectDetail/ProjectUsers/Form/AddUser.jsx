@@ -1,11 +1,10 @@
 import { Form, Input, Modal } from "antd";
-import React, { useState } from "react";
-import { ErrorMsg } from "../project-users-styles";
-import axiosInstance from "../../../../../request/axiosInstance";
-import { notificationShow } from "../../../../../utils/notificationShow";
+import React from "react";
+import axiosInstance from "@/request/axiosInstance";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const AddUser = ({ open, onClose, projectId, projectUsersRefetch }) => {
-  const [errorMsg, setErrorMsg] = useState("");
   const [addForm] = Form.useForm();
   const handleAddUser = () => {
     addForm
@@ -15,14 +14,13 @@ const AddUser = ({ open, onClose, projectId, projectUsersRefetch }) => {
           await axiosInstance.post(`project-users/${projectId}`, values);
           notificationShow(
             "success",
-            "Add user successfully",
-            "User added in this project."
+            "Add user successfully"
           );
           addForm.resetFields();
           onClose();
           projectUsersRefetch();
         } catch (e) {
-          setErrorMsg(e.response.data.message);
+          errorResponse(e.response);
         }
       })
       .catch((info) => {
@@ -42,7 +40,6 @@ const AddUser = ({ open, onClose, projectId, projectUsersRefetch }) => {
         form={addForm}
         layout="vertical"
         name="add_user"
-        onFocus={() => setErrorMsg("")}
       >
         <Form.Item
           name="email"
@@ -60,7 +57,6 @@ const AddUser = ({ open, onClose, projectId, projectUsersRefetch }) => {
         >
           <Input type="email" />
         </Form.Item>
-        {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </Form>
     </Modal>
   );

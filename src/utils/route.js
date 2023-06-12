@@ -1,4 +1,4 @@
-import { ConstantsPath } from "../constants/ConstantsPath";
+import { ConstantsPath } from "@/constants/ConstantsPath";
 
 // Team users
 export const getTeamRoute = (teamId) => {

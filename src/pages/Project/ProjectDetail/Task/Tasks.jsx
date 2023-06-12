@@ -1,17 +1,18 @@
 import { Button, Dropdown, Modal, Space, Table } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import {
   PRIORITY_OPTIONS,
   STATUS_OPTIONS,
   TYPE_OPTIONS,
-} from "../../../../constants/Constants";
+} from "@/constants/Constants";
 import { Link } from "react-router-dom";
-import { getTaskDetailRoute } from "../../../../utils/route";
+import { getTaskDetailRoute } from "@/utils/route";
 import { EllipsisOutlined } from "@ant-design/icons";
-import { notificationShow } from "../../../../utils/notificationShow";
-import axiosInstance from "../../../../request/axiosInstance";
-import MyTag from "../../../../components/MyTag/MyTag";
-import MyTooltip from "../../../../components/MyTooltip/MyTooltip";
+import { notificationShow } from "@/utils/notificationShow";
+import axiosInstance from "@/request/axiosInstance";
+import MyTag from "@/components/MyTag/MyTag";
+import MyTooltip from "@/components/MyTooltip/MyTooltip";
+import { errorResponse } from "@/utils/errorResponse";
 
 const { confirm } = Modal;
 
@@ -34,11 +35,7 @@ const Tasks = ({
           notificationShow("success", "Remove user successfully");
           tasksRefetch();
         } catch (e) {
-          notificationShow(
-            "error",
-            "Remove user unsuccessfully",
-            e.response.data.message
-          );
+          errorResponse(e.response);
         }
       },
     });
@@ -153,6 +150,7 @@ const Tasks = ({
         position: ["bottomCenter"],
       }}
       onChange={onTableChange}
+      bordered
     />
   );
 };

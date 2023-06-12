@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MainLayout from "../../../components/Layout/MainLayout/MainLayout";
+import MainLayout from "@/components/Layout/MainLayout/MainLayout";
 import {
   Container,
   Heading,
@@ -8,12 +8,12 @@ import {
   Items,
   Section,
 } from "./project-list-styles";
-import { Button } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import Loader from "../../../components/Loader/Loader";
-import useGetProjects from "../../../hooks/project/useGetProjects";
+import { Button, Result } from "antd";
+import { InboxOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import Loader from "@/components/Loader/Loader";
+import useGetProjects from "@/hooks/project/useGetProjects";
 import { Link } from "react-router-dom";
-import { getProjectDetailRoute } from "../../../utils/route";
+import { getProjectDetailRoute } from "@/utils/route";
 import CreateProject from "./Form/CreateProject";
 
 const ProjectList = () => {
@@ -43,7 +43,7 @@ const ProjectList = () => {
             <Loader />
           ) : (
             <>
-              {projects && (
+              {projects.length > 0 ? (
                 <Items>
                   {projects.map((item) => (
                     <Link key={item.id} to={getProjectDetailRoute(item.id)}>
@@ -53,6 +53,8 @@ const ProjectList = () => {
                     </Link>
                   ))}
                 </Items>
+              ) : (
+                <Result icon={<InboxOutlined />} title="No data" />
               )}
             </>
           )}

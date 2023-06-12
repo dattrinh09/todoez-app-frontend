@@ -1,11 +1,10 @@
 import { notification } from "antd";
 
-export function notificationShow(type, message, description) {
+export function notificationShow(type, message) {
   notification.open({
-    message,
-    description,
     type,
+    message,
     placement: "top",
-    duration: 5,
+    duration: 3,
   });
 }

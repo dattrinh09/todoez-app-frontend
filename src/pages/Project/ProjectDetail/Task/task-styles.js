@@ -33,9 +33,3 @@ export const FilterBar = styled.div`
   display: flex;
   gap: 20px;
 `;
-
-export const ErrorMsg = styled.div`
-  color: red;
-  text-align: center;
-  padding-bottom: 10px;
-`;

@@ -1,74 +1,68 @@
 import styled from "styled-components";
 
 export const Header = styled.div`
-    height: 192px;
-    background-image: linear-gradient( to left, #00ffff, #00bfff ,#1e90ff);
-`
+  height: 192px;
+  background-image: linear-gradient(to left, #00ffff, #00bfff, #1e90ff);
+`;
 
 export const Container = styled.div`
-    width: 1000px;
-    margin: 0 auto;
-    height: calc(100vh - 192px - 54px);
-    position: relative;
-`
+  width: 1000px;
+  margin: 0 auto;
+  height: calc(100vh - 192px - 54px);
+  position: relative;
+`;
 
 export const UserPhoto = styled.div`
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    background-color: #1677ff;
-    top: -50px;
-    border-radius: 50%;
-    font-size: 50px;
-    font-weight: 600;
-    letter-spacing: 5px;
-    color: #fff;
-    border: 5px solid #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-` 
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  background-color: #1677ff;
+  top: -50px;
+  border-radius: 50%;
+  font-size: 50px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  color: #fff;
+  border: 5px solid #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const Section = styled.div`
-    padding-top: 50px;
-`
+  padding-top: 50px;
+`;
 
 export const UserName = styled.div`
-    padding-top: 10px;
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
-`
+  padding-top: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+`;
 
 export const Info = styled.ul`
-    padding-top: 20px;
-    list-style: none;
-`
+  padding-top: 20px;
+  list-style: none;
+`;
 
 export const InfoItem = styled.li`
-    font-size: 20px;
-    padding-top: 10px;
-    display: flex;
-`
+  font-size: 20px;
+  padding-top: 10px;
+  display: flex;
+`;
 
 export const Label = styled.div`
-    width: 200px;
-    color: #1677ff;
-    font-weight: 600;
-`
+  width: 200px;
+  color: #1677ff;
+  font-weight: 600;
+`;
 
 export const ChangePass = styled.div`
-    margin-top: 50px;
-`
+  margin-top: 50px;
+`;
 
 export const EditProf = styled.div`
-    position: absolute;
-    top: 60px;
-    right: 0;
-`
-
-export const ErrorMsg = styled.div`
-    color: red;
-    text-align: center;
-    padding-bottom: 10px;
-`
+  position: absolute;
+  top: 60px;
+  right: 0;
+`;

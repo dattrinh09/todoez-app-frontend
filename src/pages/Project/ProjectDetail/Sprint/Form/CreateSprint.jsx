@@ -1,13 +1,12 @@
 import { DatePicker, Form, Input, Modal } from "antd";
-import React, { useState } from "react";
-import axiosInstance from "../../../../../request/axiosInstance";
-import { notificationShow } from "../../../../../utils/notificationShow";
-import { ErrorMsg } from "../sprint-styles";
+import React from "react";
+import axiosInstance from "@/request/axiosInstance";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const { RangePicker } = DatePicker;
 
 const CreateSprint = ({ open, onClose, projectId, sprintsRefetch }) => {
-  const [errorMsg, setErrorMsg] = useState("");
   const [createForm] = Form.useForm();
   const handleCreateSprint = () => {
     createForm
@@ -25,7 +24,7 @@ const CreateSprint = ({ open, onClose, projectId, sprintsRefetch }) => {
           sprintsRefetch();
           onClose();
         } catch (e) {
-          setErrorMsg(e.response.data.message);
+          errorResponse(e.response);
         }
       })
       .catch((info) => {
@@ -45,7 +44,6 @@ const CreateSprint = ({ open, onClose, projectId, sprintsRefetch }) => {
         form={createForm}
         layout="vertical"
         name="create_sprint"
-        onFocus={() => setErrorMsg("")}
       >
         <Form.Item
           name="title"
@@ -71,7 +69,6 @@ const CreateSprint = ({ open, onClose, projectId, sprintsRefetch }) => {
         >
           <RangePicker format="YYYY-MM-DD" />
         </Form.Item>
-        {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </Form>
     </Modal>
   );

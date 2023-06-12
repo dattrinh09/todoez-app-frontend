@@ -1,22 +1,22 @@
 import React, { useMemo, useState } from "react";
-import ProjectLayout from "../../../../components/Layout/ProjectLayout/ProjectLayout";
+import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import { useParams } from "react-router-dom";
-import useGetTask from "../../../../hooks/project/task/useGetTask";
-import Loader from "../../../../components/Loader/Loader";
+import useGetTask from "@/hooks/project/task/useGetTask";
+import Loader from "@/components/Loader/Loader";
 import { Bar, Detail, Info, Label, TitleText } from "./task-styles";
 import { Button, Space } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import useGetSprints from "../../../../hooks/project/sprint/useGetSprints";
-import useGetProjectUsers from "../../../../hooks/project/user/useGetProjectUsers";
+import useGetSprints from "@/hooks/project/sprint/useGetSprints";
+import useGetProjectUsers from "@/hooks/project/user/useGetProjectUsers";
 import UpdateTask from "./Form/UpdateTask";
 import {
   PRIORITY_OPTIONS,
   STATUS_OPTIONS,
   TYPE_OPTIONS,
-} from "../../../../constants/Constants";
-import { formatDate2 } from "../../../../utils/formatInfo";
-import MyTooltip from "../../../../components/MyTooltip/MyTooltip";
-import MyTag from "../../../../components/MyTag/MyTag";
+} from "@/constants/Constants";
+import { formatDate2 } from "@/utils/formatInfo";
+import MyTooltip from "@/components/MyTooltip/MyTooltip";
+import MyTag from "@/components/MyTag/MyTag";
 
 const TaskDetail = () => {
   const params = useParams();
