@@ -1,12 +1,11 @@
 import { Form, Input, Modal } from "antd";
-import React, { useState } from "react";
-import { ErrorMsg } from "../project-list-styles";
-import axiosInstance from "../../../../request/axiosInstance";
-import { notificationShow } from "../../../../utils/notificationShow";
+import React from "react";
+import axiosInstance from "@/request/axiosInstance";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const CreateProject = ({ open, onClose, projectsRefetch }) => {
   const [createForm] = Form.useForm();
-  const [error, setError] = useState("");
 
   const handleCreateProject = () => {
     createForm
@@ -16,14 +15,13 @@ const CreateProject = ({ open, onClose, projectsRefetch }) => {
           await axiosInstance.post("projects", values);
           notificationShow(
             "success",
-            "Create project successfully",
-            "Your project already created."
+            "Create project successfully"
           );
           createForm.resetFields();
           onClose();
           projectsRefetch();
         } catch (e) {
-          setError(e.response.data.message);
+          errorResponse(e.response);
         }
       })
       .catch((info) => {
@@ -43,7 +41,6 @@ const CreateProject = ({ open, onClose, projectsRefetch }) => {
         form={createForm}
         layout="vertical"
         name="create_project"
-        onFocus={() => setError("")}
       >
         <Form.Item
           name="name"
@@ -57,7 +54,6 @@ const CreateProject = ({ open, onClose, projectsRefetch }) => {
         >
           <Input />
         </Form.Item>
-        {error && <ErrorMsg>{error}</ErrorMsg>}
       </Form>
     </Modal>
   );

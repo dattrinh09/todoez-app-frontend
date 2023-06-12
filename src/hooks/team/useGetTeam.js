@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "../../request/axiosInstance";
+import axiosInstance from "@/request/axiosInstance";
 
 const useGetTeam = (teamId) => {
   const [isLoading, setIsLoading] = useState(true);

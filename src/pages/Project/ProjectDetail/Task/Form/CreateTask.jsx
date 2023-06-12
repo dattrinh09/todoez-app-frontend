@@ -1,13 +1,13 @@
 import { DatePicker, Form, Input, Modal, Select } from "antd";
-import React, { useState } from "react";
-import axiosInstance from "../../../../../request/axiosInstance";
-import { notificationShow } from "../../../../../utils/notificationShow";
-import { ErrorMsg } from "../task-styles";
+import React from "react";
+import axiosInstance from "@/request/axiosInstance";
+import { notificationShow } from "@/utils/notificationShow";
 import {
   PRIORITY_OPTIONS,
   TYPE_OPTIONS,
-} from "../../../../../constants/Constants";
-import { checkDateInRange } from "../../../../../utils/formatInfo";
+} from "@/constants/Constants";
+import { checkDateInRange } from "@/utils/formatInfo";
+import { errorResponse } from "@/utils/errorResponse";
 
 const CreateTask = ({
   open,
@@ -17,7 +17,6 @@ const CreateTask = ({
   projectId,
   tasksRefetch,
 }) => {
-  const [errorMsg, setErrorMsg] = useState("");
   const [createForm] = Form.useForm();
   
   const handleCreateTask = () => {
@@ -35,7 +34,7 @@ const CreateTask = ({
           tasksRefetch();
           onClose();
         } catch (e) {
-          setErrorMsg(e.response.data.message);
+          errorResponse(e.response);
         }
       })
       .catch((info) => {
@@ -181,7 +180,6 @@ const CreateTask = ({
         >
           <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
-        {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </Form>
     </Modal>
   );

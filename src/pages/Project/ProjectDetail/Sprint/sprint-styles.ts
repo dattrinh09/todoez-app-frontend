@@ -81,7 +81,7 @@ export const ItemSec = styled.div`
 export const Content = styled.div`
   font-weight: 500;
   font-size: 16px;
-  color: #1677ff;
+  color: #555;
 `;
 
 export const SubContent = styled.div`
@@ -91,10 +91,4 @@ export const SubContent = styled.div`
 export const ItemExtra = styled.div`
   display: flex;
   gap: 5px;
-`;
-
-export const ErrorMsg = styled.div`
-  color: red;
-  text-align: center;
-  padding-bottom: 10px;
 `;

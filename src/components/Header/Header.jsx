@@ -9,13 +9,14 @@ import {
   UserIcon,
 } from "./header-styles";
 import { Link, useNavigate } from "react-router-dom";
-import { ConstantsPath } from "../../constants/ConstantsPath";
+import { ConstantsPath } from "@/constants/ConstantsPath";
 import { useSelector, useDispatch } from "react-redux";
-import { userSelector } from "../../stores/selectors";
-import { formatDisplayName } from "../../utils/formatInfo";
+import { userSelector } from "@/stores/selectors";
+import { formatDisplayName } from "@/utils/formatInfo";
 import { Dropdown } from "antd";
-import axiosInstance from "../../request/axiosInstance";
-import { userInfoRemove } from "../../stores/reducers/userSlice";
+import axiosInstance from "@/request/axiosInstance";
+import { userInfoRemove } from "@/stores/reducers/userSlice";
+import { errorResponse } from "@/utils/errorResponse";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -24,11 +25,12 @@ const Header = () => {
   const handleSignout = async () => {
     try {
       await axiosInstance.get("auth/signout");
-      localStorage.removeItem("token");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       dispatch(userInfoRemove());
       navigate(ConstantsPath.HERO_PAGE);
-    } catch {
-      console.log("sign out error");
+    } catch (e) {
+      errorResponse(e.response);
     }
   };
   const items = [

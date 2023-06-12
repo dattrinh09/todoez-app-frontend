@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import useGetProjectUsers from "../../../../hooks/project/user/useGetProjectUsers";
-import ProjectLayout from "../../../../components/Layout/ProjectLayout/ProjectLayout";
-import Loader from "../../../../components/Loader/Loader";
+import useGetProjectUsers from "@/hooks/project/user/useGetProjectUsers";
+import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
+import Loader from "@/components/Loader/Loader";
 import { Bar, TitleBar } from "./project-users-styles";
 import UserList from "./UserList";
 import { Button } from "antd";
@@ -17,12 +17,6 @@ const ProjectUsers = () => {
 
   const { isProjectUsersLoading, projectUsers, projectUsersFetch } =
     useGetProjectUsers(projectId);
-
-  const list = useMemo(() => {
-    return projectUsers
-      ? projectUsers.list.filter((user) => !user.delete_at)
-      : [];
-  }, [projectUsers]);
 
   return (
     <ProjectLayout>
@@ -52,12 +46,14 @@ const ProjectUsers = () => {
                   />
                 )}
               </Bar>
-              <UserList
-                projectId={projectId}
-                isCreator={projectUsers.creator}
-                projectUsers={list}
-                projectUsersRefetch={() => projectUsersFetch(true)}
-              />
+              {projectUsers.list.length > 0 && (
+                <UserList
+                  projectId={projectId}
+                  isCreator={projectUsers.creator}
+                  projectUsers={projectUsers.list}
+                  projectUsersRefetch={() => projectUsersFetch(true)}
+                />
+              )}
             </>
           )}
         </>

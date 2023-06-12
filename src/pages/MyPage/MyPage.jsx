@@ -1,11 +1,11 @@
 import React from "react";
-import MainLayout from "../../components/Layout/MainLayout/MainLayout";
-import { ConstantsPath } from "../../constants/ConstantsPath";
-import CardList from "../../components/CardList/CardList";
+import MainLayout from "@/components/Layout/MainLayout/MainLayout";
+import { ConstantsPath } from "@/constants/ConstantsPath";
+import CardList from "@/components/CardList/CardList";
 
-import projectImg from "/src/assets/images/project-img.svg";
-import taskImg from "/src/assets/images/task-img.svg";
-import teamImg from "/src/assets/images/team-img.svg";
+import projectImg from "@/assets/images/project-img.svg";
+import taskImg from "@/assets/images/task-img.svg";
+import teamImg from "@/assets/images/team-img.svg";
 import { MyPageLayout } from "./my-page-styles";
 
 const MY_PAGE_OPTIONS = [

@@ -2,9 +2,9 @@ import React from "react";
 import { FormContainer, FormLayout, SubmitBtn } from "../auth-styles";
 import { Link, useSearchParams } from "react-router-dom";
 import { Result } from "antd";
-import { ConstantsPath } from "../../../constants/ConstantsPath";
-import Loader from "../../../components/Loader/Loader";
-import useVerifyAccount from "../../../hooks/auth/useVerifyAccount";
+import { ConstantsPath } from "@/constants/ConstantsPath";
+import Loader from "@/components/Loader/Loader";
+import useVerifyAccount from "@/hooks/auth/useVerifyAccount";
 
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();

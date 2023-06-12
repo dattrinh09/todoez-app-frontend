@@ -9,34 +9,37 @@ import {
 import { Form, Input, Result } from "antd";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import Loader from "../../../components/Loader/Loader";
-import { ConstantsPath } from "../../../constants/ConstantsPath";
-import { notificationShow } from "../../../utils/notificationShow";
-import useVerifyAccount from "../../../hooks/auth/useVerifyAccount";
+import Loader from "@/components/Loader/Loader";
+import { ConstantsPath } from "@/constants/ConstantsPath";
+import { notificationShow } from "@/utils/notificationShow";
+import useVerifyAccount from "@/hooks/auth/useVerifyAccount";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email");
   const token = searchParams.get("token");
-  const { isAccountVerifying, isAccountVerified } = useVerifyAccount(email, token);
+  const { isAccountVerifying, isAccountVerified } = useVerifyAccount(
+    email,
+    token
+  );
 
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleFinish = async (values) => {
+    setIsLoading(true);
     try {
       await axios.put(
         `http://localhost:8080/api/auth/reset-password/${email}`,
         { password: values.password }
       );
-      notificationShow(
-        "success",
-        "Reset password successfully",
-        "From now on you can use new password to signin."
-      );
+      notificationShow("success", "Reset password successfully");
       navigate(ConstantsPath.SIGN_IN);
     } catch (e) {
       setError(e.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,7 +103,11 @@ const ResetPassword = () => {
                     {error && <span style={{ color: "red" }}>{error}</span>}
                   </ErrorMessage>
                   <Form.Item style={{ paddingTop: "10px" }}>
-                    <SubmitBtn htmlType="submit" type="primary">
+                    <SubmitBtn
+                      htmlType="submit"
+                      type="primary"
+                      loading={isLoading}
+                    >
                       Submit
                     </SubmitBtn>
                   </Form.Item>

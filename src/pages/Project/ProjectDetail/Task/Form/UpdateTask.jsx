@@ -1,15 +1,15 @@
 import { DatePicker, Form, Input, Modal, Select } from "antd";
-import React, { useEffect, useState } from "react";
-import { checkDateInRange } from "../../../../../utils/formatInfo";
-import { ErrorMsg } from "../task-styles";
+import React, { useEffect } from "react";
+import { checkDateInRange } from "@/utils/formatInfo";
 import {
   PRIORITY_OPTIONS,
   STATUS_OPTIONS,
   TYPE_OPTIONS,
-} from "../../../../../constants/Constants";
+} from "@/constants/Constants";
 import moment from "moment";
-import axiosInstance from "../../../../../request/axiosInstance";
-import { notificationShow } from "../../../../../utils/notificationShow";
+import axiosInstance from "@/request/axiosInstance";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const UpdateTask = ({
   open,
@@ -21,7 +21,6 @@ const UpdateTask = ({
   users,
   taskRefetch,
 }) => {
-  const [errorMsg, setErrorMsg] = useState("");
   const [updateForm] = Form.useForm();
 
   useEffect(() => {
@@ -70,7 +69,7 @@ const UpdateTask = ({
           taskRefetch();
           onClose();
         } catch (e) {
-          setErrorMsg(e.response.data.message);
+          errorResponse(e.response);
         }
       })
       .catch((info) => {
@@ -186,7 +185,6 @@ const UpdateTask = ({
             ))}
           </Select>
         </Form.Item>
-        {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </Form>
     </Modal>
   );

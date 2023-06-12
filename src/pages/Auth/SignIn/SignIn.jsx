@@ -13,25 +13,30 @@ import {
   SubmitBtn,
 } from "../auth-styles";
 import { Link, useNavigate } from "react-router-dom";
-import { ConstantsPath } from "../../../constants/ConstantsPath";
+import { ConstantsPath } from "@/constants/ConstantsPath";
 import axios from "axios";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { GoogleConstants } from "../../../constants/Constants";
-import { notificationShow } from "../../../utils/notificationShow";
+import { GoogleConstants } from "@/constants/Constants";
+import { notificationShow } from "@/utils/notificationShow";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const handleFinish = async (values) => {
+    setIsLoading(true);
     try {
       const res = await axios.post(
         "http://localhost:8080/api/auth/signin",
         values
       );
-      localStorage.setItem("token", res.data.access_token);
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("refresh_token", res.data.refresh_token);
       navigate(ConstantsPath.MY_PAGE);
     } catch (e) {
       setError(e.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,7 +46,8 @@ const SignIn = () => {
         "http://localhost:8080/api/auth/google/signin",
         { googleToken: credentialResponse.credential }
       );
-      localStorage.setItem("token", res.data.access_token);
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("refresh_token", res.data.refresh_token);
       navigate(ConstantsPath.MY_PAGE);
     } catch (e) {
       setError(e.response.data.message);
@@ -99,7 +105,7 @@ const SignIn = () => {
             {error && <span style={{ color: "red" }}>{error}</span>}
           </ErrorMessage>
           <Form.Item>
-            <SubmitBtn htmlType="submit" type="primary">
+            <SubmitBtn htmlType="submit" type="primary" loading={isLoading}>
               Sign In
             </SubmitBtn>
           </Form.Item>

@@ -5,7 +5,7 @@ import {
   CalendarOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import MainLayout from "../../components/Layout/MainLayout/MainLayout";
+import MainLayout from "@/components/Layout/MainLayout/MainLayout";
 import {
   ChangePass,
   Container,
@@ -22,12 +22,12 @@ import {
   formatDate2,
   formatDisplayName,
   formatPhoneNumber,
-} from "../../utils/formatInfo";
+} from "@/utils/formatInfo";
 import { Button } from "antd";
 import ChangePassword from "./Form/ChangePassword";
 import EditProfile from "./Form/EditProfile";
 import { useSelector } from "react-redux";
-import { userSelector } from "../../stores/selectors";
+import { userSelector } from "@/stores/selectors";
 
 const Profile = () => {
   const { userInfo } = useSelector(userSelector);

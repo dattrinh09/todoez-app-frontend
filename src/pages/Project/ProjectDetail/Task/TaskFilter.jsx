@@ -5,7 +5,7 @@ import {
   PRIORITY_OPTIONS,
   STATUS_OPTIONS,
   TYPE_OPTIONS,
-} from "../../../../constants/Constants";
+} from "@/constants/Constants";
 import { useSearchParams } from "react-router-dom";
 
 const TaskFilter = ({ filter, users }) => {

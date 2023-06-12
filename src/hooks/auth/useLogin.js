@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import axiosInstance from "../../request/axiosInstance";
+import axiosInstance from "@/request/axiosInstance";
 import { useDispatch } from "react-redux";
-import { userInfoStore } from "../../stores/reducers/userSlice";
+import { userInfoStore } from "@/stores/reducers/userSlice";
 
 const useLogin = () => {
   const dispatch = useDispatch();

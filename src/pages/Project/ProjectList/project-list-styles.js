@@ -37,9 +37,3 @@ export const ItemTitle = styled.p`
   font-weight: 600;
   color: #333;
 `;
-
-export const ErrorMsg = styled.div`
-  color: red;
-  text-align: center;
-  padding-bottom: 10px;
-`;

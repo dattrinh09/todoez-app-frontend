@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckCircleFilled } from "@ant-design/icons";
-import MainLayout from "../../components/Layout/MainLayout/MainLayout";
+import MainLayout from "@/components/Layout/MainLayout/MainLayout";
 import {
   Container,
   HeroButton,
@@ -15,8 +15,23 @@ import {
   Title,
 } from "./hero-page-styles";
 import { useNavigate } from "react-router-dom";
-import { ConstantsPath } from "../../constants/ConstantsPath";
-import image from "/src/assets/images/hero-img.svg";
+import { ConstantsPath } from "@/constants/ConstantsPath";
+import image from "@/assets/images/hero-img.svg";
+
+const items = [
+  {
+    key: 1,
+    content: "Manage your task",
+  },
+  {
+    key: 2,
+    content: "Manage your team",
+  },
+  {
+    key: 3,
+    content: "Manage your project",
+  },
+];
 
 const HeroPage = () => {
   const navigate = useNavigate();
@@ -36,24 +51,14 @@ const HeroPage = () => {
               and modern way.
             </SubTitle>
             <Menu>
-              <Item>
-                <Icon>
-                  <CheckCircleFilled />
-                </Icon>
-                Manage your task
-              </Item>
-              <Item>
-                <Icon>
-                  <CheckCircleFilled />
-                </Icon>
-                Manage your team
-              </Item>
-              <Item>
-                <Icon>
-                  <CheckCircleFilled />
-                </Icon>
-                Manage your project
-              </Item>
+              {items.map((item) => (
+                <Item key={item.key}>
+                  <Icon>
+                    <CheckCircleFilled />
+                  </Icon>
+                  {item.content}
+                </Item>
+              ))}
             </Menu>
             <HeroButton onClick={handleClickStart}>Get Started</HeroButton>
           </Section>

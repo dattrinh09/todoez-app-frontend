@@ -1,11 +1,9 @@
 import { Form, Input, Modal } from "antd";
-import React, { useEffect, useState } from "react";
-import { ErrorMsg } from "../sprint-styles";
-import axiosInstance from "../../../../../request/axiosInstance";
-import { notificationShow } from "../../../../../utils/notificationShow";
+import React, { useEffect } from "react";
+import axiosInstance from "@/request/axiosInstance";
+import { notificationShow } from "@/utils/notificationShow";
 
 const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
-  const [errorMsg, setErrorMsg] = useState("");
   const [editForm] = Form.useForm();
 
   useEffect(() => {
@@ -24,12 +22,10 @@ const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
         try {
           await axiosInstance.put(`sprints/${projectId}/${sprint.id}`, newSprint);
           notificationShow("success", "Update sprint successfully");
-          editForm.resetFields();
           sprintsRefetch();
           onClose();
         } catch (e) {
-          console.log(e);
-          setErrorMsg(e.response.data.message);
+          errorResponse(e.response);
         }
       })
       .catch((info) => {
@@ -50,12 +46,10 @@ const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
         form={editForm}
         layout="vertical"
         name="edit_sprint"
-        onFocus={() => setErrorMsg("")}
       >
         <Form.Item name="title" label="Title">
           <Input />
         </Form.Item>
-        {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </Form>
     </Modal>
   );

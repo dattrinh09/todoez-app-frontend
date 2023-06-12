@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "../../request/axiosInstance";
+import axiosInstance from "@/request/axiosInstance";
+import { errorResponse } from "@/utils/errorResponse";
 
 const useGetProject = (projectId) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,7 +12,8 @@ const useGetProject = (projectId) => {
       try {
         const res = await axiosInstance.get(`projects/${projectId}`);
         setData(res.data);
-      } catch {
+      } catch (e) {
+        errorResponse(e.response);
         setData(null);
       } finally {
         setIsLoading(false);

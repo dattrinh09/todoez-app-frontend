@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import useGetSprints from "../../../../hooks/project/sprint/useGetSprints";
+import useGetSprints from "@/hooks/project/sprint/useGetSprints";
 import { Bar, TitleText } from "./task-styles";
-import Loader from "../../../../components/Loader/Loader";
+import Loader from "@/components/Loader/Loader";
 import { Button } from "antd";
 import CreateTask from "./Form/CreateTask";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import useGetProjectUsers from "../../../../hooks/project/user/useGetProjectUsers";
-import useGetTasks from "../../../../hooks/project/task/useGetTasks";
+import useGetProjectUsers from "@/hooks/project/user/useGetProjectUsers";
+import useGetTasks from "@/hooks/project/task/useGetTasks";
 import Tasks from "./Tasks";
-import { formatDate2 } from "../../../../utils/formatInfo";
-import ProjectLayout from "../../../../components/Layout/ProjectLayout/ProjectLayout";
+import { formatDate2 } from "@/utils/formatInfo";
+import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import TaskFilter from "./TaskFilter";
 
 const TaskList = () => {

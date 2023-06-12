@@ -1,7 +1,7 @@
 import { Button, Result } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ConstantsPath } from "../../constants/ConstantsPath";
+import { ConstantsPath } from "@/constants/ConstantsPath";
 
 const NotFoundPage = () => {
   return (
