@@ -10,7 +10,7 @@ export const formatPhoneNumber = (phoneNumber) => {
   return "+84 " + phoneNumber.slice(1);
 };
 
-export const formatDate = (date) => {
+export const convertDate = (date) => {
   return new Date(
     (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
       timeZone: "Asia/HO_CHI_MINH",
@@ -18,8 +18,14 @@ export const formatDate = (date) => {
   );
 };
 
+export const formatDate = (date) => {
+  const d = convertDate(date);
+
+  return moment(d).startOf("second").fromNow();
+};
+
 export const formatDate2 = (date, format) => {
-  return moment(formatDate(date)).format(format);
+  return moment(convertDate(date)).format(format);
 };
 
 export const formatRange = (start, end) => {
@@ -44,4 +50,4 @@ export const checkIsPassDue = (date) => {
   console.log(now, due);
 
   return now > due;
-}
+};

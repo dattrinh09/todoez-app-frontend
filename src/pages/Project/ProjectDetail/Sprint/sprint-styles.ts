@@ -53,23 +53,9 @@ export const BoxTitle = styled.p`
   color: #555;
 `;
 
-export const ListItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #aaa;
-`;
-
 export const Item = styled.div`
-  padding: 10px;
   display: flex;
   justify-content: space-between;
-  background-color: #e6f4ff;
-  &:hover{
-    background-color: #bae0ff;
-  }
-  &:last-child{
-    border: none;
-  }
 `;
 
 export const ItemSec = styled.div`
