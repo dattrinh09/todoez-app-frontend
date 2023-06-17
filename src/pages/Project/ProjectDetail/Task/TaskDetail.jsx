@@ -17,6 +17,7 @@ import {
 import { formatDate2 } from "@/utils/formatInfo";
 import MyTooltip from "@/components/MyTooltip/MyTooltip";
 import MyTag from "@/components/MyTag/MyTag";
+import CommentList from "./Comment/CommentList";
 
 const TaskDetail = () => {
   const params = useParams();
@@ -105,6 +106,7 @@ const TaskDetail = () => {
                     </Space>
                   </Space>
                 </Detail>
+                <CommentList projectId={projectId} taskId={taskId} />
               </>
             )}
           </>

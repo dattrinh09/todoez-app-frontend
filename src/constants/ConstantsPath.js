@@ -20,6 +20,7 @@ export const ConstantsPath = {
   PROJECT_TASK_LIST: "/project/:project_id/task",
   PROJECT_TASK_DETAIL: "/project/:project_id/task/:task_id",
   PROJECT_USER_LIST: "/project/:project_id/user",
+  DEMO_COMMENT: "/comment",
   // Team:
   TEAM_LIST: "/team",
   TEAM_DETAIL: "/team/:team_id",

@@ -4,26 +4,26 @@ import axiosInstance from "@/request/axiosInstance";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
-const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
+const EditComment = ({ comment, projectId, onClose, commentsRefetch }) => {
   const [editForm] = Form.useForm();
 
   useEffect(() => {
     editForm.setFieldsValue({
-      title: sprint.title,
+      content: comment.content,
     });
-  }, [sprint]);
+  }, [comment]);
 
-  const handleEditSprint = () => {
+  const handleEditComment = () => {
     editForm
       .validateFields()
       .then(async (values) => {
-        const newSprint = {
-          title: values.title ? values.title : sprint.title,
+        const newComment = {
+          content: values.content ? values.content : comment.content,
         };
         try {
-          await axiosInstance.put(`sprints/${projectId}/${sprint.id}`, newSprint);
-          notificationShow("success", "Update sprint successfully");
-          sprintsRefetch();
+          await axiosInstance.put(`comments/${projectId}/${comment.id}`, newComment);
+          notificationShow("success", "Update comment successfully");
+          commentsRefetch();
           onClose();
         } catch (e) {
           errorResponse(e.response);
@@ -36,24 +36,24 @@ const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
 
   return (
     <Modal
-      title="Edit sprint"
-      open={sprint}
+      title="Edit comment"
+      open={comment}
       okText="Save"
       cancelText="Cancel"
-      onOk={handleEditSprint}
+      onOk={handleEditComment}
       onCancel={onClose}
     >
       <Form
         form={editForm}
         layout="vertical"
-        name="edit_sprint"
+        name="edit_comment"
       >
-        <Form.Item name="title" label="Title">
-          <Input />
+        <Form.Item name="content" label="Content">
+          <Input.TextArea rows={3} allowClear />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default EditSprint;
+export default EditComment;

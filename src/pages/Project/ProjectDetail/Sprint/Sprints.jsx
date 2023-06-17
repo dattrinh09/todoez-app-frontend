@@ -9,10 +9,9 @@ import {
   ItemExtra,
   ItemSec,
   ListBox,
-  ListItem,
   SubContent,
 } from "./sprint-styles";
-import { Button, Dropdown, Empty, Modal, Space, Tag } from "antd";
+import { Button, Dropdown, List, Modal, Space, Tag } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 import {
   PRIORITY_OPTIONS,
@@ -94,55 +93,51 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
               />
             )}
           </BoxHeader>
-          {sprint.tasks.length > 0 ? (
-            <ListItem>
-              {sprint.tasks.map((task) => (
+          <List
+            size="middle"
+            bordered
+            dataSource={sprint.tasks ?? []}
+            style={{ backgroundColor: "#ecf6fd"}}
+            renderItem={(item) => (
+              <List.Item>
                 <Link
-                  key={task.id}
-                  to={getTaskDetailRoute(projectId, task.id)}
-                  style={{ borderBottom: "1px solid #aaa" }}
+                  to={getTaskDetailRoute(projectId, item.id)}
+                  style={{ width: "100%" }}
                 >
                   <Item>
                     <ItemSec>
                       <Space>
                         <MyTooltip
                           tooltip={TYPE_OPTIONS.find(
-                            (t) => t.value === task.type
+                            (t) => t.value === item.type
                           )}
                         />
-                        <Content>{task.content}</Content>
+                        <Content>{item.content}</Content>
                       </Space>
                       <SubContent>
                         <MyTag
                           tag={STATUS_OPTIONS.find(
-                            (s) => s.value === task.status
+                            (s) => s.value === item.status
                           )}
                         />
                       </SubContent>
                     </ItemSec>
                     <ItemExtra>
                       <ItemSec>
-                        <Tag color="#1677ff">{`Assignee: ${task.assignee.user.fullname}`}</Tag>
-                        <Tag color="#1677ff">{`Reporter: ${task.reporter.user.fullname}`}</Tag>
+                        <Tag color="#1677ff">{`Assignee: ${item.assignee.user.fullname}`}</Tag>
+                        <Tag color="#1677ff">{`Reporter: ${item.reporter.user.fullname}`}</Tag>
                       </ItemSec>
                       <MyTooltip
                         tooltip={PRIORITY_OPTIONS.find(
-                          (p) => p.value === task.priority
+                          (p) => p.value === item.priority
                         )}
                       />
                     </ItemExtra>
                   </Item>
                 </Link>
-              ))}
-            </ListItem>
-          ) : (
-            <div style={{ backgroundColor: "#e6f4ff", border: "1px solid #aaa" }}>
-              <Empty
-                description="No task"
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-              />
-            </div>
-          )}
+              </List.Item>
+            )}
+          />
         </Box>
       ))}
     </ListBox>
