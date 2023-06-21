@@ -12,7 +12,7 @@ import axios from "axios";
 import Loader from "@/components/Loader/Loader";
 import { ConstantsPath } from "@/constants/ConstantsPath";
 import { notificationShow } from "@/utils/notificationShow";
-import useVerifyAccount from "@/hooks/auth/useVerifyAccount";
+import { useVerifyAccount } from "@/hooks/auth";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();

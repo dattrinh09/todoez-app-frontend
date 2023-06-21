@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import useGetSprints from "@/hooks/project/sprint/useGetSprints";
 import { Bar, TitleText } from "./task-styles";
 import Loader from "@/components/Loader/Loader";
 import { Button } from "antd";
 import CreateTask from "./Form/CreateTask";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import useGetProjectUsers from "@/hooks/project/user/useGetProjectUsers";
-import useGetTasks from "@/hooks/project/task/useGetTasks";
+import { useGetProjectUsers } from "@/hooks/project-user";
+import { useGetSprints } from "@/hooks/sprint";
+import { useGetTasks } from "@/hooks/task";
 import Tasks from "./Tasks";
 import { formatDate2 } from "@/utils/formatInfo";
 import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
@@ -17,16 +17,10 @@ const TaskList = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const projectId = params["project_id"];
+  const [isCreate, setIsCreate] = useState(false);
 
   const { isSprintsLoading, sprints } = useGetSprints(projectId);
   const { isProjectUsersLoading, projectUsers } = useGetProjectUsers(projectId);
-
-  const { isTasksLoading, tasks, tasksFetch, tasksFilter } = useGetTasks(
-    projectId,
-    false
-  );
-
-  const [isCreate, setIsCreate] = useState(false);
 
   const filterParams = useMemo(() => {
     return {
@@ -50,9 +44,10 @@ const TaskList = () => {
     };
   }, [searchParams]);
 
-  useEffect(() => {
-    tasksFilter(filterParams);
-  }, [filterParams]);
+  const { isTasksLoading, tasks, tasksRefetch } = useGetTasks(
+    projectId,
+    filterParams
+  );
 
   const USER_OPTIONS = useMemo(() => {
     return projectUsers
@@ -121,7 +116,7 @@ const TaskList = () => {
                   sprints={sprints ? sprints : []}
                   assignees={assignees}
                   projectId={projectId}
-                  tasksRefetch={() => tasksFetch(true)}
+                  tasksRefetch={tasksRefetch}
                 />
               )}
             </Bar>
@@ -134,10 +129,10 @@ const TaskList = () => {
               ) : (
                 <Tasks
                   projectId={projectId}
-                  tasksRefetch={() => tasksFetch(true)}
+                  tasksRefetch={tasksRefetch}
                   data={data}
                   isLoading={isTasksLoading}
-                  current={filterParams.page}
+                  current={Number(filterParams.page)}
                   onTableChange={handleTableChange}
                 />
               )}

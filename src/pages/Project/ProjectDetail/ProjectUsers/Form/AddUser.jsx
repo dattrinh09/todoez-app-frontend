@@ -1,31 +1,35 @@
 import { Form, Input, Modal } from "antd";
 import React from "react";
-import axiosInstance from "@/request/axiosInstance";
+import { useMutateProjectUser } from "@/hooks/project-user";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
 const AddUser = ({ open, onClose, projectId, projectUsersRefetch }) => {
   const [addForm] = Form.useForm();
+  const { mutateProjectUserFn, isMutateProjectUserLoading } =
+    useMutateProjectUser();
+
   const handleAddUser = () => {
-    addForm
-      .validateFields()
-      .then(async (values) => {
-        try {
-          await axiosInstance.post(`project-users/${projectId}`, values);
-          notificationShow(
-            "success",
-            "Add user successfully"
-          );
-          addForm.resetFields();
-          onClose();
-          projectUsersRefetch();
-        } catch (e) {
-          errorResponse(e.response);
+    addForm.validateFields().then((values) => {
+      mutateProjectUserFn(
+        {
+          type: "create",
+          param: [projectId, values],
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Add user successfully");
+            projectUsersRefetch();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+          onSettled: () => {
+            onClose();
+          },
         }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
+      );
+    });
   };
   return (
     <Modal
@@ -34,13 +38,12 @@ const AddUser = ({ open, onClose, projectId, projectUsersRefetch }) => {
       okText="Save"
       cancelText="Cancel"
       onOk={handleAddUser}
+      okButtonProps={{
+        loading: isMutateProjectUserLoading,
+      }}
       onCancel={onClose}
     >
-      <Form
-        form={addForm}
-        layout="vertical"
-        name="add_user"
-      >
+      <Form form={addForm} layout="vertical" name="add_user">
         <Form.Item
           name="email"
           label="Enter user e-mail"

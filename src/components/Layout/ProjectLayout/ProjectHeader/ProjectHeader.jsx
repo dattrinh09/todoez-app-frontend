@@ -8,9 +8,15 @@ import { getProjectDetailRoute } from "@/utils/route";
 const ProjectHeader = ({ project }) => {
   return (
     <Heading>
-      <Link to={getProjectDetailRoute(project.id)}>
-        <Title>{project.name}</Title>
-      </Link>
+      <div>
+        <Link
+          style={{ fontSize: "20px", fontWeight: "500", color: "#1677ff" }}
+          to={getProjectDetailRoute(project.id)}
+        >
+          {project.name}
+        </Link>
+      </div>
+
       <Sub>
         <SubIcon>
           <CalendarOutlined />

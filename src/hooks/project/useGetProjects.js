@@ -1,31 +1,29 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "@/request/axiosInstance";
+import api from "@/api/api";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { errorResponse } from "@/utils/errorResponse";
 
-const useGetProjects = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isFetch, setIsFetch] = useState(true);
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axiosInstance.get("projects");
-        setData(res.data);
-      } catch {
-        setData(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    if (isFetch) fetchData();
-    return () => setIsFetch(false);
-  }, [isFetch]);
-
-  return {
-    isProjectsLoading: isLoading,
-    projects: data,
-    projectsFetch: setIsFetch
-  };
+const getData = async () => {
+  return await api.get("projects");
 };
 
-export default useGetProjects;
+export const useGetProjects = () => {
+  const { data, isLoading, refetch, error } = useQuery({
+    queryKey: ["project", "list"],
+    queryFn: () => getData(),
+  });
+
+  if (error) {
+    errorResponse(error.response);
+  }
+
+  const returnData = useMemo(() => {
+    return data ? data.data : [];
+  }, [data]);
+
+  return {
+    projects: returnData,
+    isProjectsLoading: isLoading,
+    projectsRefetch: refetch,
+  };
+};

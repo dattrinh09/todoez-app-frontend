@@ -9,9 +9,9 @@ import {
 } from "./project-users-styles";
 import { Button, Modal } from "antd";
 import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
-import { notificationShow } from "../../../../utils/notificationShow";
-import axiosInstance from "../../../../request/axiosInstance";
-import { errorResponse } from "../../../../utils/errorResponse";
+import { useMutateProjectUser } from "@/hooks/project-user";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const { confirm } = Modal;
 
@@ -25,19 +25,33 @@ const UserList = ({
     return projectUsers.filter((user) => !user.delete_at);
   }, [projectUsers]);
 
-  const handleDelete = async (id) => {
+  const { mutateProjectUserFn, isMutateProjectUserLoading } =
+    useMutateProjectUser();
+
+  const handleDelete = async (projectUserId) => {
     confirm({
       title: "Do you want to remove this user from this project?",
       okText: "Yes",
       cancelText: "No",
-      onOk: async () => {
-        try {
-          await axiosInstance.delete(`project-users/${projectId}/${id}`);
-          projectUsersRefetch();
-          notificationShow("success", "Remove user successfully");
-        } catch (e) {
-          errorResponse(e.response);
-        }
+      okButtonProps: {
+        loading: isMutateProjectUserLoading,
+      },
+      onOk: () => {
+        mutateProjectUserFn(
+          {
+            type: "delete",
+            param: [projectId, projectUserId],
+          },
+          {
+            onSuccess: () => {
+              notificationShow("success", "Remove user successfully");
+              projectUsersRefetch();
+            },
+            onError: (error) => {
+              errorResponse(error.response);
+            },
+          }
+        );
       },
     });
   };

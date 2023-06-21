@@ -1,7 +1,7 @@
 import { Form, Input, Modal } from "antd";
 import React, { useState } from "react";
 import { ErrorMsg } from "../team-detail-styles";
-import axiosInstance from "../../../../request/axiosInstance";
+import api from "@/api/api";
 import { notificationShow } from "../../../../utils/notificationShow";
 
 const ChangeName = ({ open, teamId, onClose, teamRefetch }) => {
@@ -12,7 +12,7 @@ const ChangeName = ({ open, teamId, onClose, teamRefetch }) => {
       .validateFields()
       .then(async (values) => {
         try {
-          await axiosInstance.put(`teams/${teamId}`, values);
+          await api.put(`teams/${teamId}`, values);
           notificationShow(
             "success",
             "Uppdate team successfully",

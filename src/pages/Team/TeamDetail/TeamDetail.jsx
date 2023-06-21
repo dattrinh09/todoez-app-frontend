@@ -23,7 +23,7 @@ import {
 } from "@ant-design/icons";
 import AddUser from "./Form/AddUser";
 import ChangeName from "./Form/ChangeName";
-import axiosInstance from "../../../request/axiosInstance";
+import api from "@/api/api";
 import { notificationShow } from "../../../utils/notificationShow";
 import { ConstantsPath } from "../../../constants/ConstantsPath";
 import useGetTeamUsers from "../../../hooks/team/user/useGetTeamUsers";
@@ -48,7 +48,7 @@ const TeamDetail = () => {
       cancelText: "No",
       onOk: async () => {
         try {
-          await axiosInstance.delete(`teams/${id}`);
+          await api.delete(`teams/${id}`);
           navigate(ConstantsPath.TEAM_LIST);
           notificationShow("success", "Remove team successfully");
         } catch (e) {

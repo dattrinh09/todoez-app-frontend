@@ -1,11 +1,12 @@
 import { Form, Input, Modal } from "antd";
 import React, { useEffect } from "react";
-import axiosInstance from "@/request/axiosInstance";
+import { useMutateSprint } from "@/hooks/sprint";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
 const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
   const [editForm] = Form.useForm();
+  const { mutateSprintFn, isMutateSprintLoading } = useMutateSprint();
 
   useEffect(() => {
     editForm.setFieldsValue({
@@ -14,40 +15,43 @@ const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
   }, [sprint]);
 
   const handleEditSprint = () => {
-    editForm
-      .validateFields()
-      .then(async (values) => {
-        const newSprint = {
-          title: values.title ? values.title : sprint.title,
-        };
-        try {
-          await axiosInstance.put(`sprints/${projectId}/${sprint.id}`, newSprint);
-          notificationShow("success", "Update sprint successfully");
-          sprintsRefetch();
-          onClose();
-        } catch (e) {
-          errorResponse(e.response);
+    editForm.validateFields().then((values) => {
+      const newSprint = { title: values.title ?? sprint.title };
+
+      mutateSprintFn(
+        {
+          type: "update",
+          param: [projectId, sprint.id, newSprint],
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Update sprint successfully");
+            sprintsRefetch();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+          onSettled: () => {
+            onClose();
+          },
         }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
+      );
+    });
   };
 
   return (
     <Modal
       title="Edit sprint"
-      open={sprint}
+      open={!!sprint}
       okText="Save"
       cancelText="Cancel"
       onOk={handleEditSprint}
+      okButtonProps={{
+        loading: isMutateSprintLoading,
+      }}
       onCancel={onClose}
     >
-      <Form
-        form={editForm}
-        layout="vertical"
-        name="edit_sprint"
-      >
+      <Form form={editForm} layout="vertical" name="edit_sprint">
         <Form.Item name="title" label="Title">
           <Input />
         </Form.Item>

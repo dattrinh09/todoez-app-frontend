@@ -4,13 +4,16 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Result } from "antd";
 import { ConstantsPath } from "@/constants/ConstantsPath";
 import Loader from "@/components/Loader/Loader";
-import useVerifyAccount from "@/hooks/auth/useVerifyAccount";
+import { useVerifyAccount } from "@/hooks/auth";
 
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email");
   const token = searchParams.get("token");
-  const { isAccountVerifying, isAccountVerified } = useVerifyAccount(email, token);
+  const { isAccountVerifying, isAccountVerified } = useVerifyAccount(
+    email,
+    token
+  );
 
   return (
     <FormLayout>

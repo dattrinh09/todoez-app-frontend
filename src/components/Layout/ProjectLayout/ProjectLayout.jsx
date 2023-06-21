@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "./project-layout-styles";
-import useGetProject from "@/hooks/project/useGetProject";
+import { useGetProject } from "@/hooks/project";
 import { useParams } from "react-router-dom";
 import Loader from "@/components/Loader/Loader";
 import ProjectHeader from "./ProjectHeader/ProjectHeader";

@@ -12,7 +12,7 @@ import {
 } from "./team-list-styles";
 import { Button, Form, Input, Modal } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import axiosInstance from "../../../request/axiosInstance";
+import api from "@/api/api";
 import { notificationShow } from "../../../utils/notificationShow";
 import useGetTeams from "../../../hooks/team/useGetTeams";
 import Loader from "../../../components/Loader/Loader";
@@ -29,7 +29,7 @@ const TeamList = () => {
       .validateFields()
       .then(async (values) => {
         try {
-          await axiosInstance.post("teams", values);
+          await api.post("teams", values);
           notificationShow(
             "success",
             "Create team successfully",

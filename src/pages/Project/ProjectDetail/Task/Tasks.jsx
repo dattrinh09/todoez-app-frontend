@@ -8,10 +8,10 @@ import {
 import { Link } from "react-router-dom";
 import { getTaskDetailRoute } from "@/utils/route";
 import { EllipsisOutlined } from "@ant-design/icons";
-import { notificationShow } from "@/utils/notificationShow";
-import axiosInstance from "@/request/axiosInstance";
 import MyTag from "@/components/MyTag/MyTag";
 import MyTooltip from "@/components/MyTooltip/MyTooltip";
+import { useMutateTask } from "@/hooks/task";
+import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
 const { confirm } = Modal;
@@ -24,19 +24,32 @@ const Tasks = ({
   current,
   onTableChange,
 }) => {
+  const { mutateTaskFn, isMutateTaskLoading } = useMutateTask();
+
   const handleDeleteTask = (id) => {
     confirm({
       title: "Do you want to remove this task from this project?",
       okText: "Yes",
       cancelText: "No",
-      onOk: async () => {
-        try {
-          await axiosInstance.delete(`tasks/${projectId}/${id}`);
-          notificationShow("success", "Remove user successfully");
-          tasksRefetch();
-        } catch (e) {
-          errorResponse(e.response);
-        }
+      okButtonProps: {
+        loading: isMutateTaskLoading
+      },
+      onOk: () => {
+        mutateTaskFn(
+          {
+            type: "delete",
+            param: [projectId, id],
+          },
+          {
+            onSuccess: () => {
+              notificationShow("success", "Delete task successfully");
+              tasksRefetch();
+            },
+            onError: (error) => {
+              errorResponse(error.response);
+            },
+          }
+        );
       },
     });
   };
@@ -69,16 +82,25 @@ const Tasks = ({
       key: "status",
       render: (status) => {
         const s = STATUS_OPTIONS.find((i) => i.value === status);
-        return <MyTag tag={s} />;
+        return (
+          <Space size="small">
+            <MyTag tag={s} />
+          </Space>
+        );
       },
     },
     {
       title: "P",
       dataIndex: "priority",
       key: "priority",
+      align: "center",
       render: (priority) => {
         const p = PRIORITY_OPTIONS.find((i) => i.value === priority);
-        return <MyTooltip tooltip={p} />;
+        return (
+          <Space size="small">
+            <MyTooltip tooltip={p} />
+          </Space>
+        );
       },
     },
     {

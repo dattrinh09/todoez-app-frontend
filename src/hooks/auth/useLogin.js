@@ -1,32 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
-import axiosInstance from "@/request/axiosInstance";
-import { useDispatch } from "react-redux";
-import { userInfoStore } from "@/stores/reducers/userSlice";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/api/api";
 
-const useLogin = () => {
-  const dispatch = useDispatch();
-  const [isChecking, setIsChecking] = useState(true);
-  const [userInfo, setUserInfo] = useState(null);
-  const isLogin = useMemo(() => {
-    return !!userInfo;
-  }, [userInfo]);
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsChecking(true);
-      try {
-        const res = await axiosInstance.get("users/profile");
-        setUserInfo(res.data.user_info);
-        dispatch(userInfoStore(res.data.user_info));
-      } catch {
-        setUserInfo(null);
-      } finally {
-        setIsChecking(false);
-      }
-    };
-    fetchData();
-  }, []);
+const typeLoginUrl = {
+  email: "auth/signin",
+  google: "auth/google/signin",
+}
 
-  return { isChecking, isLogin, userInfo };
+export const useLogin = () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: async ({ type, body }) => {
+      return await api.post(typeLoginUrl[`${type}`], body);
+    },
+    networkMode: "offlineFirst",
+  });
+
+  return {
+    loginFn: mutate,
+    isLoginLoading: isLoading,
+  };
 };
-
-export default useLogin;

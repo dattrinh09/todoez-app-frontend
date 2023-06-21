@@ -6,6 +6,7 @@ export const errorResponse = (response) => {
 
   switch (status) {
     case 401:
+      notificationShow("error", message);
       break;
     case 400:
       notificationShow("error", message);

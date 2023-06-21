@@ -8,39 +8,38 @@ import {
   SignUp,
   UserIcon,
 } from "./header-styles";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ConstantsPath } from "@/constants/ConstantsPath";
-import { useSelector, useDispatch } from "react-redux";
-import { userSelector } from "@/stores/selectors";
 import { formatDisplayName } from "@/utils/formatInfo";
-import { Dropdown } from "antd";
-import axiosInstance from "@/request/axiosInstance";
-import { userInfoRemove } from "@/stores/reducers/userSlice";
-import { errorResponse } from "@/utils/errorResponse";
+import { Button, Dropdown } from "antd";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { useLogout } from "@/hooks/auth";
 
-const Header = () => {
-  const navigate = useNavigate();
-  const { userInfo } = useSelector(userSelector);
-  const dispatch = useDispatch();
-  const handleSignout = async () => {
-    try {
-      await axiosInstance.get("auth/signout");
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      dispatch(userInfoRemove());
-      navigate(ConstantsPath.HERO_PAGE);
-    } catch (e) {
-      errorResponse(e.response);
-    }
-  };
+const Header = ({ info }) => {
+  const { logoutFn, isLogoutLoading } = useLogout();
   const items = [
     {
       key: "1",
-      label: <Link to={ConstantsPath.PROFILE}>My profile</Link>,
+      label: (
+        <Link to={ConstantsPath.PROFILE}>
+          <Button type="ghost" icon={<UserOutlined />}>
+            My Profile
+          </Button>
+        </Link>
+      ),
     },
     {
       key: "2",
-      label: <div onClick={handleSignout}>Sign out</div>,
+      label: (
+        <Button
+          type="ghost"
+          icon={<LogoutOutlined />}
+          loading={isLogoutLoading}
+          onClick={() => logoutFn()}
+        >
+          Sign out
+        </Button>
+      ),
     },
   ];
   return (
@@ -50,7 +49,7 @@ const Header = () => {
           <Logo>TodoEZ</Logo>
         </Link>
         <Menu>
-          {userInfo ? (
+          {info ? (
             <>
               <Link to="">
                 <Item>Tasks</Item>
@@ -67,7 +66,7 @@ const Header = () => {
                 placement="bottomRight"
                 arrow
               >
-                <UserIcon>{formatDisplayName(userInfo.fullname)}</UserIcon>
+                <UserIcon>{formatDisplayName(info.fullname)}</UserIcon>
               </Dropdown>
             </>
           ) : (

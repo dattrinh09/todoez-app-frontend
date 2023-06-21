@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Item, ItemTitle, Items } from "./team-detail-styles";
-import axiosInstance from "../../../request/axiosInstance";
+import api from "@/api/api";
 import { notificationShow } from "../../../utils/notificationShow";
 
 const { confirm } = Modal;
@@ -15,7 +15,7 @@ const TeamUsers = ({ teamId, teamUsers, teamUsersRefetch, teamRefetch }) => {
       cancelText: "No",
       onOk: async () => {
         try {
-          await axiosInstance.delete(`team-users/${teamId}/${id}`);
+          await api.delete(`team-users/${teamId}/${id}`);
           teamUsersRefetch();
           teamRefetch();
           notificationShow(

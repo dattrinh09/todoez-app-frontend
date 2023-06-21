@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 import { ConstantsPath } from "@/constants/ConstantsPath";
+import { useCheckLogin } from "@/hooks/auth";
 import SignIn from "@/pages/Auth/SignIn/SignIn";
 import SignUp from "@/pages/Auth/SignUp/SignUp";
 import ForgotPassword from "@/pages/Auth/ForgotPassword/ForgotPassword";
@@ -8,7 +9,6 @@ import ResetPassword from "@/pages/Auth/ResetPassword/ResetPassword";
 import SuccessPage from "@/pages/Auth/SuccessPage/SuccessPage";
 import VerifyEmail from "@/pages/Auth/VerifyEmail/VerifyEmail";
 import HeroPage from "@/pages/HeroPage/HeroPage";
-import useLogin from "@/hooks/auth/useLogin";
 import Profile from "@/pages/Profile/Profile";
 import ProjectList from "@/pages/Project/ProjectList/ProjectList";
 import Loader from "@/components/Loader/Loader";
@@ -23,7 +23,8 @@ import TaskDetail from "@/pages/Project/ProjectDetail/Task/TaskDetail";
 import ProjectDetail from "@/pages/Project/ProjectDetail/ProjectDetail";
 
 const PrivateRoute = () => {
-  const { isLogin, isChecking } = useLogin();
+  const { isLogin, isChecking } = useCheckLogin();
+
   return (
     <>
       {isChecking ? (

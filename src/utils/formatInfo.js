@@ -45,9 +45,7 @@ export const checkDateInRange = (date, start, end) => {
 
 export const checkIsPassDue = (date) => {
   const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
-  const due = parseInt(moment(new Date(date)).format("YYYYMMDD"));
-
-  console.log(now, due);
+  const due = parseInt(moment(date).format("YYYYMMDD"));
 
   return now > due;
 };

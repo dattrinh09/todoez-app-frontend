@@ -1,30 +1,31 @@
 import { Form, Input, Modal } from "antd";
 import React from "react";
-import axiosInstance from "@/request/axiosInstance";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
+import { useMutateProfile } from "@/hooks/profile";
 
 const ChangePassword = ({ open, onClose }) => {
   const [changeForm] = Form.useForm();
+  const { mutateProfileFn, isMutateProfileLoading } = useMutateProfile();
   const handleChangePassword = () => {
-    changeForm
-      .validateFields()
-      .then(async (values) => {
-        try {
-          await axiosInstance.put("users/change-password", values);
-          notificationShow(
-            "success",
-            "Change password successfully"
-          );
-          changeForm.resetFields();
-          onClose();
-        } catch (e) {
-          errorResponse(e.response);
+    changeForm.validateFields().then((values) => {
+      mutateProfileFn(
+        {
+          type: "changePassword",
+          body: values,
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Change password successfully");
+            changeForm.resetFields();
+            onClose();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
         }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
+      );
+    });
   };
   return (
     <Modal
@@ -33,13 +34,12 @@ const ChangePassword = ({ open, onClose }) => {
       okText="Save"
       cancelText="Cancel"
       onOk={handleChangePassword}
+      okButtonProps={{
+        loading: isMutateProfileLoading,
+      }}
       onCancel={onClose}
     >
-      <Form
-        form={changeForm}
-        layout="vertical"
-        name="change_password"
-      >
+      <Form form={changeForm} layout="vertical" name="change_password">
         <Form.Item
           name="currentPassword"
           label="Current Password"

@@ -13,10 +13,10 @@ const TaskFilter = ({ filter, users }) => {
 
   const filterData = useMemo(() => {
     return {
-      keyword: filter.keyword ? filter.keyword : null,
-      type: filter.type ? filter.type : null,
-      status: filter.status ? filter.status : null,
-      priority: filter.priority ? filter.priority : null,
+      keyword: filter.keyword ?? null,
+      type: filter.type ?? null,
+      status: filter.status ?? null,
+      priority: filter.priority ?? null,
       assignee: filter.assignee
         ? users.find((item) => item.value === Number(filter.assignee)).label
         : null,
@@ -26,46 +26,11 @@ const TaskFilter = ({ filter, users }) => {
     };
   }, [filter, users]);
 
-  const handleSearchKeyword = (value) => {
-    const text = value.replaceAll(" ", "%");
-    if (text) searchParams.set("keyword", text);
-    else searchParams.delete("keyword");
+  const changeSearchParam = (field, value) => {
+    if (value) searchParams.set(field, value);
+    else searchParams.delete(field);
 
-    setSearchParams(searchParams);
-  };
-
-  const handleChangeType = (value) => {
-    if (value) searchParams.set("type", value);
-    else searchParams.delete("type");
-
-    setSearchParams(searchParams);
-  };
-
-  const handleChangeStatus = (value) => {
-    if (value) searchParams.set("status", value);
-    else searchParams.delete("status");
-
-    setSearchParams(searchParams);
-  };
-
-  const handleChangePriority = (value) => {
-    if (value) searchParams.set("priority", value);
-    else searchParams.delete("priority");
-
-    setSearchParams(searchParams);
-  };
-
-  const handleChangeAssignee = (value) => {
-    if (value) searchParams.set("assignee", value);
-    else searchParams.delete("assignee");
-
-    setSearchParams(searchParams);
-  };
-
-  const handleChangeReporter = (value) => {
-    if (value) searchParams.set("reporter", value);
-    else searchParams.delete("reporter");
-
+    searchParams.delete("page");
     setSearchParams(searchParams);
   };
 
@@ -74,14 +39,17 @@ const TaskFilter = ({ filter, users }) => {
       <Input.Search
         defaultValue={filterData.keyword}
         allowClear
-        onSearch={handleSearchKeyword}
+        onSearch={(value) => {
+          const text = value.replaceAll(" ", "%");
+          changeSearchParam("keyword", text);
+        }}
         placeholder="Search task"
         style={{ width: "200px" }}
       />
       <Select
         allowClear
         defaultValue={filterData.type}
-        onChange={handleChangeType}
+        onChange={(value) => changeSearchParam("type", value)}
         placeholder="Type"
         style={{ width: "100px" }}
       >
@@ -94,7 +62,7 @@ const TaskFilter = ({ filter, users }) => {
       <Select
         allowClear
         defaultValue={filterData.status}
-        onChange={handleChangeStatus}
+        onChange={(value) => changeSearchParam("status", value)}
         placeholder="Status"
         style={{ width: "100px" }}
       >
@@ -107,7 +75,7 @@ const TaskFilter = ({ filter, users }) => {
       <Select
         allowClear
         defaultValue={filterData.priority}
-        onChange={handleChangePriority}
+        onChange={(value) => changeSearchParam("priority", value)}
         placeholder="Priority"
         style={{ width: "100px" }}
       >
@@ -120,7 +88,7 @@ const TaskFilter = ({ filter, users }) => {
       <Select
         allowClear
         defaultValue={filterData.assignee}
-        onChange={handleChangeAssignee}
+        onChange={(value) => changeSearchParam("assignee", value)}
         placeholder="Assignee"
         style={{ width: "150px" }}
       >
@@ -133,7 +101,7 @@ const TaskFilter = ({ filter, users }) => {
       <Select
         allowClear
         defaultValue={filterData.reporter}
-        onChange={handleChangeReporter}
+        onChange={(value) => changeSearchParam("reporter", value)}
         placeholder="Reporter"
         style={{ width: "150px" }}
       >
