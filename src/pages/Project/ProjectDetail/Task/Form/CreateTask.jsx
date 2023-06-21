@@ -1,12 +1,9 @@
 import { DatePicker, Form, Input, Modal, Select } from "antd";
 import React from "react";
-import axiosInstance from "@/request/axiosInstance";
-import { notificationShow } from "@/utils/notificationShow";
-import {
-  PRIORITY_OPTIONS,
-  TYPE_OPTIONS,
-} from "@/constants/Constants";
+import { PRIORITY_OPTIONS, TYPE_OPTIONS } from "@/constants/Constants";
 import { checkDateInRange } from "@/utils/formatInfo";
+import { useMutateTask } from "@/hooks/task";
+import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
 const CreateTask = ({
@@ -18,28 +15,33 @@ const CreateTask = ({
   tasksRefetch,
 }) => {
   const [createForm] = Form.useForm();
-  
+  const { mutateTaskFn, isMutateTaskLoading } = useMutateTask();
+
   const handleCreateTask = () => {
-    createForm
-      .validateFields()
-      .then(async (values) => {
-        const newTask = {
-          ...values,
-          end_at: new Date(values.end_at.$d).toString(),
-        };
-        try {
-          await axiosInstance.post(`tasks/${projectId}`, newTask);
-          notificationShow("success", "Create tasks successfully");
-          createForm.resetFields();
-          tasksRefetch();
-          onClose();
-        } catch (e) {
-          errorResponse(e.response);
+    createForm.validateFields().then((values) => {
+      const newTask = {
+        ...values,
+        end_at: new Date(values.end_at.$d).toString(),
+      };
+      mutateTaskFn(
+        {
+          type: "create",
+          param: [projectId, newTask],
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Create task successfully");
+            tasksRefetch();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+          onSettled: () => {
+            onClose();
+          },
         }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
+      );
+    });
   };
   return (
     <Modal
@@ -48,6 +50,9 @@ const CreateTask = ({
       okText="Save"
       cancelText="Cancel"
       onOk={handleCreateTask}
+      okButtonProps={{
+        loading: isMutateTaskLoading,
+      }}
       onCancel={onClose}
     >
       <Form form={createForm} layout="vertical" name="create_task">

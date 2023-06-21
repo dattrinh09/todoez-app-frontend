@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from "react";
 import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import { useParams } from "react-router-dom";
-import useGetTask from "@/hooks/project/task/useGetTask";
 import Loader from "@/components/Loader/Loader";
 import { Bar, Detail, Info, Label, TitleText } from "./task-styles";
-import { Button, Space } from "antd";
+import { Button, Space, Tag } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import useGetSprints from "@/hooks/project/sprint/useGetSprints";
-import useGetProjectUsers from "@/hooks/project/user/useGetProjectUsers";
+import { useGetSprints } from "@/hooks/sprint";
+import { useGetProjectUsers } from "@/hooks/project-user";
+import { useGetTask } from "@/hooks/task";
 import UpdateTask from "./Form/UpdateTask";
 import {
   PRIORITY_OPTIONS,
@@ -18,6 +18,7 @@ import { formatDate2 } from "@/utils/formatInfo";
 import MyTooltip from "@/components/MyTooltip/MyTooltip";
 import MyTag from "@/components/MyTag/MyTag";
 import CommentList from "./Comment/CommentList";
+import { checkIsPassDue } from "../../../../utils/formatInfo";
 
 const TaskDetail = () => {
   const params = useParams();
@@ -28,7 +29,7 @@ const TaskDetail = () => {
 
   const { isSprintsLoading, sprints } = useGetSprints(projectId);
   const { isProjectUsersLoading, projectUsers } = useGetProjectUsers(projectId);
-  const { isTaskLoading, task, taskFetch } = useGetTask(projectId, taskId);
+  const { isTaskLoading, task, taskRefetch } = useGetTask(projectId, taskId);
 
   const taskInfo = useMemo(() => {
     return task
@@ -36,6 +37,7 @@ const TaskDetail = () => {
           type: TYPE_OPTIONS.find((t) => t.value === task.type),
           priority: PRIORITY_OPTIONS.find((p) => p.value === task.priority),
           status: STATUS_OPTIONS.find((s) => s.value === task.status),
+          isPassDue: checkIsPassDue(task.end_at),
         }
       : null;
   }, [task]);
@@ -53,15 +55,14 @@ const TaskDetail = () => {
           <Loader />
         ) : (
           <>
-            {!task ? (
-              <div>No data</div>
-            ) : (
+            {task && (
               <>
                 <Detail>
                   <Bar>
                     <Space>
                       {taskInfo && <MyTooltip tooltip={taskInfo.type} />}
                       <TitleText>{task.content}</TitleText>
+                      {taskInfo?.isPassDue && (<Tag color="red">Over</Tag>)}
                     </Space>
                     <Button
                       type="primary"
@@ -75,11 +76,10 @@ const TaskDetail = () => {
                         open={isUpdate}
                         onClose={() => setIsUpdate(false)}
                         projectId={projectId}
-                        taskId={taskId}
                         task={task}
                         sprints={sprints ? sprints : []}
                         users={users}
-                        taskRefetch={() => taskFetch(true)}
+                        taskRefetch={taskRefetch}
                       />
                     )}
                   </Bar>

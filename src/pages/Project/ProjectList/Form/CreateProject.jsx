@@ -1,32 +1,18 @@
 import { Form, Input, Modal } from "antd";
 import React from "react";
-import axiosInstance from "@/request/axiosInstance";
-import { notificationShow } from "@/utils/notificationShow";
-import { errorResponse } from "@/utils/errorResponse";
+import { useCreateProject } from "@/hooks/project";
 
 const CreateProject = ({ open, onClose, projectsRefetch }) => {
   const [createForm] = Form.useForm();
+  const { createProject, isCreateProjectLoading } = useCreateProject(
+    projectsRefetch,
+    onClose
+  );
 
   const handleCreateProject = () => {
-    createForm
-      .validateFields()
-      .then(async (values) => {
-        try {
-          await axiosInstance.post("projects", values);
-          notificationShow(
-            "success",
-            "Create project successfully"
-          );
-          createForm.resetFields();
-          onClose();
-          projectsRefetch();
-        } catch (e) {
-          errorResponse(e.response);
-        }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
+    createForm.validateFields().then((values) => {
+      createProject(values);
+    });
   };
   return (
     <Modal
@@ -35,13 +21,12 @@ const CreateProject = ({ open, onClose, projectsRefetch }) => {
       okText="Save"
       cancelText="Cancel"
       onOk={handleCreateProject}
+      okButtonProps={{
+        loading: isCreateProjectLoading,
+      }}
       onCancel={onClose}
     >
-      <Form
-        form={createForm}
-        layout="vertical"
-        name="create_project"
-      >
+      <Form form={createForm} layout="vertical" name="create_project">
         <Form.Item
           name="name"
           label="Project Name"

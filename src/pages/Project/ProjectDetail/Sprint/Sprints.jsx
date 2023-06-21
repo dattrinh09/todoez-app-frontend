@@ -23,7 +23,7 @@ import MyTag from "@/components/MyTag/MyTag";
 import { Link } from "react-router-dom";
 import { getTaskDetailRoute } from "@/utils/route";
 import EditSprint from "./Form/EditSprint";
-import axiosInstance from "@/request/axiosInstance";
+import { useMutateSprint } from "@/hooks/sprint";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
@@ -31,20 +31,32 @@ const { confirm } = Modal;
 
 const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
   const [selected, setSelected] = useState(null);
+  const { mutateSprintFn, isMutateSprintLoading } = useMutateSprint();
 
   const handleDeleteSprint = (id) => {
     confirm({
       title: "Do you want to remove this sprint from this project?",
       okText: "Yes",
       cancelText: "No",
-      onOk: async () => {
-        try {
-          await axiosInstance.delete(`sprints/${projectId}/${id}`);
-          notificationShow("success", "Remove user successfully");
-          sprintsRefetch();
-        } catch (e) {
-          errorResponse(e.response);
-        }
+      okButtonProps: {
+        loading: isMutateSprintLoading,
+      },
+      onOk: () => {
+        mutateSprintFn(
+          {
+            type: "delete",
+            param: [projectId, id],
+          },
+          {
+            onSuccess: () => {
+              notificationShow("success", "Remove sprint successfully");
+              sprintsRefetch();
+            },
+            onError: (error) => {
+              errorResponse(error.response);
+            },
+          }
+        );
       },
     });
   };
@@ -97,7 +109,7 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
             size="middle"
             bordered
             dataSource={sprint.tasks ?? []}
-            style={{ backgroundColor: "#ecf6fd"}}
+            style={{ backgroundColor: "#ecf6fd" }}
             renderItem={(item) => (
               <List.Item>
                 <Link

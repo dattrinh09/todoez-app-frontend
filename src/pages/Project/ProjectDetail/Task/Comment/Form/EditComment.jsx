@@ -1,11 +1,12 @@
 import { Form, Input, Modal } from "antd";
 import React, { useEffect } from "react";
-import axiosInstance from "@/request/axiosInstance";
+import { useMutateComment } from "@/hooks/comment";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
 const EditComment = ({ comment, projectId, onClose, commentsRefetch }) => {
   const [editForm] = Form.useForm();
+  const { mutateCommentFn, isMutateCommentLoading } = useMutateComment();
 
   useEffect(() => {
     editForm.setFieldsValue({
@@ -14,40 +15,44 @@ const EditComment = ({ comment, projectId, onClose, commentsRefetch }) => {
   }, [comment]);
 
   const handleEditComment = () => {
-    editForm
-      .validateFields()
-      .then(async (values) => {
-        const newComment = {
-          content: values.content ? values.content : comment.content,
-        };
-        try {
-          await axiosInstance.put(`comments/${projectId}/${comment.id}`, newComment);
-          notificationShow("success", "Update comment successfully");
-          commentsRefetch();
-          onClose();
-        } catch (e) {
-          errorResponse(e.response);
+    editForm.validateFields().then((values) => {
+      const newComment = {
+        content: values.content ?? comment.content,
+      };
+      mutateCommentFn(
+        {
+          type: "update",
+          param: [projectId, comment.id, newComment],
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Update comment successfully");
+            commentsRefetch();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+          onSettled: () => {
+            onClose();
+          },
         }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
+      );
+    });
   };
 
   return (
     <Modal
       title="Edit comment"
-      open={comment}
+      open={!!comment}
       okText="Save"
       cancelText="Cancel"
       onOk={handleEditComment}
+      okButtonProps={{
+        loading: isMutateCommentLoading,
+      }}
       onCancel={onClose}
     >
-      <Form
-        form={editForm}
-        layout="vertical"
-        name="edit_comment"
-      >
+      <Form form={editForm} layout="vertical" name="edit_comment">
         <Form.Item name="content" label="Content">
           <Input.TextArea rows={3} allowClear />
         </Form.Item>

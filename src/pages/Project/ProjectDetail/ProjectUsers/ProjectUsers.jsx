@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import useGetProjectUsers from "@/hooks/project/user/useGetProjectUsers";
+import { useGetProjectUsers } from "@/hooks/project-user";
 import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import Loader from "@/components/Loader/Loader";
 import { Bar, TitleBar } from "./project-users-styles";
@@ -12,11 +12,9 @@ import AddUser from "./Form/AddUser";
 const ProjectUsers = () => {
   const params = useParams();
   const projectId = params["project_id"];
-
   const [isAdd, setIsAdd] = useState(false);
 
-  const { isProjectUsersLoading, projectUsers, projectUsersFetch } =
-    useGetProjectUsers(projectId);
+  const {isProjectUsersLoading, projectUsers, projectUsersRefetch} = useGetProjectUsers(projectId);
 
   return (
     <ProjectLayout>
@@ -42,7 +40,7 @@ const ProjectUsers = () => {
                     open={isAdd}
                     onClose={() => setIsAdd(false)}
                     projectId={projectId}
-                    projectUsersRefetch={() => projectUsersFetch(true)}
+                    projectUsersRefetch={projectUsersRefetch}
                   />
                 )}
               </Bar>
@@ -51,7 +49,7 @@ const ProjectUsers = () => {
                   projectId={projectId}
                   isCreator={projectUsers.creator}
                   projectUsers={projectUsers.list}
-                  projectUsersRefetch={() => projectUsersFetch(true)}
+                  projectUsersRefetch={projectUsersRefetch}
                 />
               )}
             </>

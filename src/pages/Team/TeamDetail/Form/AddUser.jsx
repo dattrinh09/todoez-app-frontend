@@ -1,7 +1,7 @@
 import { Form, Input, Modal } from "antd";
 import React, { useState } from "react";
 import { ErrorMsg } from "../team-detail-styles";
-import axiosInstance from "../../../../request/axiosInstance";
+import api from "@/api/api";
 import { notificationShow } from "../../../../utils/notificationShow";
 
 const AddUser = ({ open, teamId, onClose, teamRefetch, teamUsersRefetch }) => {
@@ -12,7 +12,7 @@ const AddUser = ({ open, teamId, onClose, teamRefetch, teamUsersRefetch }) => {
       .validateFields()
       .then(async (values) => {
         try {
-          await axiosInstance.post(`team-users/${teamId}`, values);
+          await api.post(`team-users/${teamId}`, values);
           notificationShow(
             "success",
             "Add user successfully",

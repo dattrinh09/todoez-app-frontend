@@ -7,7 +7,7 @@ import {
   TYPE_OPTIONS,
 } from "@/constants/Constants";
 import moment from "moment";
-import axiosInstance from "@/request/axiosInstance";
+import { useMutateTask } from "@/hooks/task";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
@@ -15,13 +15,13 @@ const UpdateTask = ({
   open,
   onClose,
   projectId,
-  taskId,
   task,
   sprints,
   users,
   taskRefetch,
 }) => {
   const [updateForm] = Form.useForm();
+  const { mutateTaskFn, isMutateTaskLoading } = useMutateTask();
 
   useEffect(() => {
     const assignee = users.find((user) => user.id === task.assignee.id);
@@ -40,41 +40,40 @@ const UpdateTask = ({
   }, [task]);
 
   const handleUpdateTask = () => {
-    updateForm
-      .validateFields()
-      .then(async (values) => {
-        const newTask = {
-          content: values.content ? values.content : task.content,
-          description: values.description
-            ? values.description
-            : task.description,
-          sprint_id: values.sprint_id ? values.sprint_id : task.sprint.id,
-          end_at: values.end_at
-            ? new Date(values.end_at.$d).toString()
-            : task.end_at,
-          type: values.type ? values.type : task.type,
-          status: values.status ? values.status : task.status,
-          priority: values.priority ? values.priority : task.priority,
-          assignee_id: values.assignee_id
-            ? values.assignee_id
-            : task.assignee.id,
-          reporter_id: values.reporter_id
-            ? values.reporter_id
-            : task.reporter.id,
-        };
+    updateForm.validateFields().then((values) => {
+      const newTask = {
+        content: values.content ?? task.content,
+        description: values.description ?? task.description,
+        sprint_id: values.sprint_id ?? task.sprint.id,
+        end_at: values.end_at
+          ? new Date(values.end_at.$d).toString()
+          : task.end_at,
+        type: values.type ?? task.type,
+        status: values.status ?? task.status,
+        priority: values.priority ?? task.priority,
+        assignee_id: values.assignee_id ?? task.assignee.id,
+        reporter_id: values.reporter_id ?? task.reporter.id,
+      };
 
-        try {
-          await axiosInstance.put(`tasks/${projectId}/${taskId}`, newTask);
-          notificationShow("success", "Update tasks successfully");
-          taskRefetch();
-          onClose();
-        } catch (e) {
-          errorResponse(e.response);
+      mutateTaskFn(
+        {
+          type: "update",
+          param: [projectId, task.id, newTask],
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Update task successfully");
+            taskRefetch();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+          onSettled: () => {
+            onClose();
+          },
         }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
+      );
+    });
   };
 
   return (
@@ -84,6 +83,9 @@ const UpdateTask = ({
       okText="Save"
       cancelText="Cancel"
       onOk={handleUpdateTask}
+      okButtonProps={{
+        loading: isMutateTaskLoading,
+      }}
       onCancel={onClose}
     >
       <Form

@@ -11,14 +11,14 @@ import {
 import { Button, Result } from "antd";
 import { InboxOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import Loader from "@/components/Loader/Loader";
-import useGetProjects from "@/hooks/project/useGetProjects";
+import { useGetProjects } from "@/hooks/project";
 import { Link } from "react-router-dom";
 import { getProjectDetailRoute } from "@/utils/route";
 import CreateProject from "./Form/CreateProject";
 
 const ProjectList = () => {
   const [isCreate, setIsCreate] = useState(false);
-  const { isProjectsLoading, projects, projectsFetch } = useGetProjects();
+  const { isProjectsLoading, projects, projectsRefetch } = useGetProjects();
 
   return (
     <MainLayout>
@@ -35,7 +35,7 @@ const ProjectList = () => {
           <CreateProject
             open={isCreate}
             onClose={() => setIsCreate(false)}
-            projectsRefetch={() => projectsFetch(true)}
+            projectsRefetch={() => projectsRefetch()}
           />
         )}
         <Section>

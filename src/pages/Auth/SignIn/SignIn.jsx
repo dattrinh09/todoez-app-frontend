@@ -14,44 +14,52 @@ import {
 } from "../auth-styles";
 import { Link, useNavigate } from "react-router-dom";
 import { ConstantsPath } from "@/constants/ConstantsPath";
-import axios from "axios";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleConstants } from "@/constants/Constants";
 import { notificationShow } from "@/utils/notificationShow";
+import { useLogin } from "@/hooks/auth";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const handleFinish = async (values) => {
-    setIsLoading(true);
-    try {
-      const res = await axios.post(
-        "http://localhost:8080/api/auth/signin",
-        values
-      );
-      localStorage.setItem("access_token", res.data.access_token);
-      localStorage.setItem("refresh_token", res.data.refresh_token);
-      navigate(ConstantsPath.MY_PAGE);
-    } catch (e) {
-      setError(e.response.data.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const [errorMsg, setErrorMsg] = useState("");
+  const { loginFn, isLoginLoading } = useLogin();
+
+  const handleFinish = (values) => {
+    loginFn(
+      {
+        type: "email",
+        body: values,
+      },
+      {
+        onSuccess: (data) => {
+          localStorage.setItem("access_token", data.data.access_token);
+          localStorage.setItem("refresh_token", data.data.refresh_token);
+          navigate(ConstantsPath.MY_PAGE);
+        },
+        onError: (error) => {
+          setErrorMsg(error.response.data.message);
+        },
+      }
+    );
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const res = await axios.post(
-        "http://localhost:8080/api/auth/google/signin",
-        { googleToken: credentialResponse.credential }
-      );
-      localStorage.setItem("access_token", res.data.access_token);
-      localStorage.setItem("refresh_token", res.data.refresh_token);
-      navigate(ConstantsPath.MY_PAGE);
-    } catch (e) {
-      setError(e.response.data.message);
-    }
+  const handleGoogleSuccess = (credentialResponse) => {
+    loginFn(
+      {
+        type: "google",
+        body: { googleToken: credentialResponse.credential },
+      },
+      {
+        onSuccess: (data) => {
+          localStorage.setItem("access_token", data.data.access_token);
+          localStorage.setItem("refresh_token", data.data.refresh_token);
+          navigate(ConstantsPath.MY_PAGE);
+        },
+        onError: (error) => {
+          setErrorMsg(error.response.data.message);
+        },
+      }
+    );
   };
 
   return (
@@ -61,7 +69,7 @@ const SignIn = () => {
         <Form
           name="signin_form"
           onFinish={handleFinish}
-          onFocus={() => setError("")}
+          onFocus={() => setErrorMsg("")}
           style={{ marginTop: "20px" }}
         >
           <Form.Item
@@ -81,6 +89,7 @@ const SignIn = () => {
               prefix={<MailOutlined />}
               type="email"
               placeholder="E-mail"
+              autoComplete="username"
             />
           </Form.Item>
           <Form.Item
@@ -96,16 +105,21 @@ const SignIn = () => {
               prefix={<LockOutlined />}
               type="password"
               placeholder="Password"
+              autoComplete="current-password"
             />
           </Form.Item>
           <ForgotPassLink>
             <Link to={ConstantsPath.FORGOT_PASSWORD}>Forgot password?</Link>
           </ForgotPassLink>
           <ErrorMessage>
-            {error && <span style={{ color: "red" }}>{error}</span>}
+            {errorMsg && <span style={{ color: "red" }}>{errorMsg}</span>}
           </ErrorMessage>
           <Form.Item>
-            <SubmitBtn htmlType="submit" type="primary" loading={isLoading}>
+            <SubmitBtn
+              htmlType="submit"
+              type="primary"
+              loading={isLoginLoading}
+            >
               Sign In
             </SubmitBtn>
           </Form.Item>
@@ -119,7 +133,7 @@ const SignIn = () => {
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => {
-                  notificationShow("error", "Google sign in unsuccessfully", "Something went wrong");
+                  notificationShow("error", "Google sign in unsuccessfully");
                 }}
               />
             </GoogleOAuthProvider>

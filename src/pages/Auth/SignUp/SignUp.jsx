@@ -10,29 +10,28 @@ import {
 import { Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { ConstantsPath } from "@/constants/ConstantsPath";
-import axios from "axios";
 import { PhoneNumberFormat } from "@/constants/Constants";
+import { useRegister } from "@/hooks/auth";
 
 const SignUp = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const [errorMsg, setErrorMsg] = useState();
   const navigate = useNavigate();
+  const { registerFn, isRegisterLoading } = useRegister();
 
-  const handleFinish = async (values) => {
-    setIsLoading(true);
-    try {
-      await axios.post("http://localhost:8080/api/auth/signup", values);
-      navigate(ConstantsPath.SUCCESS, {
-        state: {
-          title: "Create account successfully",
-          sub: "Please check your e-mail to verify",
-        },
-      });
-    } catch (e) {
-      setError(e.response.data.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleFinish = (values) => {
+    registerFn(values, {
+      onSuccess: () => {
+        navigate(ConstantsPath.SUCCESS, {
+          state: {
+            title: "Create account successfully",
+            sub: "Please check your e-mail to verify",
+          },
+        });
+      },
+      onError: (error) => {
+        setErrorMsg(error.response.data.message);
+      },
+    });
   };
 
   return (
@@ -134,10 +133,14 @@ const SignUp = () => {
             <Input.Password />
           </Form.Item>
           <ErrorMessage>
-            {error && <span style={{ color: "red" }}>{error}</span>}
+            {errorMsg && <span style={{ color: "red" }}>{errorMsg}</span>}
           </ErrorMessage>
           <Form.Item style={{ paddingTop: "10px" }}>
-            <SubmitBtn htmlType="submit" type="primary" loading={isLoading}>
+            <SubmitBtn
+              htmlType="submit"
+              type="primary"
+              loading={isRegisterLoading}
+            >
               Sign Up
             </SubmitBtn>
           </Form.Item>

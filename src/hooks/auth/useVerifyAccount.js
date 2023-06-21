@@ -1,29 +1,23 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "@/request/axiosInstance";
+import api from "@/api/api";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 
-const useVerifyAccount = (email, token) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isVerify, setIsVerify] = useState(false);
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setIsVerify(false);
-      try {
-        await axiosInstance.get(`auth/verify/${email}/${token}`);
-        setIsVerify(true);
-      } catch {
-        setIsVerify(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    if (email && token) fetchData();
-  }, [email, token]);
+const verify = async (email, token) => {
+  return await api.get(`auth/verify/${email}/${token}`);
+}
+
+export const useVerifyAccount = (email, token) => {
+  const { isSuccess, isLoading } = useQuery({
+    queryKey: ["email", "token", "verify", email, token],
+    queryFn: () => verify(email, token),
+  });
+
+  const isVerified = useMemo(() => {
+    return isSuccess;
+  }, [isSuccess]); 
 
   return {
     isAccountVerifying: isLoading,
-    isAccountVerified: isVerify
+    isAccountVerified: isVerified,
   };
 };
-
-export default useVerifyAccount;

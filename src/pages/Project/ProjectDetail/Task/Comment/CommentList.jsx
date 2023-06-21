@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import useGetComments from "@/hooks/project/comment/useGetComments";
+import React, { useState } from "react";
 import {
   ButtonGroup,
   CommentContainer,
@@ -10,60 +9,85 @@ import { Avatar, Button, Input, List, Modal, Space, Tag } from "antd";
 import { useSelector } from "react-redux";
 import { userSelector } from "@/stores/selectors";
 import { formatDisplayName } from "@/utils/formatInfo";
-import axiosInstance from "@/request/axiosInstance";
-import { errorResponse } from "@/utils/errorResponse";
 import Loader from "@/components/Loader/Loader";
-import { notificationShow } from "@/utils/notificationShow";
 import { formatDate } from "@/utils/formatInfo";
 import EditComment from "./Form/EditComment";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useGetComments, useMutateComment } from "@/hooks/comment";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const { confirm } = Modal;
 
 const CommentList = ({ projectId, taskId }) => {
   const { userInfo } = useSelector(userSelector);
   const [content, setContent] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
   const [selected, setSelected] = useState(null);
-  const [page, setPage] = useState(1);
-  const { isCommentsLoading, comments, commentsFetch, commentsFilter } =
-    useGetComments(projectId, taskId, false);
 
-  useEffect(() => {
-    commentsFilter({ page });
-  }, [page]);
+  const {
+    comments,
+    isCommentsLoading,
+    isCommentsNext,
+    commentsFetchNext,
+    commentsRefetch,
+  } = useGetComments(projectId, taskId);
+  const { mutateCommentFn, isMutateCommentLoading } = useMutateComment();
 
-  const handleCreateComment = async () => {
+  const loadMoreComments = async () => {
+    if (isCommentsNext) await commentsFetchNext();
+  };
+
+  const handleCreateComment = () => {
     if (content) {
-      setIsCreating(true);
-      try {
-        await axiosInstance.post(`comments/${projectId}`, {
-          task_id: Number(taskId),
-          content,
-        });
-        commentsFetch(true);
-      } catch (e) {
-        errorResponse(e.response);
-      } finally {
-        setIsCreating(false);
-        setContent("");
-      }
+      const newComment = {
+        task_id: Number(taskId),
+        content,
+      };
+      mutateCommentFn(
+        {
+          type: "create",
+          param: [projectId, newComment],
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Add comment successfully");
+            commentsRefetch();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+          onSettled: () => {
+            setContent("");
+          },
+        }
+      );
     }
   };
 
-  const handleDeleteComment = (id) => {
+  const handleDeleteComment = (commentId) => {
     confirm({
       title: "Do you want to remove this comment?",
       okText: "Yes",
       cancelText: "No",
-      onOk: async () => {
-        try {
-          await axiosInstance.delete(`comments/${projectId}/${id}`);
-          notificationShow("success", "Remove comment successfully");
-          commentsFetch(true);
-        } catch (e) {
-          console.log(e);
-          errorResponse(e.response);
-        }
+      okButtonProps: {
+        loading: isMutateCommentLoading,
+      },
+      onOk: () => {
+        mutateCommentFn(
+          {
+            type: "delete",
+            param: [projectId, commentId],
+          },
+          {
+            onSuccess: () => {
+              notificationShow("success", "Remove comment successfully");
+              commentsRefetch();
+            },
+            onError: (error) => {
+              errorResponse(error.response);
+            },
+          }
+        );
       },
     });
   };
@@ -89,7 +113,10 @@ const CommentList = ({ projectId, taskId }) => {
             onChange={(e) => setContent(e.target.value)}
           />
           <div>
-            <Button loading={isCreating} onClick={handleCreateComment}>
+            <Button
+              loading={isMutateCommentLoading}
+              onClick={handleCreateComment}
+            >
               Add comment
             </Button>
           </div>
@@ -98,59 +125,68 @@ const CommentList = ({ projectId, taskId }) => {
       {isCommentsLoading ? (
         <Loader />
       ) : (
-        <List
-          size="middle"
-          itemLayout="vertical"
-          bordered
-          dataSource={comments ? comments.list : []}
-          renderItem={(item) => (
-            <List.Item
-              actions={[
-                <ButtonGroup>
-                  <Button
-                    size="small"
-                    type="link"
-                    onClick={() => setSelected(item)}
-                  >
-                    Edit
-                  </Button>
-                  {selected && (
-                    <EditComment
-                      comment={selected}
-                      onClose={() => setSelected(null)}
-                      projectId={projectId}
-                      commentsRefetch={() => commentsFetch(true)}
-                    />
-                  )}
-                  <Button
-                    size="small"
-                    type="link"
-                    onClick={() => handleDeleteComment(item.id)}
-                  >
-                    Delete
-                  </Button>
-                </ButtonGroup>,
-              ]}
-            >
-              <List.Item.Meta
-                avatar={
-                  <Avatar style={{ backgroundColor: "#1677ff", color: "fff" }}>
-                    {formatDisplayName(item.user.user.fullname)}
-                  </Avatar>
-                }
-                title={
-                  <Space>
-                    <span>{item.user.user.fullname}</span>
-                    <span style={{ color: "#1677ff" }}>
-                      {formatDate(item.update_at)}
-                    </span>
-                  </Space>
-                }
-                description={item.content}
-              />
-            </List.Item>
-          )}
-        />
+        <InfiniteScroll
+          dataLength={10}
+          next={loadMoreComments}
+          hasMore={isCommentsNext}
+          loader={<Loader />}
+        >
+          <List
+            size="middle"
+            itemLayout="vertical"
+            bordered
+            dataSource={comments}
+            renderItem={(item) => (
+              <List.Item
+                actions={[
+                  <ButtonGroup>
+                    <Button
+                      size="small"
+                      type="link"
+                      onClick={() => setSelected(item)}
+                    >
+                      Edit
+                    </Button>
+                    {selected && (
+                      <EditComment
+                        comment={selected}
+                        onClose={() => setSelected(null)}
+                        projectId={projectId}
+                        commentsRefetch={commentsRefetch}
+                      />
+                    )}
+                    <Button
+                      size="small"
+                      type="link"
+                      onClick={() => handleDeleteComment(item.id)}
+                    >
+                      Delete
+                    </Button>
+                  </ButtonGroup>,
+                ]}
+              >
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      style={{ backgroundColor: "#1677ff", color: "fff" }}
+                    >
+                      {formatDisplayName(item.user.user.fullname)}
+                    </Avatar>
+                  }
+                  title={
+                    <Space>
+                      <span>{item.user.user.fullname}</span>
+                      <span style={{ color: "#1677ff" }}>
+                        {formatDate(item.update_at)}
+                      </span>
+                    </Space>
+                  }
+                  description={item.content}
+                />
+              </List.Item>
+            )}
+          />
+        </InfiniteScroll>
       )}
     </CommentContainer>
   );
