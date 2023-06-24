@@ -8,15 +8,26 @@ import {
   SignUp,
   UserIcon,
 } from "./header-styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ConstantsPath } from "@/constants/ConstantsPath";
 import { formatDisplayName } from "@/utils/formatInfo";
 import { Button, Dropdown } from "antd";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { useLogout } from "@/hooks/auth";
+import api from "@/api/api";
+import { errorResponse } from "@/utils/errorResponse";
 
 const Header = ({ info }) => {
-  const { logoutFn, isLogoutLoading } = useLogout();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await api.get("auth/signout");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      navigate(ConstantsPath.SIGN_IN);
+    } catch (e) {
+      errorResponse(e.response);
+    }
+  };
   const items = [
     {
       key: "1",
@@ -31,12 +42,7 @@ const Header = ({ info }) => {
     {
       key: "2",
       label: (
-        <Button
-          type="ghost"
-          icon={<LogoutOutlined />}
-          loading={isLogoutLoading}
-          onClick={() => logoutFn()}
-        >
+        <Button type="ghost" icon={<LogoutOutlined />} onClick={handleLogout}>
           Sign out
         </Button>
       ),

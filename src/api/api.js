@@ -49,8 +49,8 @@ api.interceptors.response.use(
       const newToken = await refresh();
       if (newToken) {
         localStorage.setItem("access_token", newToken);
+        return api(prevRequest);
       }
-      return api(prevRequest);
     }
     return Promise.reject(error);
   }

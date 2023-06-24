@@ -1,110 +1,65 @@
 import React, { useState } from "react";
-import MainLayout from "../../../components/Layout/MainLayout/MainLayout";
+import MainLayout from "@/components/Layout/MainLayout/MainLayout";
+import Loader from "@/components/Loader/Loader";
+import { useGetTeams } from "@/hooks/team";
+import { Button, Empty } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import {
   Container,
-  ErrorMsg,
   Heading,
   Item,
   ItemTitle,
   Items,
   Section,
-  TeamListLayout,
 } from "./team-list-styles";
-import { Button, Form, Input, Modal } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import api from "@/api/api";
-import { notificationShow } from "../../../utils/notificationShow";
-import useGetTeams from "../../../hooks/team/useGetTeams";
-import Loader from "../../../components/Loader/Loader";
+import { getTeamDetailRoute } from "@/utils/route";
+import CreateTeam from "./Form/CreateTeam";
 import { Link } from "react-router-dom";
-import { getTeamRoute } from "../../../utils/route";
 
 const TeamList = () => {
-  const [open, setOpen] = useState(false);
-  const { isTeamsLoading, teams, teamsFetch } = useGetTeams();
-  const [createForm] = Form.useForm();
-  const [error, setError] = useState("");
-  const handleCreateTeam = () => {
-    createForm
-      .validateFields()
-      .then(async (values) => {
-        try {
-          await api.post("teams", values);
-          notificationShow(
-            "success",
-            "Create team successfully",
-            "Your team already created."
-          );
-          createForm.resetFields();
-          setOpen(false);
-          teamsFetch(true);
-        } catch (e) {
-          setError(e.response.data.message);
-        }
-      })
-      .catch((info) => {
-        console.log("Validate Failed: ", info);
-      });
-  };
+  const [isCreate, setIsCreate] = useState(false);
+  const { isTeamsLoading, teams, teamsRefetch } = useGetTeams();
+
   return (
     <MainLayout>
-      <TeamListLayout>
-        <Container>
-          <Heading>Team List</Heading>
-          <Button
-            icon={<PlusCircleOutlined />}
-            size="large"
-            type="primary"
-            onClick={() => setOpen(true)}
-          >
-            Create team
-          </Button>
-          <Modal
-            title="Create team"
-            open={open}
-            okText="Save"
-            cancelText="Cancel"
-            onOk={handleCreateTeam}
-            onCancel={() => setOpen(false)}
-          >
-            <Form
-              form={createForm}
-              layout="vertical"
-              name="create_team"
-              onFocus={() => setError("")}
-            >
-              <Form.Item
-                name="name"
-                label="Team Name"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter team name.",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              {error && <ErrorMsg>{error}</ErrorMsg>}
-            </Form>
-          </Modal>
-          <Section>
-            {isTeamsLoading ? (
-              <Loader />
-            ) : (
-              <Items>
-                {teams.map((item) => (
-                  <Link key={item.id} to={getTeamRoute(item.id)}>
-                    <Item>
-                      <ItemTitle>{item.name}</ItemTitle>
+      <Container>
+        <Heading>Team List</Heading>
+        <Button
+          icon={<PlusCircleOutlined />}
+          type="primary"
+          onClick={() => setIsCreate(true)}
+        >
+          Create team
+        </Button>
+        {isCreate && (
+          <CreateTeam
+            open={isCreate}
+            onClose={() => setIsCreate(false)}
+            teamsRefetch={teamsRefetch}
+          />
+        )}
+        <Section>
+          {isTeamsLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {teams.length > 0 ? (
+                <Items>
+                  {teams.map((item) => (
+                    <Item key={item.id}>
+                      <Link to={getTeamDetailRoute(item.id)}>
+                        <ItemTitle>{item.name}</ItemTitle>
+                      </Link>
                     </Item>
-                  </Link>
-                ))}
-              </Items>
-            )}
-          </Section>
-        </Container>
-      </TeamListLayout>
+                  ))}
+                </Items>
+              ) : (
+                <Empty description="No team" />
+              )}
+            </>
+          )}
+        </Section>
+      </Container>
     </MainLayout>
   );
 };

@@ -1,19 +1,19 @@
 import React from "react";
-import { Heading, Sub, SubIcon, SubText } from "./project-header-styles";
-import { CalendarOutlined } from "@ant-design/icons";
-import { formatDate2 } from "@/utils/formatInfo";
+import { Heading, Sub, SubIcon, SubText } from "./team-header-styles";
 import { Link } from "react-router-dom";
-import { getProjectDetailRoute } from "@/utils/route";
+import { CalendarOutlined } from "@ant-design/icons";
+import { getTeamDetailRoute } from "@/utils/route";
+import { formatDate2 } from "@/utils/formatInfo";
 
-const ProjectHeader = ({ project }) => {
+const TeamHeader = ({ team }) => {
   return (
     <Heading>
       <div>
         <Link
           style={{ fontSize: "20px", fontWeight: "500", color: "#1677ff" }}
-          to={getProjectDetailRoute(project.id)}
+          to={getTeamDetailRoute(team.id)}
         >
-          {project.name}
+          {team.name}
         </Link>
       </div>
 
@@ -21,10 +21,10 @@ const ProjectHeader = ({ project }) => {
         <SubIcon>
           <CalendarOutlined />
         </SubIcon>
-        <SubText>{formatDate2(project.create_at, "DD-MM-YYYY")}</SubText>
+        <SubText>{formatDate2(team.create_at, "LL")}</SubText>
       </Sub>
     </Heading>
   );
 };
 
-export default ProjectHeader;
+export default TeamHeader;

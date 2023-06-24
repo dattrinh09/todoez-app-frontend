@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import CardList from "@/components/CardList/CardList";
-import { getProjectUsersRoute, getSprintListlRoute, getTaskListRoute } from "@/utils/route";
+import { getProjectUsersRoute, getSprintListRoute, getTaskListRoute } from "@/utils/route";
 import { useParams } from "react-router-dom";
 import sprintsImg from "@/assets/images/sprint-list.svg";
 import tasksImg from "@/assets/images/task-list.svg";
@@ -16,7 +16,7 @@ const ProjectDetail = () => {
       {
         key: 1,
         title: "Sprint list",
-        route: getSprintListlRoute(projectId),
+        route: getSprintListRoute(projectId),
         image: sprintsImg,
       },
       {

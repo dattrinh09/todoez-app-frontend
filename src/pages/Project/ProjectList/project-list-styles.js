@@ -26,6 +26,7 @@ export const Item = styled.li`
   border: 1px solid #aaa;
   padding: 10px;
   margin: 20px 0;
+  cursor: pointer;
   &:hover {
     scale: 1.05;
     box-shadow: 0 2px 5px 0 rgba(51, 62, 73, 0.1);

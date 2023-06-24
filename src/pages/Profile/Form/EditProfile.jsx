@@ -54,12 +54,6 @@ const EditProfile = ({ open, onClose, info }) => {
         <Form.Item
           name="fullname"
           label="Full Name"
-          rules={[
-            {
-              required: true,
-              message: "Please enter your full name.",
-            },
-          ]}
         >
           <Input />
         </Form.Item>
@@ -67,10 +61,6 @@ const EditProfile = ({ open, onClose, info }) => {
           name="phone_number"
           label="Phone Nummber"
           rules={[
-            {
-              required: true,
-              message: "Please enter your new phone number.",
-            },
             () => ({
               validator(_, value) {
                 if (!value || value.match(PhoneNumberFormat)) {

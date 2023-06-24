@@ -13,15 +13,18 @@ export const useCheckLogin = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["login", "check"],
     queryFn: () => checkLogin(),
+    retry: 2,
   });
 
+  const rToken = localStorage.getItem("refresh_token");
+
   const isLogin = useMemo(() => {
-    if (!!data?.data?.user_info) {
+    if (rToken && !!data?.data?.user_info) {
       dispatch(userInfoStore(data.data.user_info));
       return true;
     }
     return false;
-  }, [data]);
+  }, [data, rToken]);
 
   return {
     isLogin,

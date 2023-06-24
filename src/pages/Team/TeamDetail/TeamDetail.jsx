@@ -1,159 +1,36 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import MainLayout from "../../../components/Layout/MainLayout/MainLayout";
-import useGetTeam from "../../../hooks/team/useGetTeam";
-import {
-  Container,
-  Heading,
-  TeamDetailLayout,
-  Title,
-  Sub,
-  SubIcon,
-  SubText,
-} from "./team-detail-styles";
-import Loader from "../../../components/Loader/Loader";
-import TeamUsers from "./TeamUsers";
-import { Button, Modal } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  UserOutlined,
-  UserAddOutlined,
-  CalendarOutlined,
-} from "@ant-design/icons";
-import AddUser from "./Form/AddUser";
-import ChangeName from "./Form/ChangeName";
-import api from "@/api/api";
-import { notificationShow } from "../../../utils/notificationShow";
-import { ConstantsPath } from "../../../constants/ConstantsPath";
-import useGetTeamUsers from "../../../hooks/team/user/useGetTeamUsers";
-import { formatDate } from "../../../utils/formatInfo";
-import CanNotAccessPage from "../../CanNotAccessPage/CanNotAccessPage";
-
-const { confirm } = Modal;
+import React, { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
+import TeamLayout from "@/components/Layout/TeamLayout/TeamLayout";
+import CardList from "@/components/CardList/CardList";
+import { getNoteListRoute, getTeamUsersRoute } from '@/utils/route';
+import usersImg from "@/assets/images/user-list.svg";
+import notesImg from "@/assets/images/note-list.svg";
 
 const TeamDetail = () => {
-  const params = useParams();
-  const navigate = useNavigate();
-  const { isTeamLoading, teamInfo, teamFetch } = useGetTeam(params.team_id);
-  const { isTeamUsersLoading, teamUsers, teamUsersFetch } = useGetTeamUsers(
-    params.team_id
-  );
-  const [isAdd, setIsAdd] = useState(false);
-  const [isChange, setIsChange] = useState(false);
-  const handleDelete = async (id) => {
-    confirm({
-      title: "Do you want to remove this team ?",
-      okText: "Yes",
-      cancelText: "No",
-      onOk: async () => {
-        try {
-          await api.delete(`teams/${id}`);
-          navigate(ConstantsPath.TEAM_LIST);
-          notificationShow("success", "Remove team successfully");
-        } catch (e) {
-          notificationShow(
-            "error",
-            "Remove user unsuccessfully",
-            e.response.data.message
-          );
-        }
-      },
-    });
-  };
-  return (
-    <MainLayout>
-      <TeamDetailLayout>
-        <Container>
-          {isTeamLoading ? (
-            <Loader />
-          ) : (
-            <>
-              {!teamInfo ? (
-                <CanNotAccessPage />
-              ) : (
-                <>
-                  <Heading>
-                    <Title>{teamInfo.team.name}</Title>
-                  </Heading>
-                  <Sub>
-                    <SubIcon>
-                      <CalendarOutlined />
-                    </SubIcon>
-                    <SubText>
-                      {formatDate(teamInfo.team.create_time).toLocaleString()}
-                    </SubText>
-                    <SubIcon>
-                      <UserOutlined />
-                    </SubIcon>
-                    <SubText>{teamInfo.user_number}</SubText>
-                    {teamInfo.is_creator && (
-                      <>
-                        <Button
-                          shape="circle"
-                          size="small"
-                          type="primary"
-                          icon={<EditOutlined />}
-                          onClick={() => setIsChange(true)}
-                        />
-                        <Button
-                          shape="circle"
-                          size="small"
-                          type="primary"
-                          danger
-                          icon={<DeleteOutlined />}
-                          onClick={() => handleDelete(params.team_id)}
-                        />
-                      </>
-                    )}
-                  </Sub>
-                  {isChange && (
-                    <ChangeName
-                      open={isChange}
-                      teamId={teamInfo.team.id}
-                      onClose={() => setIsChange(false)}
-                      teamRefetch={() => teamFetch(true)}
-                    />
-                  )}
-                  {teamInfo.is_creator && (
-                    <Button
-                      size="large"
-                      type="primary"
-                      icon={<UserAddOutlined />}
-                      onClick={() => setIsAdd(true)}
-                    >
-                      Add user
-                    </Button>
-                  )}
-                  {isAdd && (
-                    <AddUser
-                      open={isAdd}
-                      teamId={teamInfo.team.id}
-                      onClose={() => setIsAdd(false)}
-                      teamRefetch={() => teamFetch(true)}
-                      teamUsersRefetch={() => teamUsersFetch(true)}
-                    />
-                  )}
-                  <section>
-                    {isTeamUsersLoading ? (
-                      <Loader />
-                    ) : (
-                      <TeamUsers
-                        teamId={teamInfo.team.id}
-                        teamUsers={teamUsers}
-                        teamRefetch={() => teamFetch(true)}
-                        teamUsersRefetch={() => teamUsersFetch(true)}
-                      />
-                    )}
-                  </section>
-                </>
-              )}
-            </>
-          )}
-        </Container>
-      </TeamDetailLayout>
-    </MainLayout>
-  );
-};
+    const params = useParams();
+    const teamId = params["team_id"];
 
-export default TeamDetail;
+    const TEAM_DETAIL_OPTIONS = useMemo(() => {
+        return [
+            {
+                key: 1,
+                title: "Note list",
+                route: getNoteListRoute(teamId),
+                image: notesImg,
+            },
+            {
+                key: 2,
+                title: "User list",
+                route: getTeamUsersRoute(teamId),
+                image: usersImg,
+            }
+        ]
+    }, [teamId]);
+  return (
+    <TeamLayout>
+        <CardList options={TEAM_DETAIL_OPTIONS} />
+    </TeamLayout>
+  )
+}
+
+export default TeamDetail

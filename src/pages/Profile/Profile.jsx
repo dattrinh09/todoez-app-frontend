@@ -28,16 +28,23 @@ import ChangePassword from "./Form/ChangePassword";
 import EditProfile from "./Form/EditProfile";
 import { useSelector } from "react-redux";
 import { userSelector } from "@/stores/selectors";
+import ChangeAvatar from "./Form/ChangeAvatar";
 
 const Profile = () => {
   const { userInfo } = useSelector(userSelector);
   const [change, setChange] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [upload, setUpload] = useState(false);
   return (
     <MainLayout>
       <Header />
       <Container>
-        <UserPhoto>{formatDisplayName(userInfo.fullname)}</UserPhoto>
+        <UserPhoto onClick={() => setUpload(true)}>
+          {formatDisplayName(userInfo.fullname)}
+        </UserPhoto>
+        {upload && (
+          <ChangeAvatar open={upload} onClose={() => setUpload(false)} />
+        )}
         <Section>
           <UserName>{userInfo.fullname}</UserName>
           <Info>
@@ -51,7 +58,8 @@ const Profile = () => {
               <Label>
                 <PhoneOutlined /> Phone number:
               </Label>
-              {userInfo.phone_number && formatPhoneNumber(userInfo.phone_number)}
+              {userInfo.phone_number &&
+                formatPhoneNumber(userInfo.phone_number)}
             </InfoItem>
             <InfoItem>
               <Label>

@@ -28,6 +28,25 @@ export const formatDate2 = (date, format) => {
   return moment(convertDate(date)).format(format);
 };
 
+export const formatDate3 = (date) => {
+  const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
+  const day = parseInt(formatDate2(date, "YYYYMMDD"));
+  let str = "";
+
+  switch (now - day) {
+    case 0:
+      str = "Today";
+      break;
+    case 1:
+      str = "Yesterday";
+      break;
+    default:
+      str = formatDate2(date, "LL");
+  }
+
+  return str;
+}
+
 export const formatRange = (start, end) => {
   const startDate = moment(start).format("DD/MM/YYYY");
   const endDate = moment(end).format("DD/MM/YYYY");
