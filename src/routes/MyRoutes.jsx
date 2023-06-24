@@ -14,13 +14,15 @@ import ProjectList from "@/pages/Project/ProjectList/ProjectList";
 import Loader from "@/components/Loader/Loader";
 import TeamList from "@/pages/Team/TeamList/TeamList";
 import TeamDetail from "@/pages/Team/TeamDetail/TeamDetail";
+import TeamUsers from "@/pages/Team/TeamDetail/TeamUser/TeamUsers";
 import MyPage from "@/pages/MyPage/MyPage";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
-import ProjectUsers from "@/pages/Project/ProjectDetail/ProjectUsers/ProjectUsers";
+import ProjectUsers from "@/pages/Project/ProjectDetail/ProjectUser/ProjectUsers";
 import SprintList from "@/pages/Project/ProjectDetail/Sprint/SprintList";
 import TaskList from "@/pages/Project/ProjectDetail/Task/TaskList";
 import TaskDetail from "@/pages/Project/ProjectDetail/Task/TaskDetail";
 import ProjectDetail from "@/pages/Project/ProjectDetail/ProjectDetail";
+import NoteList from "@/pages/Team/TeamDetail/Note/NoteList";
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useCheckLogin();
@@ -30,7 +32,7 @@ const PrivateRoute = () => {
       {isChecking ? (
         <Loader />
       ) : (
-        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.SIGN_IN} />}</>
+        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.HERO_PAGE} />}</>
       )}
     </>
   );
@@ -79,6 +81,8 @@ const MyRoutes = () => {
           />
           <Route path={ConstantsPath.TEAM_LIST} element={<TeamList />} />
           <Route path={ConstantsPath.TEAM_DETAIL} element={<TeamDetail />} />
+          <Route path={ConstantsPath.TEAM_NOTE_LIST} element={<NoteList />} />
+          <Route path={ConstantsPath.TEAM_USER_LIST} element={<TeamUsers />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

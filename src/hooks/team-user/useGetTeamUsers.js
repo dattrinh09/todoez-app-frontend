@@ -4,12 +4,12 @@ import { useMemo } from "react";
 import { errorResponse } from "@/utils/errorResponse";
 
 const getData = async (teamId) => {
-  return await api.get(`teams/${teamId}`);
+  return await api.get(`team-users/${teamId}`);
 };
 
-export const useGetTeam = (teamId) => {
+export const useGetTeamUsers = (teamId) => {
   const { data, isLoading, refetch, error } = useQuery({
-    queryKey: ["team", "detail", teamId],
+    queryKey: ["team", "user", "list", teamId],
     queryFn: () => getData(teamId),
   });
 
@@ -20,8 +20,8 @@ export const useGetTeam = (teamId) => {
   }, [data]);
 
   return {
-    team: returnData,
-    isTeamLoading: isLoading,
-    teamRefetch: refetch,
+    teamUsers: returnData,
+    isTeamUsersLoading: isLoading,
+    teamUsersRefetch: refetch,
   };
 };

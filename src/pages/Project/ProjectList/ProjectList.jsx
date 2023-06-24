@@ -8,8 +8,8 @@ import {
   Items,
   Section,
 } from "./project-list-styles";
-import { Button, Result } from "antd";
-import { InboxOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Empty } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import Loader from "@/components/Loader/Loader";
 import { useGetProjects } from "@/hooks/project";
 import { Link } from "react-router-dom";
@@ -46,15 +46,15 @@ const ProjectList = () => {
               {projects.length > 0 ? (
                 <Items>
                   {projects.map((item) => (
-                    <Link key={item.id} to={getProjectDetailRoute(item.id)}>
-                      <Item>
+                    <Item key={item.id}>
+                      <Link to={getProjectDetailRoute(item.id)}>
                         <ItemTitle>{item.name}</ItemTitle>
-                      </Item>
-                    </Link>
+                      </Link>
+                    </Item>
                   ))}
                 </Items>
               ) : (
-                <Result icon={<InboxOutlined />} title="No data" />
+                <Empty description="No project" />
               )}
             </>
           )}

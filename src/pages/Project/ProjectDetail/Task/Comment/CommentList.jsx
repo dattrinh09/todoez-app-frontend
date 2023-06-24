@@ -147,14 +147,6 @@ const CommentList = ({ projectId, taskId }) => {
                     >
                       Edit
                     </Button>
-                    {selected && (
-                      <EditComment
-                        comment={selected}
-                        onClose={() => setSelected(null)}
-                        projectId={projectId}
-                        commentsRefetch={commentsRefetch}
-                      />
-                    )}
                     <Button
                       size="small"
                       type="link"
@@ -187,6 +179,14 @@ const CommentList = ({ projectId, taskId }) => {
             )}
           />
         </InfiniteScroll>
+      )}
+      {selected && (
+        <EditComment
+          comment={selected}
+          onClose={() => setSelected(null)}
+          projectId={projectId}
+          commentsRefetch={commentsRefetch}
+        />
       )}
     </CommentContainer>
   );

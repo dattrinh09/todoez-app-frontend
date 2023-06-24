@@ -78,14 +78,27 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
                 items: [
                   {
                     key: 1,
-                    label: <div onClick={() => setSelected(sprint)}>Edit</div>,
+                    label: (
+                      <Button
+                        type="link"
+                        size="small"
+                        onClick={() => setSelected(sprint)}
+                      >
+                        Edit
+                      </Button>
+                    ),
                   },
                   {
                     key: 2,
                     label: (
-                      <div onClick={() => handleDeleteSprint(sprint.id)}>
+                      <Button
+                        type="link"
+                        size="small"
+                        danger
+                        onClick={() => handleDeleteSprint(sprint.id)}
+                      >
                         Delete
-                      </div>
+                      </Button>
                     ),
                   },
                 ],

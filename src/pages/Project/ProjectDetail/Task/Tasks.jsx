@@ -5,7 +5,7 @@ import {
   STATUS_OPTIONS,
   TYPE_OPTIONS,
 } from "@/constants/Constants";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getTaskDetailRoute } from "@/utils/route";
 import { EllipsisOutlined } from "@ant-design/icons";
 import MyTag from "@/components/MyTag/MyTag";
@@ -24,7 +24,12 @@ const Tasks = ({
   current,
   onTableChange,
 }) => {
+  const navigate = useNavigate();
   const { mutateTaskFn, isMutateTaskLoading } = useMutateTask();
+
+  const goToTaskDetail = (id) => {
+    navigate(getTaskDetailRoute(projectId, id));
+  };
 
   const handleDeleteTask = (id) => {
     confirm({
@@ -32,7 +37,7 @@ const Tasks = ({
       okText: "Yes",
       cancelText: "No",
       okButtonProps: {
-        loading: isMutateTaskLoading
+        loading: isMutateTaskLoading,
       },
       onOk: () => {
         mutateTaskFn(
@@ -139,14 +144,27 @@ const Tasks = ({
                 {
                   key: "1",
                   label: (
-                    <Link to={getTaskDetailRoute(projectId, id)}>
+                    <Button
+                      type="link"
+                      size="small"
+                      onClick={() => goToTaskDetail(id)}
+                    >
                       View task
-                    </Link>
+                    </Button>
                   ),
                 },
                 {
                   key: "2",
-                  label: <div onClick={() => handleDeleteTask(id)}>Delete</div>,
+                  label: (
+                    <Button
+                      type="link"
+                      size="small"
+                      danger
+                      onClick={() => handleDeleteTask(id)}
+                    >
+                      Delete
+                    </Button>
+                  ),
                 },
               ],
             }}
