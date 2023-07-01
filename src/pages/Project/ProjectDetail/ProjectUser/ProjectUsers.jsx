@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetProjectUsers } from "@/hooks/project-user";
 import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import Loader from "@/components/Loader/Loader";
-import { Bar, TitleBar } from "./project-users-styles";
+import { Bar, Title } from "./project-users-styles";
 import UserList from "./UserList";
 import { Button } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
@@ -14,48 +14,59 @@ const ProjectUsers = () => {
   const projectId = params["project_id"];
   const [isAdd, setIsAdd] = useState(false);
 
-  const {isProjectUsersLoading, projectUsers, projectUsersRefetch} = useGetProjectUsers(projectId);
+  const { isProjectUsersLoading, projectUsers, projectUsersRefetch } =
+    useGetProjectUsers(projectId);
+
+  const data = useMemo(() => {
+    return {
+      list: projectUsers
+        ? projectUsers.list
+            .filter((item) => !item.delete_at)
+            .map((value) => ({
+              key: value.id,
+              id: value.id,
+              name: value.user.fullname,
+              avatar: value.user.avatar,
+              email: value.user.email,
+              creator: value.is_creator,
+            }))
+        : [],
+      creator: projectUsers ? projectUsers.creator : null,
+    };
+  }, [projectUsers]);
 
   return (
     <ProjectLayout>
-      {isProjectUsersLoading ? (
-        <Loader />
-      ) : (
-        <>
-          {projectUsers && (
-            <>
-              <Bar>
-                <TitleBar>User list</TitleBar>
-                {projectUsers.creator && (
-                  <Button
-                    type="primary"
-                    icon={<UserAddOutlined />}
-                    onClick={() => setIsAdd(true)}
-                  >
-                    Add user
-                  </Button>
-                )}
-                {isAdd && (
-                  <AddUser
-                    open={isAdd}
-                    onClose={() => setIsAdd(false)}
-                    projectId={projectId}
-                    projectUsersRefetch={projectUsersRefetch}
-                  />
-                )}
-              </Bar>
-              {projectUsers.list.length > 0 && (
-                <UserList
-                  projectId={projectId}
-                  isCreator={projectUsers.creator}
-                  projectUsers={projectUsers.list}
-                  projectUsersRefetch={projectUsersRefetch}
-                />
-              )}
-            </>
-          )}
-        </>
-      )}
+      <Bar>
+        <Title>User list</Title>
+        <Button
+          type="primary"
+          icon={<UserAddOutlined />}
+          onClick={() => setIsAdd(true)}
+        >
+          Add user
+        </Button>
+        {isAdd && (
+          <AddUser
+            open={isAdd}
+            onClose={() => setIsAdd(false)}
+            projectId={projectId}
+            projectUsersRefetch={projectUsersRefetch}
+          />
+        )}
+      </Bar>
+      <section>
+        {isProjectUsersLoading ? (
+          <Loader />
+        ) : (
+          <UserList
+            projectId={projectId}
+            data={data}
+            isLoading={isProjectUsersLoading}
+            projectUsersRefetch={projectUsersRefetch}
+          />
+        )}
+      </section>
     </ProjectLayout>
   );
 };

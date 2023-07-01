@@ -10,6 +10,7 @@ const queryClient = new QueryClient({
       networkMode: "offlineFirst",
       refetchOnWindowFocus: false,
       //staleTime: 3 * 1000 * 60,
+      keepPreviousData: true,
     },
   },
 });

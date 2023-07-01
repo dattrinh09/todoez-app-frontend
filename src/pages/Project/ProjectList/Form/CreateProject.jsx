@@ -1,17 +1,34 @@
 import { Form, Input, Modal } from "antd";
 import React from "react";
-import { useCreateProject } from "@/hooks/project";
+import { useMutateProject } from "@/hooks/project";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
 
 const CreateProject = ({ open, onClose, projectsRefetch }) => {
   const [createForm] = Form.useForm();
-  const { createProject, isCreateProjectLoading } = useCreateProject(
-    projectsRefetch,
-    onClose
-  );
+  const { mutateProjectFn, isMutateProjectLoading } = useMutateProject();
 
   const handleCreateProject = () => {
     createForm.validateFields().then((values) => {
-      createProject(values);
+      mutateProjectFn(
+        {
+          type: "create",
+          param: [values],
+        },
+        {
+          onSuccess: () => {
+            notificationShow("success", "Create project successfully");
+            projectsRefetch();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+          onSettled: () => {
+            createForm.resetFields();
+            onClose();
+          },
+        }
+      );
     });
   };
   return (
@@ -22,7 +39,7 @@ const CreateProject = ({ open, onClose, projectsRefetch }) => {
       cancelText="Cancel"
       onOk={handleCreateProject}
       okButtonProps={{
-        loading: isCreateProjectLoading,
+        loading: isMutateProjectLoading,
       }}
       onCancel={onClose}
     >

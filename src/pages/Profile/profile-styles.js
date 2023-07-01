@@ -1,3 +1,4 @@
+import { Avatar } from "antd";
 import styled from "styled-components";
 
 export const Header = styled.div`
@@ -12,7 +13,7 @@ export const Container = styled.div`
   position: relative;
 `;
 
-export const UserPhoto = styled.div`
+export const UserPhoto = styled(Avatar)`
   position: absolute;
   height: 100px;
   width: 100px;
@@ -23,7 +24,7 @@ export const UserPhoto = styled.div`
   font-weight: 600;
   letter-spacing: 5px;
   color: #fff;
-  border: 5px solid #fff;
+  border: 2px solid #fff;
   display: flex;
   justify-content: center;
   align-items: center;

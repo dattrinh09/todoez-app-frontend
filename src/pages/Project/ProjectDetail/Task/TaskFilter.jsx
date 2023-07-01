@@ -13,10 +13,10 @@ const TaskFilter = ({ filter, users }) => {
 
   const filterData = useMemo(() => {
     return {
-      keyword: filter.keyword ?? null,
-      type: filter.type ?? null,
-      status: filter.status ?? null,
-      priority: filter.priority ?? null,
+      keyword: filter.keyword || null,
+      type: filter.type || null,
+      status: filter.status || null,
+      priority: filter.priority || null,
       assignee: filter.assignee
         ? users.find((item) => item.value === Number(filter.assignee)).label
         : null,
@@ -44,7 +44,7 @@ const TaskFilter = ({ filter, users }) => {
           changeSearchParam("keyword", text);
         }}
         placeholder="Search task"
-        style={{ width: "200px" }}
+        style={{ width: "300px" }}
       />
       <Select
         allowClear

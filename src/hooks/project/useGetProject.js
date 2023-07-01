@@ -1,26 +1,27 @@
 import api from "@/api/api";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 import { errorResponse } from "@/utils/errorResponse";
 
 const getData = async (id) => {
-  return await api.get(`projects/${id}`);
+  let data = null;
+  try {
+    const res = await api.get(`projects/${id}`);
+    data = res.data;
+  } catch (e) {
+    data = null;
+    errorResponse(e.response);
+  }
+  return data;
 };
 
 export const useGetProject = (projectId) => {
-  const { data, isLoading, refetch, error } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["project", "detail", projectId],
     queryFn: () => getData(projectId),
   });
 
-  const returnData = useMemo(() => {
-    return data ? data.data : null;
-  }, [data]);
-
-  if (error) errorResponse(error.response);
-
   return {
-    project: returnData,
+    project: data,
     isProjectLoading: isLoading,
     projectRefetch: refetch,
   };

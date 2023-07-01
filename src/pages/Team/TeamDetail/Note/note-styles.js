@@ -7,7 +7,7 @@ export const Bar = styled.div`
 `;
 
 export const NoteTitle = styled.div`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #555;
 `;

@@ -8,11 +8,19 @@ const getData = async (projectId, taskId, page = 1) => {
     page,
     limit: 10,
   };
-  return await api.get(`comments/${projectId}/${taskId}`, { params });
+  let data = null;
+  try {
+    data = await api.get(`comments/${projectId}/${taskId}`, { params });
+  } catch (e) {
+    errorResponse(e.response);
+    data = null;
+  }
+
+  return data;
 };
 
 export const useGetComments = (projectId, taskId) => {
-  const { data, hasNextPage, fetchNextPage, isLoading, error, refetch } =
+  const { data, hasNextPage, fetchNextPage, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ["comment", "list", projectId, taskId],
       queryFn: ({ pageParam = 1 }) => getData(projectId, taskId, pageParam),
@@ -22,8 +30,6 @@ export const useGetComments = (projectId, taskId) => {
         return nextPage <= maxPage ? nextPage : undefined;
       },
     });
-
-  if (error) errorResponse(error.response);
 
   const returnData = useMemo(() => {
     return data?.pages

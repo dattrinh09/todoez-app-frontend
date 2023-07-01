@@ -9,7 +9,7 @@ import Loader from "@/components/Loader/Loader";
 const TeamLayout = ({ children }) => {
   const params = useParams();
   const teamId = params["team_id"];
-  const { isTeamLoading, team } = useGetTeam(teamId);
+  const { isTeamLoading, team, teamRefetch } = useGetTeam(teamId);
   return (
     <MainLayout>
       <Container>
@@ -19,7 +19,7 @@ const TeamLayout = ({ children }) => {
           <>
             {team && (
               <>
-                <TeamHeader team={team.information} />
+                <TeamHeader team={team.information} teamRefetch={teamRefetch} />
                 {children}
               </>
             )}

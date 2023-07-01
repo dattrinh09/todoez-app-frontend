@@ -2,7 +2,14 @@ import React, { useMemo, useState } from "react";
 import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import { useParams } from "react-router-dom";
 import Loader from "@/components/Loader/Loader";
-import { Bar, Detail, Info, Label, TitleText } from "./task-styles";
+import {
+  Bar,
+  Detail,
+  FullContent,
+  Info,
+  Label,
+  SectionDescription,
+} from "./task-styles";
 import { Button, Space, Tag } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useGetSprints } from "@/hooks/sprint";
@@ -14,11 +21,11 @@ import {
   STATUS_OPTIONS,
   TYPE_OPTIONS,
 } from "@/constants/Constants";
-import { formatDate2 } from "@/utils/formatInfo";
+import { formatDate2, checkIsPassDue } from "@/utils/formatInfo";
 import MyTooltip from "@/components/MyTooltip/MyTooltip";
 import MyTag from "@/components/MyTag/MyTag";
 import CommentList from "./Comment/CommentList";
-import { checkIsPassDue } from "../../../../utils/formatInfo";
+import ErrorText from "@/components/ErrorText/ErrorText";
 
 const TaskDetail = () => {
   const params = useParams();
@@ -37,7 +44,6 @@ const TaskDetail = () => {
           type: TYPE_OPTIONS.find((t) => t.value === task.type),
           priority: PRIORITY_OPTIONS.find((p) => p.value === task.priority),
           status: STATUS_OPTIONS.find((s) => s.value === task.status),
-          isPassDue: checkIsPassDue(task.end_at),
         }
       : null;
   }, [task]);
@@ -61,8 +67,7 @@ const TaskDetail = () => {
                   <Bar>
                     <Space>
                       {taskInfo && <MyTooltip tooltip={taskInfo.type} />}
-                      <TitleText>{task.content}</TitleText>
-                      {taskInfo?.isPassDue && (<Tag color="red">Over</Tag>)}
+                      <FullContent>{task.content}</FullContent>
                     </Space>
                     <Button
                       type="primary"
@@ -86,26 +91,48 @@ const TaskDetail = () => {
                   <Info>{taskInfo && <MyTag tag={taskInfo.status} />}</Info>
 
                   <Space>
-                    <Label>Reporter: </Label>
-                    {task.reporter.user.fullname}
+                    <Label>Reporter:</Label>
+                    <ErrorText
+                      check={task.reporter.delete_at}
+                      title="No longer"
+                      content={task.reporter.user.fullname}
+                    />
                   </Space>
                   <Space>
-                    <Label>Assignee: </Label>
-                    {task.assignee.user.fullname}
+                    <Label>Assignee:</Label>
+                    <ErrorText
+                      check={task.assignee.delete_at}
+                      title="No longer"
+                      content={task.assignee.user.fullname}
+                    />
                   </Space>
 
                   <Space>
+                    <MyTooltip tooltip={taskInfo.priority} />
                     <Space>
-                      Create at: {formatDate2(task.create_at, "DD-MM-YYYY")} |
+                      <span>Create at:</span>
+                      <span>{formatDate2(task.create_at, "LL")}</span>
+                      <span>|</span>
                     </Space>
                     <Space>
-                      Update at: {formatDate2(task.update_at, "DD-MM-YYYY")} |
+                      <span>Update at:</span>
+                      <span>{formatDate2(task.update_at, "LL")}</span>
+                      <span>|</span>
                     </Space>
                     <Space>
-                      End at: {formatDate2(task.end_at, "DD-MM-YYYY")}
+                      <span>End at:</span>
+                      <ErrorText
+                        check={checkIsPassDue(task.end_at)}
+                        title="Over due"
+                        content={formatDate2(task.end_at, "LL")}
+                      />
                     </Space>
                   </Space>
                 </Detail>
+                <section>
+                  <Tag color="#222222">Description</Tag>
+                  <SectionDescription>{task.description}</SectionDescription>
+                </section>
                 <CommentList projectId={projectId} taskId={taskId} />
               </>
             )}

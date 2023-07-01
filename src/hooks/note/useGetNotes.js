@@ -9,11 +9,19 @@ const getData = async (id, page = 1) => {
     page,
     limit: 10,
   };
-  return await api.get(`notes/${id}`, { params });
+  let data = null;
+  try {
+    data = await api.get(`notes/${id}`, { params });
+  } catch (e) {
+    errorResponse(e.response);
+    data = null;
+  }
+
+  return data;
 };
 
 export const useGetNotes = (teamId) => {
-  const { data, hasNextPage, fetchNextPage, isLoading, error, refetch } =
+  const { data, hasNextPage, fetchNextPage, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ["note", "list", "infinite", teamId],
       queryFn: ({ pageParam = 1 }) => getData(teamId, pageParam),
@@ -23,8 +31,6 @@ export const useGetNotes = (teamId) => {
         return nextPage <= maxPage ? nextPage : undefined;
       },
     });
-
-  if (error) errorResponse(error.response);
 
   const returnData = useMemo(() => {
     const list = data?.pages

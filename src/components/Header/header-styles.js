@@ -34,16 +34,6 @@ export const Item = styled.div`
 `;
 
 export const UserIcon = styled.div`
-  width: 34px;
-  height: 34px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #fff;
-  background-color: #1677ff;
-  border-radius: 50%;
   cursor: pointer;
 ` 
 

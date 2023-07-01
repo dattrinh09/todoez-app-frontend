@@ -42,17 +42,17 @@ const UpdateTask = ({
   const handleUpdateTask = () => {
     updateForm.validateFields().then((values) => {
       const newTask = {
-        content: values.content ?? task.content,
-        description: values.description ?? task.description,
-        sprint_id: values.sprint_id ?? task.sprint.id,
+        content: values.content || task.content,
+        description: values.description || task.description,
+        sprint_id: values.sprint_id || task.sprint.id,
         end_at: values.end_at
           ? new Date(values.end_at.$d).toString()
           : task.end_at,
-        type: values.type ?? task.type,
-        status: values.status ?? task.status,
-        priority: values.priority ?? task.priority,
-        assignee_id: values.assignee_id ?? task.assignee.id,
-        reporter_id: values.reporter_id ?? task.reporter.id,
+        type: values.type || task.type,
+        status: values.status || task.status,
+        priority: values.priority || task.priority,
+        assignee_id: values.assignee_id || task.assignee.id,
+        reporter_id: values.reporter_id || task.reporter.id,
       };
 
       mutateTaskFn(
@@ -114,11 +114,9 @@ const UpdateTask = ({
                       (i) => i.id === getFieldValue("sprint_id")
                     );
                     const date = value ? value.$d : task.end_at;
-                    const isInRange = checkDateInRange(
-                      date,
-                      s.start_at,
-                      s.end_at
-                    );
+                    const isInRange = s
+                      ? checkDateInRange(date, s.start_at, s.end_at)
+                      : false;
 
                     if (isInRange) {
                       return Promise.resolve();

@@ -1,27 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Heading, Sub, SubIcon, SubText } from "./project-header-styles";
-import { CalendarOutlined } from "@ant-design/icons";
+import { CalendarOutlined, EditOutlined } from "@ant-design/icons";
 import { formatDate2 } from "@/utils/formatInfo";
 import { Link } from "react-router-dom";
 import { getProjectDetailRoute } from "@/utils/route";
+import { Button, Space } from "antd";
+import EditProject from "../Form/EditProject";
 
-const ProjectHeader = ({ project }) => {
+const ProjectHeader = ({ project, projectRefetch }) => {
+  const [isEdit, setIsEdit] = useState(false);
   return (
     <Heading>
-      <div>
+      <Space>
         <Link
           style={{ fontSize: "20px", fontWeight: "500", color: "#1677ff" }}
           to={getProjectDetailRoute(project.id)}
         >
           {project.name}
         </Link>
-      </div>
-
+        <Button
+          size="small"
+          shape="circle"
+          icon={<EditOutlined />}
+          onClick={() => setIsEdit(true)}
+        />
+      </Space>
+      {isEdit && (
+        <EditProject
+          open={isEdit}
+          onClose={() => setIsEdit(false)}
+          project={project}
+          projectRefetch={projectRefetch}
+        />
+      )}
       <Sub>
         <SubIcon>
           <CalendarOutlined />
         </SubIcon>
-        <SubText>{formatDate2(project.create_at, "DD-MM-YYYY")}</SubText>
+        <SubText>{formatDate2(project.create_at, "LL")}</SubText>
       </Sub>
     </Heading>
   );

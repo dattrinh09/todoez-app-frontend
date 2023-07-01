@@ -102,11 +102,9 @@ const CreateTask = ({
                     const s = sprints.find(
                       (i) => i.id === getFieldValue("sprint_id")
                     );
-                    const isInRange = checkDateInRange(
-                      value.$d,
-                      s.start_at,
-                      s.end_at
-                    );
+                    const isInRange = s
+                      ? checkDateInRange(value.$d, s.start_at, s.end_at)
+                      : false;
 
                     if (!value || isInRange) {
                       return Promise.resolve();
@@ -119,7 +117,7 @@ const CreateTask = ({
                 }),
               ]}
             >
-              <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }}/>
+              <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
             </Form.Item>
           </Col>
           <Col span={12}>

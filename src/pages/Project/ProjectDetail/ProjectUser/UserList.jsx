@@ -1,34 +1,18 @@
-import React, { useMemo } from "react";
-import {
-  Item,
-  ItemTitle,
-  Items,
-  Sub,
-  SubIcon,
-  SubText,
-} from "./project-users-styles";
-import { Button, Modal } from "antd";
-import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
+import React from "react";
+import { Button, Modal, Table, Tag } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useMutateProjectUser } from "@/hooks/project-user";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
+import MyAvatar from "@/components/MyAvatar/MyAvatar";
 
 const { confirm } = Modal;
 
-const UserList = ({
-  projectId,
-  isCreator,
-  projectUsers,
-  projectUsersRefetch,
-}) => {
-  const list = useMemo(() => {
-    return projectUsers.filter((user) => !user.delete_at);
-  }, [projectUsers]);
-
+const UserList = ({ projectId, data, isLoading, projectUsersRefetch }) => {
   const { mutateProjectUserFn, isMutateProjectUserLoading } =
     useMutateProjectUser();
 
-  const handleDelete = async (projectUserId) => {
+  const handleDelete = async (id) => {
     confirm({
       title: "Do you want to remove this user from this project?",
       okText: "Yes",
@@ -40,7 +24,7 @@ const UserList = ({
         mutateProjectUserFn(
           {
             type: "delete",
-            param: [projectId, projectUserId],
+            param: [projectId, id],
           },
           {
             onSuccess: () => {
@@ -55,35 +39,59 @@ const UserList = ({
       },
     });
   };
+
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Avatar",
+      key: "avatar",
+      render: ({ name, avatar }) => (
+        <MyAvatar src={avatar} name={name} />
+      ),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Role",
+      dataIndex: "creator",
+      key: "creator",
+      render: (creator) => (
+        <>{creator ? <Tag color="blue">Creator</Tag> : <Tag>Member</Tag>}</>
+      ),
+    },
+    {
+      key: "action",
+      align: "center",
+      render: ({ id }) => (
+        <>
+          {data.creator && (
+            <Button
+              danger
+              type="primary"
+              icon={<DeleteOutlined />}
+              size="small"
+              onClick={() => handleDelete(id)}
+            />
+          )}
+        </>
+      ),
+    },
+  ];
   return (
-    <>
-      <Sub>
-        <SubIcon>
-          <UserOutlined />
-        </SubIcon>
-        <SubText>{list.length}</SubText>
-      </Sub>
-      <Items>
-        {list.map((user) => (
-          <Item key={user.id}>
-            <ItemTitle isCreator={user.is_creator}>
-              {user.is_creator
-                ? user.user.fullname + " [ Creator ]"
-                : user.user.fullname}
-            </ItemTitle>
-            {isCreator && !user.is_creator && (
-              <Button
-                danger
-                type="primary"
-                icon={<DeleteOutlined />}
-                size="small"
-                onClick={() => handleDelete(user.id)}
-              />
-            )}
-          </Item>
-        ))}
-      </Items>
-    </>
+    <Table
+      columns={columns}
+      dataSource={data.list}
+      loading={isLoading}
+      bordered
+      pagination={false}
+    />
   );
 };
 
