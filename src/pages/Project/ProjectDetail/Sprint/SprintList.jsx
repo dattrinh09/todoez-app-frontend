@@ -29,28 +29,28 @@ const SprintList = () => {
 
   return (
     <ProjectLayout>
+      <Bar>
+        <SprintTitle>Sprint list</SprintTitle>
+        <Button
+          type="primary"
+          icon={<PlusCircleOutlined />}
+          onClick={() => setIsCreate(true)}
+        >
+          Create sprint
+        </Button>
+        {isCreate && (
+          <CreateSprint
+            open={isCreate}
+            onClose={() => setIsCreate(false)}
+            projectId={projectId}
+            sprintsRefetch={infiniteSprintsRefetch}
+          />
+        )}
+      </Bar>
       {isInfiniteSprintsLoading ? (
         <Loader />
       ) : (
         <>
-          <Bar>
-            <SprintTitle>Sprint list</SprintTitle>
-            <Button
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              onClick={() => setIsCreate(true)}
-            >
-              Create sprint
-            </Button>
-            {isCreate && (
-              <CreateSprint
-                open={isCreate}
-                onClose={() => setIsCreate(false)}
-                projectId={projectId}
-                sprintsRefetch={infiniteSprintsRefetch}
-              />
-            )}
-          </Bar>
           {infiniteSprints.length > 0 ? (
             <InfiniteScroll
               dataLength={3}

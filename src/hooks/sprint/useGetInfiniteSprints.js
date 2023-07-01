@@ -1,18 +1,26 @@
 import api from "@/api/api";
 import { useMemo } from "react";
-import { errorResponse } from "@/utils/errorResponse";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { errorResponse } from "@/utils/errorResponse";
 
 const getData = async (projectId, page = 1) => {
   const params = {
     page,
     limit: 5,
   }
-  return await api.get(`sprints/${projectId}/tasks`, { params });
+  let data = null;
+  try {
+    data = await api.get(`sprints/${projectId}/tasks`, { params });
+  } catch (e) {
+    errorResponse(e.response);
+    data = null;
+  }
+
+  return data;
 };
 
 export const useGetInfiniteSprints = (projectId) => {
-  const { data, hasNextPage, fetchNextPage, isLoading, error, refetch } = useInfiniteQuery({
+  const { data, hasNextPage, fetchNextPage, isLoading, refetch } = useInfiniteQuery({
     queryKey: ["sprint", "list", "infinite", projectId],
     queryFn: ({ pageParam = 1 }) => getData(projectId, pageParam),
     getNextPageParam: (lastPage, allPages) => {
@@ -21,8 +29,6 @@ export const useGetInfiniteSprints = (projectId) => {
       return nextPage <= maxPage ? nextPage : undefined;
     },
   });
-
-  if (error) errorResponse(error.response);
 
   const returnData = useMemo(() => {
     return data?.pages

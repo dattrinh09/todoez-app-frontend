@@ -9,7 +9,8 @@ import MainLayout from "@/components/Layout/MainLayout/MainLayout";
 const ProjectLayout = ({ children }) => {
   const params = useParams();
   const projectId = params["project_id"];
-  const { isProjectLoading, project } = useGetProject(projectId);
+  const { isProjectLoading, project, projectRefetch } =
+    useGetProject(projectId);
 
   return (
     <MainLayout>
@@ -20,7 +21,10 @@ const ProjectLayout = ({ children }) => {
           <>
             {project && (
               <>
-                <ProjectHeader project={project.information} />
+                <ProjectHeader
+                  project={project.information}
+                  projectRefetch={projectRefetch}
+                />
                 {children}
               </>
             )}

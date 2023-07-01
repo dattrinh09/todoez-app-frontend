@@ -1,10 +1,10 @@
-import { Avatar, Button, Divider, List, Modal } from "antd";
+import { Button, Divider, List, Modal } from "antd";
 import React, { useState } from "react";
-import { formatDisplayName } from "@/utils/formatInfo";
 import EditNote from "./Form/EditNote";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 import { useMutateNote } from "@/hooks/note";
+import MyAvatar from "@/components/MyAvatar/MyAvatar";
 
 const { confirm } = Modal;
 
@@ -50,6 +50,7 @@ const Notes = ({ notes, teamId, notesRefetch }) => {
             dataSource={note.list}
             renderItem={(item) => (
               <List.Item
+                key={item.id}
                 actions={[
                   <Button type="link" onClick={() => setSelected(item)}>
                     Edit
@@ -65,11 +66,11 @@ const Notes = ({ notes, teamId, notesRefetch }) => {
               >
                 <List.Item.Meta
                   avatar={
-                    <Avatar
-                      style={{ backgroundColor: "#1677ff", color: "fff" }}
-                    >
-                      {formatDisplayName(item.user.user.fullname)}
-                    </Avatar>
+                    <MyAvatar
+                      size="large"
+                      src={item.user.user.avatar}
+                      name={item.user.user.fullname}
+                    />
                   }
                   title={<span>{item.user.user.fullname}</span>}
                   description={<span>{item.content}</span>}

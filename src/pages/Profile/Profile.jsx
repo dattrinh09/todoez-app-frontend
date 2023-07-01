@@ -23,7 +23,7 @@ import {
   formatDisplayName,
   formatPhoneNumber,
 } from "@/utils/formatInfo";
-import { Button } from "antd";
+import { Avatar, Button } from "antd";
 import ChangePassword from "./Form/ChangePassword";
 import EditProfile from "./Form/EditProfile";
 import { useSelector } from "react-redux";
@@ -39,11 +39,19 @@ const Profile = () => {
     <MainLayout>
       <Header />
       <Container>
-        <UserPhoto onClick={() => setUpload(true)}>
-          {formatDisplayName(userInfo.fullname)}
+        <UserPhoto
+          size="large"
+          style={{ backgroundColor: "#1677ff", color: "fff" }}
+          src={userInfo.avatar || ""}
+        >
+          {!userInfo.avatar && formatDisplayName(userInfo.fullname)}
         </UserPhoto>
         {upload && (
-          <ChangeAvatar open={upload} onClose={() => setUpload(false)} />
+          <ChangeAvatar
+            open={upload}
+            url={"image.png"}
+            onClose={() => setUpload(false)}
+          />
         )}
         <Section>
           <UserName>{userInfo.fullname}</UserName>
@@ -65,19 +73,18 @@ const Profile = () => {
               <Label>
                 <CalendarOutlined /> Create at:
               </Label>
-              {formatDate2(userInfo.create_at, "DD-MM-YYYY")}
+              {formatDate2(userInfo.create_at, "LL")}
             </InfoItem>
             <InfoItem>
               <Label>
                 <CalendarOutlined /> Update at:
               </Label>
-              {formatDate2(userInfo.update_at, "DD-MM-YYYY")}
+              {formatDate2(userInfo.update_at, "LL")}
             </InfoItem>
           </Info>
           <ChangePass>
             <Button
               type="primary"
-              size="large"
               onClick={() => setChange(true)}
               disabled={!userInfo.is_email_signin}
             >

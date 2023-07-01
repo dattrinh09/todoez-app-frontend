@@ -12,6 +12,8 @@ export const ConstantsPath = {
   MY_PAGE: "/",
   // User
   PROFILE: "/profile",
+  // My Task
+  MY_TASK: "/my-task",
   // Project
   PROJECT_LIST: "/project",
   PROJECT_DETAIL: "/project/:project_id",

@@ -8,6 +8,9 @@ const profileFn = {
   updateProfile: async (body) => {
     return await api.put("users/update-profile", body);
   },
+  changeAvatar: async (body) => {
+    return await api.put("users/change-avatar", body);
+  },
 };
 
 export const useMutateProfile = () => {

@@ -3,38 +3,24 @@ import styled from "styled-components";
 export const Container = styled.div`
   width: 1200px;
   margin: 0 auto;
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export const Heading = styled.div`
-  padding: 30px 0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #1677ff;
 `;
 
-export const Section = styled.div`
-  margin-top: 50px;
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
-export const Items = styled.ul`
-  list-style: none;
-`;
-
-export const Item = styled.li`
-  width: 200px;
-  border-radius: 5px;
-  border: 1px solid #aaa;
-  padding: 10px;
-  margin: 20px 0;
-  cursor: pointer;
-  &:hover {
-    scale: 1.05;
-    box-shadow: 0 2px 5px 0 rgba(51, 62, 73, 0.1);
-  }
-`;
-
-export const ItemTitle = styled.p`
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
+export const Content = styled.div`
+  min-width: 500px;
+  color: #1677ff;
 `;

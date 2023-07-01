@@ -8,6 +8,9 @@ const taskFn = {
   update: async (...param) => {
     return await api.put(`tasks/${param[0]}/${param[1]}`, param[2]);
   },
+  updateStatus: async (...param) => {
+    return await api.put(`tasks/${param[0]}/${param[1]}/update-status`, param[2]);
+  },
   delete: async (...param) => {
     return await api.delete(`tasks/${param[0]}/${param[1]}`);
   },

@@ -5,6 +5,7 @@ import styled from "styled-components";
 const Icon = styled.div`
   height: 15px;
   width: 15px;
+  cursor: pointer;
 `;
 
 const MyTooltip = ({ tooltip }) => {

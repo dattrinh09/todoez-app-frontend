@@ -10,11 +10,11 @@ import {
 } from "./header-styles";
 import { Link, useNavigate } from "react-router-dom";
 import { ConstantsPath } from "@/constants/ConstantsPath";
-import { formatDisplayName } from "@/utils/formatInfo";
 import { Button, Dropdown } from "antd";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import api from "@/api/api";
 import { errorResponse } from "@/utils/errorResponse";
+import MyAvatar from "../MyAvatar/MyAvatar";
 
 const Header = ({ info }) => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const Header = ({ info }) => {
         <Menu>
           {info ? (
             <>
-              <Link to="">
+              <Link to={ConstantsPath.MY_TASK}>
                 <Item>Tasks</Item>
               </Link>
               <Link to={ConstantsPath.PROJECT_LIST}>
@@ -72,7 +72,9 @@ const Header = ({ info }) => {
                 placement="bottomRight"
                 arrow
               >
-                <UserIcon>{formatDisplayName(info.fullname)}</UserIcon>
+                <UserIcon>
+                  <MyAvatar src={info.avatar} name={info.fullname} />
+                </UserIcon>
               </Dropdown>
             </>
           ) : (

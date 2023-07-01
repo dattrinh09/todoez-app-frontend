@@ -1,85 +1,127 @@
-import { Modal, Upload } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { Form, Modal, Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
-import Loader from "@/components/Loader/Loader";
+import { useDispatch } from "react-redux";
+import { userInfoStore } from "@/stores/reducers/userSlice";
+import { useMutateProfile } from "@/hooks/profile";
 
-const getBase64 = (img, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    notificationShow("error", "You can only upload JPG/PNG file!");
-  }
-
-  const isLessThan2M = file.size / 1024 / 1024 < 2;
-  if (!isLessThan2M) {
-    notificationShow("error", "Image must smaller than 2MB!");
-  }
-
-  return isJpgOrPng && isLessThan2M;
+const getBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (e) => reject(e);
+  });
 };
 
 const ChangeAvatar = ({ open, onClose }) => {
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
-  
-  const handleUpload = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
+  const [changeForm] = Form.useForm();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const dispatch = useDispatch();
+  const { mutateProfileFn, isMutateProfileLoading } = useMutateProfile();
+
+  const beforeUpload = (file) => {
+    const imageType = file.name.toLocaleLowerCase().match(/\.[^.]*$/)?.[0];
+    const isLt5M = file.size / 1024 / 1024 < 5;
+    const isJpgOrPng = imageType === ".jpg" || imageType === ".png";
+
+    const isFileError = (isJpgOrPng && isLt5M) || Upload.LIST_IGNORE;
+
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+      return isFileError;
     }
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
+
+    if (!isLt5M) {
+      message.error("Image must be smaller than 5MB!");
+      return isFileError;
+    }
+
+    return false;
+  };
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.file;
+  };
+
+  const handleChange = async (info) => {
+    try {
+      const res = await getBase64(info.fileList[0].originFileObj);
+      setImageUrl(res);
+    } catch (e) {
+      throw new Error(e);
     }
   };
 
-  const handleChangeAvatar = () => {
-    console.log(imageUrl);
+  const handleUploadAvatar = () => {
+    if (imageUrl) {
+      mutateProfileFn(
+        {
+          type: "changeAvatar",
+          body: { avatar: imageUrl },
+        },
+        {
+          onSuccess: (data) => {
+            message.success("Change avatar successfully");
+            dispatch(userInfoStore(data.data.user_info));
+            setImageUrl("");
+            onClose();
+          },
+          onError: (error) => {
+            errorResponse(error.response);
+          },
+        }
+      );
+    }
   };
+
+  const handleClose = () => {
+    setImageUrl("");
+    onClose();
+  };
+
   return (
     <Modal
       title="Avatar"
       open={open}
       okText="Save"
       cancelText="Cancel"
-      onCancel={onClose}
+      okButtonProps={{
+        loading: isMutateProfileLoading,
+      }}
+      onOk={handleUploadAvatar}
+      onCancel={handleClose}
     >
-      <Upload
-        name="avatar"
-        listType="picture-circle"
-        className="avatar-uploader"
-        showUploadList={false}
-        beforeUpload={beforeUpload}
-        onChange={handleUpload}
-      >
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt="avatar"
-            style={{
-              width: "100%",
-            }}
-          />
-        ) : (
-          <div>
-            {loading ? <Loader /> : <PlusOutlined />}
-            <div
-              style={{
-                marginTop: 8,
-              }}
-            >
-              Upload
+      <Form form={changeForm} layout="vertical" name="change_avatar">
+        <Form.Item
+          label="Upload avatar"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload
+            listType="picture-card"
+            maxCount={1}
+            beforeUpload={beforeUpload}
+            onPreview={() => setPreviewOpen(true)}
+            onChange={handleChange}
+          >
+            <div>
+              <UploadOutlined />
             </div>
-          </div>
-        )}
-      </Upload>
+          </Upload>
+        </Form.Item>
+        <Modal
+          open={previewOpen}
+          footer={null}
+          onCancel={() => setPreviewOpen(false)}
+        >
+          <img alt="example" src={imageUrl} style={{ maxWidth: "400px" }} />
+        </Modal>
+      </Form>
     </Modal>
   );
 };

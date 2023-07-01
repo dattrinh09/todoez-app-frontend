@@ -7,7 +7,7 @@ export const Bar = styled.div`
 `;
 
 export const SprintTitle = styled.div`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #555;
 `;
@@ -19,15 +19,6 @@ export const Sub = styled.div`
   align-items: center;
   gap: 4px;
   margin-bottom: 10px;
-`;
-
-export const SubIcon = styled.div`
-  color: #1677ff;
-`;
-
-export const SubText = styled.span`
-  padding-top: 2px;
-  color: #555;
 `;
 
 export const ListBox = styled.div`
@@ -53,28 +44,24 @@ export const BoxTitle = styled.p`
   color: #555;
 `;
 
-export const Item = styled.div`
-  display: flex;
-  justify-content: space-between;
+export const Content = styled.div`
+  max-width: 900px;
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #1677ff;
 `;
 
-export const ItemSec = styled.div`
+export const SubContent = styled.div`
+  margin-left: 20px;
   display: flex;
   flex-direction: column;
   gap: 5px;
 `;
 
-export const Content = styled.div`
-  font-weight: 500;
-  font-size: 16px;
-  color: #555;
-`;
-
-export const SubContent = styled.div`
-  margin-left: 20px;
-`;
-
 export const ItemExtra = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 5px;
 `;

@@ -47,9 +47,15 @@ export const formatDate3 = (date) => {
   return str;
 }
 
+export const formatDate4 = (date) => {
+  const d = convertDate(date);
+
+  return moment(d).calendar();
+}
+
 export const formatRange = (start, end) => {
-  const startDate = moment(start).format("DD/MM/YYYY");
-  const endDate = moment(end).format("DD/MM/YYYY");
+  const startDate = moment(start).format("LL");
+  const endDate = moment(end).format("LL");
 
   return startDate + " ~ " + endDate;
 };
@@ -64,7 +70,7 @@ export const checkDateInRange = (date, start, end) => {
 
 export const checkIsPassDue = (date) => {
   const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
-  const due = parseInt(moment(date).format("YYYYMMDD"));
+  const due = parseInt(formatDate2(date, "YYYYMMDD"));
 
   return now > due;
 };

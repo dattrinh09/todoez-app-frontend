@@ -5,10 +5,9 @@ import {
   CommentCreate,
   CommentForm,
 } from "./comment-styles";
-import { Avatar, Button, Input, List, Modal, Space, Tag } from "antd";
+import { Button, Input, List, Modal, Space, Tag } from "antd";
 import { useSelector } from "react-redux";
 import { userSelector } from "@/stores/selectors";
-import { formatDisplayName } from "@/utils/formatInfo";
 import Loader from "@/components/Loader/Loader";
 import { formatDate } from "@/utils/formatInfo";
 import EditComment from "./Form/EditComment";
@@ -16,6 +15,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useGetComments, useMutateComment } from "@/hooks/comment";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
+import MyAvatar from "@/components/MyAvatar/MyAvatar";
 
 const { confirm } = Modal;
 
@@ -98,12 +98,7 @@ const CommentList = ({ projectId, taskId }) => {
         <Tag color="#222222">Comment</Tag>
       </div>
       <CommentCreate>
-        <Avatar
-          size="large"
-          style={{ backgroundColor: "#1677ff", color: "fff" }}
-        >
-          {formatDisplayName(userInfo.fullname)}
-        </Avatar>
+        <MyAvatar size="large" src={userInfo.avatar} name={userInfo.fullname} />
         <CommentForm>
           <Input.TextArea
             value={content}
@@ -125,60 +120,64 @@ const CommentList = ({ projectId, taskId }) => {
       {isCommentsLoading ? (
         <Loader />
       ) : (
-        <InfiniteScroll
-          dataLength={10}
-          next={loadMoreComments}
-          hasMore={isCommentsNext}
-          loader={<Loader />}
-        >
-          <List
-            size="middle"
-            itemLayout="vertical"
-            bordered
-            dataSource={comments}
-            renderItem={(item) => (
-              <List.Item
-                actions={[
-                  <ButtonGroup>
-                    <Button
-                      size="small"
-                      type="link"
-                      onClick={() => setSelected(item)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      size="small"
-                      type="link"
-                      onClick={() => handleDeleteComment(item.id)}
-                    >
-                      Delete
-                    </Button>
-                  </ButtonGroup>,
-                ]}
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      style={{ backgroundColor: "#1677ff", color: "fff" }}
-                    >
-                      {formatDisplayName(item.user.user.fullname)}
-                    </Avatar>
-                  }
-                  title={
-                    <Space>
-                      <span>{item.user.user.fullname}</span>
-                      <span style={{ color: "#1677ff" }}>
-                        {formatDate(item.update_at)}
-                      </span>
-                    </Space>
-                  }
-                  description={item.content}
-                />
-              </List.Item>
-            )}
-          />
-        </InfiniteScroll>
+        <>
+          {comments.length > 0 && (
+            <InfiniteScroll
+              dataLength={10}
+              next={loadMoreComments}
+              hasMore={isCommentsNext}
+              loader={<Loader />}
+            >
+              <List
+                size="middle"
+                itemLayout="vertical"
+                bordered
+                dataSource={comments}
+                renderItem={(item) => (
+                  <List.Item
+                    actions={[
+                      <ButtonGroup>
+                        <Button
+                          size="small"
+                          type="link"
+                          onClick={() => setSelected(item)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="small"
+                          type="link"
+                          danger
+                          onClick={() => handleDeleteComment(item.id)}
+                        >
+                          Delete
+                        </Button>
+                      </ButtonGroup>,
+                    ]}
+                  >
+                    <List.Item.Meta
+                      avatar={
+                        <MyAvatar
+                          src={item.user.user.avatar}
+                          name={item.user.user.fullname}
+                        />
+                      }
+                      title={
+                        <Space>
+                          <span>{item.user.user.fullname}</span>
+                          <span style={{ color: "#1677ff" }}>
+                            {formatDate(item.update_at)}
+                          </span>
+                        </Space>
+                      }
+                      description={item.content}
+                    />
+                  </List.Item>
+                )}
+              />
+            </InfiniteScroll>
+          )}
+        </>
       )}
       {selected && (
         <EditComment

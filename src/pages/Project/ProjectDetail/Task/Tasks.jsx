@@ -1,4 +1,4 @@
-import { Button, Dropdown, Modal, Space, Table } from "antd";
+import { Button, Dropdown, Modal, Space, Table, Tooltip } from "antd";
 import React from "react";
 import {
   PRIORITY_OPTIONS,
@@ -13,6 +13,8 @@ import MyTooltip from "@/components/MyTooltip/MyTooltip";
 import { useMutateTask } from "@/hooks/task";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
+import { Content } from "./task-styles";
+import ErrorText from "@/components/ErrorText/ErrorText";
 
 const { confirm } = Modal;
 
@@ -78,7 +80,9 @@ const Tasks = ({
       title: "Content",
       key: "content",
       render: ({ id, content }) => (
-        <Link to={getTaskDetailRoute(projectId, id)}>{content}</Link>
+        <Link to={getTaskDetailRoute(projectId, id)}>
+          <Content>{content}</Content>
+        </Link>
       ),
     },
     {
@@ -112,11 +116,25 @@ const Tasks = ({
       title: "Reporter",
       dataIndex: "reporter",
       key: "reporter",
+      render: (reporter) => (
+        <ErrorText
+          check={reporter.delete_at}
+          title={"No longer"}
+          content={reporter.user.fullname}
+        />
+      ),
     },
     {
       title: "Assignee",
       dataIndex: "assignee",
       key: "assignee",
+      render: (assignee) => (
+        <ErrorText
+          check={assignee.delete_at}
+          title={"No longer"}
+          content={assignee.user.fullname}
+        />
+      ),
     },
     {
       title: "Create",
@@ -130,8 +148,10 @@ const Tasks = ({
     },
     {
       title: "Due",
-      dataIndex: "duedate",
       key: "duedate",
+      render: ({ over, duedate }) => (
+        <ErrorText check={over} title={"Over due"} content={duedate} />
+      ),
     },
     {
       key: "action",
@@ -169,7 +189,7 @@ const Tasks = ({
               ],
             }}
             trigger={["click"]}
-            placement="bottom"
+            placement="bottomRight"
             arrow
           >
             <Button size="small" icon={<EllipsisOutlined />} />

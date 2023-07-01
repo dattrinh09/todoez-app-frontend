@@ -2,27 +2,29 @@ import React, { Suspense } from "react";
 import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 import { ConstantsPath } from "@/constants/ConstantsPath";
 import { useCheckLogin } from "@/hooks/auth";
+import Loader from "@/components/Loader/Loader";
+import HeroPage from "@/pages/HeroPage/HeroPage";
 import SignIn from "@/pages/Auth/SignIn/SignIn";
 import SignUp from "@/pages/Auth/SignUp/SignUp";
 import ForgotPassword from "@/pages/Auth/ForgotPassword/ForgotPassword";
 import ResetPassword from "@/pages/Auth/ResetPassword/ResetPassword";
 import SuccessPage from "@/pages/Auth/SuccessPage/SuccessPage";
 import VerifyEmail from "@/pages/Auth/VerifyEmail/VerifyEmail";
-import HeroPage from "@/pages/HeroPage/HeroPage";
 import Profile from "@/pages/Profile/Profile";
-import ProjectList from "@/pages/Project/ProjectList/ProjectList";
-import Loader from "@/components/Loader/Loader";
+import MyPage from "@/pages/MyPage/MyPage";
+import MyTask from "@/pages/MyTask/MyTask";
 import TeamList from "@/pages/Team/TeamList/TeamList";
 import TeamDetail from "@/pages/Team/TeamDetail/TeamDetail";
+import NoteList from "@/pages/Team/TeamDetail/Note/NoteList";
 import TeamUsers from "@/pages/Team/TeamDetail/TeamUser/TeamUsers";
-import MyPage from "@/pages/MyPage/MyPage";
-import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
+import ProjectList from "@/pages/Project/ProjectList/ProjectList";
+import ProjectDetail from "@/pages/Project/ProjectDetail/ProjectDetail";
 import ProjectUsers from "@/pages/Project/ProjectDetail/ProjectUser/ProjectUsers";
 import SprintList from "@/pages/Project/ProjectDetail/Sprint/SprintList";
 import TaskList from "@/pages/Project/ProjectDetail/Task/TaskList";
 import TaskDetail from "@/pages/Project/ProjectDetail/Task/TaskDetail";
-import ProjectDetail from "@/pages/Project/ProjectDetail/ProjectDetail";
-import NoteList from "@/pages/Team/TeamDetail/Note/NoteList";
+import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
+
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useCheckLogin();
@@ -32,7 +34,7 @@ const PrivateRoute = () => {
       {isChecking ? (
         <Loader />
       ) : (
-        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.HERO_PAGE} />}</>
+        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.SIGN_IN} />}</>
       )}
     </>
   );
@@ -58,6 +60,11 @@ const MyRoutes = () => {
         <Route element={<PrivateRoute />}>
           <Route path={ConstantsPath.MY_PAGE} element={<MyPage />} index />
           <Route path={ConstantsPath.PROFILE} element={<Profile />} />
+          <Route path={ConstantsPath.MY_TASK} element={<MyTask />} />
+          <Route path={ConstantsPath.TEAM_LIST} element={<TeamList />} />
+          <Route path={ConstantsPath.TEAM_DETAIL} element={<TeamDetail />} />
+          <Route path={ConstantsPath.TEAM_NOTE_LIST} element={<NoteList />} />
+          <Route path={ConstantsPath.TEAM_USER_LIST} element={<TeamUsers />} />
           <Route path={ConstantsPath.PROJECT_LIST} element={<ProjectList />} />
           <Route
             path={ConstantsPath.PROJECT_DETAIL}
@@ -79,10 +86,6 @@ const MyRoutes = () => {
             path={ConstantsPath.PROJECT_USER_LIST}
             element={<ProjectUsers />}
           />
-          <Route path={ConstantsPath.TEAM_LIST} element={<TeamList />} />
-          <Route path={ConstantsPath.TEAM_DETAIL} element={<TeamDetail />} />
-          <Route path={ConstantsPath.TEAM_NOTE_LIST} element={<NoteList />} />
-          <Route path={ConstantsPath.TEAM_USER_LIST} element={<TeamUsers />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

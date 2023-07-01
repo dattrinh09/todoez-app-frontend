@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { formatRange } from "@/utils/formatInfo";
+import { formatRange, formatDate2, checkIsPassDue } from "@/utils/formatInfo";
 import {
   Box,
   BoxHeader,
   BoxTitle,
   Content,
-  Item,
   ItemExtra,
-  ItemSec,
   ListBox,
   SubContent,
 } from "./sprint-styles";
@@ -26,6 +24,7 @@ import EditSprint from "./Form/EditSprint";
 import { useMutateSprint } from "@/hooks/sprint";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
+import ErrorText from "@/components/ErrorText/ErrorText";
 
 const { confirm } = Modal;
 
@@ -73,42 +72,48 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
                 style={{ color: "#1677ff" }}
               >{` ${sprint.tasks.length} tasks`}</span>
             </BoxTitle>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: 1,
-                    label: (
-                      <Button
-                        type="link"
-                        size="small"
-                        onClick={() => setSelected(sprint)}
-                      >
-                        Edit
-                      </Button>
-                    ),
-                  },
-                  {
-                    key: 2,
-                    label: (
-                      <Button
-                        type="link"
-                        size="small"
-                        danger
-                        onClick={() => handleDeleteSprint(sprint.id)}
-                      >
-                        Delete
-                      </Button>
-                    ),
-                  },
-                ],
-              }}
-              trigger={["click"]}
-              placement="bottomRight"
-              arrow
-            >
-              <Button size="small" type="primary" icon={<EllipsisOutlined />} />
-            </Dropdown>
+            <Space>
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: 1,
+                      label: (
+                        <Button
+                          type="link"
+                          size="small"
+                          onClick={() => setSelected(sprint)}
+                        >
+                          Edit
+                        </Button>
+                      ),
+                    },
+                    {
+                      key: 2,
+                      label: (
+                        <Button
+                          type="link"
+                          size="small"
+                          danger
+                          onClick={() => handleDeleteSprint(sprint.id)}
+                        >
+                          Delete
+                        </Button>
+                      ),
+                    },
+                  ],
+                }}
+                trigger={["click"]}
+                placement="bottomRight"
+                arrow
+              >
+                <Button
+                  size="small"
+                  type="primary"
+                  icon={<EllipsisOutlined />}
+                />
+              </Dropdown>
+            </Space>
             {selected && (
               <EditSprint
                 projectId={projectId}
@@ -122,44 +127,59 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
             size="middle"
             bordered
             dataSource={sprint.tasks ?? []}
-            style={{ backgroundColor: "#ecf6fd" }}
+            style={{ backgroundColor: "#fff" }}
             renderItem={(item) => (
-              <List.Item>
-                <Link
-                  to={getTaskDetailRoute(projectId, item.id)}
-                  style={{ width: "100%" }}
-                >
-                  <Item>
-                    <ItemSec>
+              <List.Item
+                key={item.id}
+                extra={[
+                  <ItemExtra>
+                    <Tag
+                      color={item.assignee.delete_at ? "#ff4d4f" : "#1677ff"}
+                    >{`Assignee: ${item.assignee.user.fullname}`}</Tag>
+                    <Tag
+                      color={item.reporter.delete_at ? "#ff4d4f" : "#1677ff"}
+                    >{`Reporter: ${item.reporter.user.fullname}`}</Tag>
+                  </ItemExtra>,
+                ]}
+              >
+                <List.Item.Meta
+                  title={
+                    <Space>
+                      <MyTooltip
+                        tooltip={TYPE_OPTIONS.find(
+                          (t) => t.value === item.type
+                        )}
+                      />
+                      <Link to={getTaskDetailRoute(projectId, item.id)}>
+                        <Content>{item.content}</Content>
+                      </Link>
+                    </Space>
+                  }
+                  description={
+                    <SubContent>
                       <Space>
                         <MyTooltip
-                          tooltip={TYPE_OPTIONS.find(
-                            (t) => t.value === item.type
+                          tooltip={PRIORITY_OPTIONS.find(
+                            (p) => p.value === item.priority
                           )}
                         />
-                        <Content>{item.content}</Content>
+                        <span>End at:</span>
+                        <ErrorText
+                          check={checkIsPassDue(item.end_at)}
+                          title="Over due"
+                          content={formatDate2(item.end_at, "LL")}
+                        />
                       </Space>
-                      <SubContent>
+                      <div>
                         <MyTag
                           tag={STATUS_OPTIONS.find(
                             (s) => s.value === item.status
                           )}
                         />
-                      </SubContent>
-                    </ItemSec>
-                    <ItemExtra>
-                      <ItemSec>
-                        <Tag color="#1677ff">{`Assignee: ${item.assignee.user.fullname}`}</Tag>
-                        <Tag color="#1677ff">{`Reporter: ${item.reporter.user.fullname}`}</Tag>
-                      </ItemSec>
-                      <MyTooltip
-                        tooltip={PRIORITY_OPTIONS.find(
-                          (p) => p.value === item.priority
-                        )}
-                      />
-                    </ItemExtra>
-                  </Item>
-                </Link>
+                      </div>
+                    </SubContent>
+                  }
+                />
               </List.Item>
             )}
           />
