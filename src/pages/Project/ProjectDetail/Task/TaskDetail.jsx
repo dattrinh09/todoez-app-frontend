@@ -122,7 +122,7 @@ const TaskDetail = () => {
                     <Space>
                       <span>End at:</span>
                       <ErrorText
-                        check={checkIsPassDue(task.end_at)}
+                        check={checkIsPassDue(task.end_at, task.status)}
                         title="Over due"
                         content={formatDate2(task.end_at, "LL")}
                       />

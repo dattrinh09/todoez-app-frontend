@@ -21,6 +21,7 @@ export const errorResponse = (response) => {
       notificationShow("error", "Server error");
       break;
     default:
+      notificationShow("error", "Something error");
       break;
   }
 };

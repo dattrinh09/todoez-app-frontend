@@ -8,13 +8,14 @@ import {
 } from "../auth-styles";
 import { Form, Input, Result } from "antd";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import Loader from "@/components/Loader/Loader";
 import { ConstantsPath } from "@/constants/ConstantsPath";
+import { useVerifyAccount, useResetPassword } from "@/hooks/auth";
 import { notificationShow } from "@/utils/notificationShow";
-import { useVerifyAccount } from "@/hooks/auth";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email");
   const token = searchParams.get("token");
@@ -23,24 +24,25 @@ const ResetPassword = () => {
     token
   );
 
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { resetPasswordFn, isResetPasswordLoading } = useResetPassword();
 
-  const handleFinish = async (values) => {
-    setIsLoading(true);
-    try {
-      await axios.put(
-        `http://localhost:8080/api/auth/reset-password/${email}`,
-        { password: values.password }
-      );
-      notificationShow("success", "Reset password successfully");
-      navigate(ConstantsPath.SIGN_IN);
-    } catch (e) {
-      setError(e.response.data.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleFinish = (values) => {
+    const newPassword = values.password;
+    resetPasswordFn(
+      {
+        email,
+        password: newPassword,
+      },
+      {
+        onSuccess: () => {
+          navigate(ConstantsPath.SIGN_IN);
+          notificationShow("success", "Reset password successfully");
+        },
+        onError: (e) => {
+          setErrorMsg(e.response.data.message);
+        },
+      }
+    );
   };
 
   return (
@@ -57,7 +59,7 @@ const ResetPassword = () => {
                   layout="vertical"
                   name="forgot_password_form"
                   onFinish={handleFinish}
-                  onFocus={() => setError("")}
+                  onFocus={() => setErrorMsg("")}
                   style={{ marginTop: "20px" }}
                 >
                   <Form.Item
@@ -100,13 +102,15 @@ const ResetPassword = () => {
                     <Input.Password />
                   </Form.Item>
                   <ErrorMessage>
-                    {error && <span style={{ color: "red" }}>{error}</span>}
+                    {errorMsg && (
+                      <span style={{ color: "red" }}>{errorMsg}</span>
+                    )}
                   </ErrorMessage>
                   <Form.Item style={{ paddingTop: "10px" }}>
                     <SubmitBtn
                       htmlType="submit"
                       type="primary"
-                      loading={isLoading}
+                      loading={isResetPasswordLoading}
                     >
                       Submit
                     </SubmitBtn>

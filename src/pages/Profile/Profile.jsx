@@ -4,9 +4,11 @@ import {
   PhoneOutlined,
   CalendarOutlined,
   EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import MainLayout from "@/components/Layout/MainLayout/MainLayout";
 import {
+  ButtonGroup,
   ChangePass,
   Container,
   EditProf,
@@ -23,18 +25,54 @@ import {
   formatDisplayName,
   formatPhoneNumber,
 } from "@/utils/formatInfo";
-import { Avatar, Button } from "antd";
+import { Button, Modal, Space } from "antd";
 import ChangePassword from "./Form/ChangePassword";
 import EditProfile from "./Form/EditProfile";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { userInfoStore } from "@/stores/reducers/userSlice";
 import { userSelector } from "@/stores/selectors";
 import ChangeAvatar from "./Form/ChangeAvatar";
+import { useMutateProfile } from "@/hooks/profile";
+import { notificationShow } from "@/utils/notificationShow";
+import { errorResponse } from "@/utils/errorResponse";
+
+const { confirm } = Modal;
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const { userInfo } = useSelector(userSelector);
   const [change, setChange] = useState(false);
   const [edit, setEdit] = useState(false);
   const [upload, setUpload] = useState(false);
+  const { mutateProfileFn, isMutateProfileLoading } = useMutateProfile();
+
+  const handleDeleteAvatar = () => {
+    confirm({
+      title: "Do you want to delete avatar?",
+      okText: "Yes",
+      cancelText: "No",
+      okButtonProps: {
+        loading: isMutateProfileLoading,
+      },
+      onOk: () => {
+        mutateProfileFn(
+          {
+            type: "deleteAvatar",
+            body: null,
+          },
+          {
+            onSuccess: (data) => {
+              notificationShow("success", "Delete avatar successfully");
+              dispatch(userInfoStore(data.data.user_info));
+            },
+            onError: (error) => {
+              errorResponse(error.response);
+            },
+          }
+        );
+      },
+    });
+  }
   return (
     <MainLayout>
       <Header />
@@ -44,14 +82,31 @@ const Profile = () => {
           style={{ backgroundColor: "#1677ff", color: "fff" }}
           src={userInfo.avatar || ""}
         >
-          {!userInfo.avatar && formatDisplayName(userInfo.fullname)}
+          <span>
+            {!userInfo.avatar && formatDisplayName(userInfo.fullname)}
+          </span>
         </UserPhoto>
+        <ButtonGroup>
+          <Space>
+            <Button
+              type="primary"
+              shape="circle"
+              size="small"
+              icon={<EditOutlined />}
+              onClick={() => setUpload(true)}
+            />
+            <Button
+              type="primary"
+              shape="circle"
+              size="small"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={handleDeleteAvatar}
+            />
+          </Space>
+        </ButtonGroup>
         {upload && (
-          <ChangeAvatar
-            open={upload}
-            url={"image.png"}
-            onClose={() => setUpload(false)}
-          />
+          <ChangeAvatar open={upload} onClose={() => setUpload(false)} />
         )}
         <Section>
           <UserName>{userInfo.fullname}</UserName>

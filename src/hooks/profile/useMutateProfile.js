@@ -11,6 +11,9 @@ const profileFn = {
   changeAvatar: async (body) => {
     return await api.put("users/change-avatar", body);
   },
+  deleteAvatar: async (body) => {
+    return await api.put("users/delete-avatar");
+  }
 };
 
 export const useMutateProfile = () => {

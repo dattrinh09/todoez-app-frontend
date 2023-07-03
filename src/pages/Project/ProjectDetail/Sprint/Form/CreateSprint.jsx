@@ -33,7 +33,7 @@ const CreateSprint = ({ open, onClose, projectId, sprintsRefetch }) => {
           },
           onSettled: () => {
             onClose();
-          }
+          },
         }
       );
     });
@@ -73,7 +73,7 @@ const CreateSprint = ({ open, onClose, projectId, sprintsRefetch }) => {
             },
           ]}
         >
-          <RangePicker format="YYYY-MM-DD" />
+          <RangePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
         </Form.Item>
       </Form>
     </Modal>

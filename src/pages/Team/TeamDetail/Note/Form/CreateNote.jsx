@@ -34,6 +34,7 @@ const CreateNote = ({ open, onClose, teamId, notesRefetch }) => {
   return (
     <Modal
       title="Create Note"
+      width={800}
       open={open}
       okText="Save"
       cancelText="Cancel"
@@ -66,7 +67,7 @@ const CreateNote = ({ open, onClose, teamId, notesRefetch }) => {
             },
           ]}
         >
-          <Input.TextArea rows={3} allowClear />
+          <Input.TextArea rows={5} allowClear />
         </Form.Item>
       </Form>
     </Modal>

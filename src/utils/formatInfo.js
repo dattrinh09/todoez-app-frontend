@@ -45,13 +45,13 @@ export const formatDate3 = (date) => {
   }
 
   return str;
-}
+};
 
 export const formatDate4 = (date) => {
   const d = convertDate(date);
 
   return moment(d).calendar();
-}
+};
 
 export const formatRange = (start, end) => {
   const startDate = moment(start).format("LL");
@@ -68,9 +68,9 @@ export const checkDateInRange = (date, start, end) => {
   return d >= st && d <= en;
 };
 
-export const checkIsPassDue = (date) => {
+export const checkIsPassDue = (date, state) => {
   const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
   const due = parseInt(formatDate2(date, "YYYYMMDD"));
 
-  return now > due;
+  return now > due && state !== "resolve" && state !== "reject";
 };

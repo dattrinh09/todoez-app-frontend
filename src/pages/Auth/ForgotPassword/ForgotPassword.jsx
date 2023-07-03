@@ -7,8 +7,8 @@ import {
   SubmitBtn,
 } from "../auth-styles";
 import { Form, Input } from "antd";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "@/api/api";
 import { ConstantsPath } from "@/constants/ConstantsPath";
 
 const ForgotPassword = () => {
@@ -18,7 +18,7 @@ const ForgotPassword = () => {
   const handleFinish = async (values) => {
     setIsLoading(true);
     try {
-      await axios.get(`http://localhost:8080/api/auth/forgot/${values.email}`);
+      await api.get(`auth/forgot/${values.email}`);
       navigate(ConstantsPath.SUCCESS, {
         state: {
           title: "Send link to your email",

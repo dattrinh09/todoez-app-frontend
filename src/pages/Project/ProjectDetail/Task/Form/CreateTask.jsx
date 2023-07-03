@@ -134,7 +134,7 @@ const CreateTask = ({
               <Select allowClear>
                 {TYPE_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    {option.label}
+                    <span style={{ color: `${option.color}`}}>{option.label}</span>
                   </Select.Option>
                 ))}
               </Select>
@@ -152,7 +152,7 @@ const CreateTask = ({
               <Select allowClear>
                 {PRIORITY_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    {option.label}
+                    <span style={{ color: `${option.color}`}}>{option.label}</span>
                   </Select.Option>
                 ))}
               </Select>
@@ -187,7 +187,7 @@ const CreateTask = ({
             },
           ]}
         >
-          <Input.TextArea allowClear rows={3} />
+          <Input.TextArea allowClear rows={5} />
         </Form.Item>
       </Form>
     </Modal>

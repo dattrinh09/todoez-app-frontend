@@ -45,6 +45,7 @@ const TaskList = ({ myTasks, myTasksRefetch }) => {
                           color={item.status.color}
                         >
                           <Button
+                            size="small"
                             style={{
                               color: "#fff",
                               backgroundColor: item.status.color,

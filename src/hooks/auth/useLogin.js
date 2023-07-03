@@ -12,8 +12,8 @@ const login = {
 
 export const useLogin = () => {
   const { mutate, isLoading } = useMutation({
-    mutationFn: async ({ type, body }) => {
-      return await login[`${type}`](body);
+    mutationFn: ({ type, body }) => {
+      return login[`${type}`](body);
     },
     networkMode: "offlineFirst",
   });

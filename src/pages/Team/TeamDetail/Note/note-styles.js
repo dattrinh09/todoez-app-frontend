@@ -11,3 +11,21 @@ export const NoteTitle = styled.div`
   font-weight: 700;
   color: #555;
 `;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 50px;
+  margin-bottom: 10px;
+`
+
+export const ContentTitle = styled.div`
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+export const ContentSection = styled.div`
+  white-space: pre-wrap;
+  word-wrap: break-word;
+`;

@@ -55,7 +55,7 @@ const TaskFilter = ({ filter, users }) => {
       >
         {TYPE_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            {option.label}
+            <span style={{ color: `${option.color}`}}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>
@@ -68,7 +68,7 @@ const TaskFilter = ({ filter, users }) => {
       >
         {STATUS_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            {option.label}
+            <span style={{ color: `${option.color}`}}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>
@@ -81,7 +81,7 @@ const TaskFilter = ({ filter, users }) => {
       >
         {PRIORITY_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            {option.label}
+            <span style={{ color: `${option.color}`}}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>

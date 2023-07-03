@@ -2,7 +2,7 @@ import api from "@/api/api";
 import { useMemo } from "react";
 import { errorResponse } from "@/utils/errorResponse";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { formatDate3 } from "@/utils/formatInfo";
+import { formatDate2, formatDate3 } from "@/utils/formatInfo";
 
 const getData = async (id, page = 1) => {
   const params = {
@@ -40,6 +40,7 @@ export const useGetNotes = (teamId) => {
           }, [])
           .map((item) => ({
             ...item,
+            create_time: formatDate2(item.create_at, "LLL"),
             create_at: formatDate3(item.create_at, "LL"),
             update_at: formatDate3(item.update_at, "LL"),
           }))

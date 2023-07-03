@@ -21,12 +21,12 @@ const SignUp = () => {
   const handleFinish = (values) => {
     registerFn(values, {
       onSuccess: () => {
-        // navigate(ConstantsPath.SUCCESS, {
-        //   state: {
-        //     title: "Create account successfully",
-        //     sub: "Please check your e-mail to verify",
-        //   },
-        // });
+        navigate(ConstantsPath.SUCCESS, {
+          state: {
+            title: "Create account successfully",
+            sub: "Please check your e-mail to verify",
+          },
+        });
       },
       onError: (error) => {
         setErrorMsg(error.response.data.message);

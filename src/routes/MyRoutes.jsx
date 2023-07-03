@@ -34,7 +34,7 @@ const PrivateRoute = () => {
       {isChecking ? (
         <Loader />
       ) : (
-        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.SIGN_IN} />}</>
+        <>{isLogin ? <Outlet /> : <Navigate to={ConstantsPath.HERO_PAGE} />}</>
       )}
     </>
   );
