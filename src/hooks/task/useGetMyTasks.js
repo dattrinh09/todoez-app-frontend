@@ -52,7 +52,7 @@ export const useGetMyTasks = (filter) => {
             create_at: formatDate3(item.create_at),
             update_at: formatDate3(item.update_at),
             end_at: formatDate4(item.end_at),
-            is_over: checkIsPassDue(item.end_at),
+            is_over: checkIsPassDue(item.end_at, item.status),
           }))
       : [];
     const group = list.reduce((prev, cur) => {

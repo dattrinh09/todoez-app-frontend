@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   ButtonGroup,
   CommentContainer,
+  CommentContent,
   CommentCreate,
   CommentForm,
 } from "./comment-styles";
@@ -133,9 +134,10 @@ const CommentList = ({ projectId, taskId }) => {
                 itemLayout="vertical"
                 bordered
                 dataSource={comments}
+                style={{ backgroundColor: "#fff" }}
                 renderItem={(item) => (
                   <List.Item
-                    actions={[
+                    extra={[
                       <ButtonGroup>
                         <Button
                           size="small"
@@ -170,7 +172,9 @@ const CommentList = ({ projectId, taskId }) => {
                           </span>
                         </Space>
                       }
-                      description={item.content}
+                      description={
+                        <CommentContent>{item.content}</CommentContent>
+                      }
                     />
                   </List.Item>
                 )}

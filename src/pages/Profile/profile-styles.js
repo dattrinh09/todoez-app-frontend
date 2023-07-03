@@ -31,6 +31,12 @@ export const UserPhoto = styled(Avatar)`
   cursor: pointer;
 `;
 
+export const ButtonGroup = styled.div`
+  position: absolute;
+  top: 25px;
+  left: 100px;
+`;
+
 export const Section = styled.div`
   padding-top: 50px;
 `;

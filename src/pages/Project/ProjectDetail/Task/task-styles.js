@@ -48,6 +48,7 @@ export const SectionDescription = styled.div`
   max-width: 1200px;
   padding: 10px 20px;
   white-space: pre-wrap;
+  word-wrap: break-word;
 `;
 
 export const FilterBar = styled.div`

@@ -70,7 +70,7 @@ const TaskList = () => {
             create: formatDate2(value.create_at, "MMMM DD"),
             update: formatDate2(value.update_at, "MMMM DD"),
             duedate: formatDate2(value.end_at, "MMMM DD"),
-            over: checkIsPassDue(value.end_at),
+            over: checkIsPassDue(value.end_at, value.status),
           }))
         : [],
       total: tasks ? tasks.total : 0,

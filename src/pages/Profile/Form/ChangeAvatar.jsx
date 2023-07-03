@@ -1,9 +1,11 @@
-import { Form, Modal, Upload, message } from "antd";
+import { Form, Modal, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { userInfoStore } from "@/stores/reducers/userSlice";
 import { useMutateProfile } from "@/hooks/profile";
+import { errorResponse } from "@/utils/errorResponse";
+import { notificationShow } from "@/utils/notificationShow";
 
 const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -23,18 +25,18 @@ const ChangeAvatar = ({ open, onClose }) => {
 
   const beforeUpload = (file) => {
     const imageType = file.name.toLocaleLowerCase().match(/\.[^.]*$/)?.[0];
-    const isLt5M = file.size / 1024 / 1024 < 5;
+    const isLt2M = file.size / 1024 / 1024 < 2;
     const isJpgOrPng = imageType === ".jpg" || imageType === ".png";
 
-    const isFileError = (isJpgOrPng && isLt5M) || Upload.LIST_IGNORE;
+    const isFileError = (isJpgOrPng && isLt2M) || Upload.LIST_IGNORE;
 
     if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
+      notificationShow("error", "You can only upload JPG/PNG file!");
       return isFileError;
     }
 
-    if (!isLt5M) {
-      message.error("Image must be smaller than 5MB!");
+    if (!isLt2M) {
+      notificationShow("error", "Image must be smaller than 2MB!");
       return isFileError;
     }
 
@@ -49,11 +51,13 @@ const ChangeAvatar = ({ open, onClose }) => {
   };
 
   const handleChange = async (info) => {
-    try {
-      const res = await getBase64(info.fileList[0].originFileObj);
-      setImageUrl(res);
-    } catch (e) {
-      throw new Error(e);
+    if (info) {
+      try {
+        const res = await getBase64(info?.fileList[0]?.originFileObj);
+        setImageUrl(res);
+      } catch (e) {
+        throw new Error(e);
+      }
     }
   };
 
@@ -66,7 +70,7 @@ const ChangeAvatar = ({ open, onClose }) => {
         },
         {
           onSuccess: (data) => {
-            message.success("Change avatar successfully");
+            notificationShow("success", "Change avatar successfully");
             dispatch(userInfoStore(data.data.user_info));
             setImageUrl("");
             onClose();

@@ -18,6 +18,11 @@ export const CommentForm = styled.div`
   gap: 5px;
 `;
 
+export const CommentContent = styled.div`
+  white-space: pre-wrap;
+  word-wrap: break-word;
+`
+
 export const ButtonGroup = styled.div`
   margin-left: 40px;
 `;

@@ -150,7 +150,7 @@ const UpdateTask = ({
               <Select allowClear placeholder="Type">
                 {TYPE_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    {option.label}
+                    <span style={{ color: `${option.color}`}}>{option.label}</span>
                   </Select.Option>
                 ))}
               </Select>
@@ -159,7 +159,7 @@ const UpdateTask = ({
               <Select allowClear>
                 {STATUS_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    {option.label}
+                    <span style={{ color: `${option.color}`}}>{option.label}</span>
                   </Select.Option>
                 ))}
               </Select>
@@ -168,7 +168,7 @@ const UpdateTask = ({
               <Select allowClear>
                 {PRIORITY_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    {option.label}
+                    <span style={{ color: `${option.color}`}}>{option.label}</span>
                   </Select.Option>
                 ))}
               </Select>
@@ -185,7 +185,7 @@ const UpdateTask = ({
           </Col>
         </Row>
         <Form.Item name="description" label="Description">
-          <Input.TextArea allowClear rows={3} placeholder="Description..." />
+          <Input.TextArea allowClear rows={5} placeholder="Description..." />
         </Form.Item>
       </Form>
     </Modal>

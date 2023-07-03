@@ -5,7 +5,7 @@ import { formatDisplayName } from "@/utils/formatInfo";
 
 const Photo = styled(Avatar)`
   background-color: #1677ff;
-  border: none;
+  border: 1px solid #aaa;
 `;
 
 const MyAvatar = ({ size, src, name }) => {

@@ -5,6 +5,7 @@ import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 import { useMutateNote } from "@/hooks/note";
 import MyAvatar from "@/components/MyAvatar/MyAvatar";
+import { Content, ContentSection, ContentTitle } from "./note-styles";
 
 const { confirm } = Modal;
 
@@ -48,10 +49,12 @@ const Notes = ({ notes, teamId, notesRefetch }) => {
           <List
             bordered
             dataSource={note.list}
+            itemLayout="vertical"
+            style={{ backgroundColor: "#fff" }}
             renderItem={(item) => (
               <List.Item
                 key={item.id}
-                actions={[
+                extra={[
                   <Button type="link" onClick={() => setSelected(item)}>
                     Edit
                   </Button>,
@@ -73,8 +76,12 @@ const Notes = ({ notes, teamId, notesRefetch }) => {
                     />
                   }
                   title={<span>{item.user.user.fullname}</span>}
-                  description={<span>{item.content}</span>}
+                  description={<span>{item.create_time}</span>}
                 />
+                <Content>
+                  <ContentTitle>{item.content}</ContentTitle>
+                  <ContentSection>{item.description}</ContentSection>
+                </Content>
               </List.Item>
             )}
           />

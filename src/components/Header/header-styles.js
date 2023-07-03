@@ -34,6 +34,7 @@ export const Item = styled.div`
 `;
 
 export const UserIcon = styled.div`
+  border-radius: 50%;
   cursor: pointer;
 ` 
 

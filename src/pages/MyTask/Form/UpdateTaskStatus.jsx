@@ -58,7 +58,7 @@ const UpdateTaskStatus = ({ task, onClose, myTasksRefetch }) => {
           <Select allowClear>
             {STATUS_OPTIONS.map((option) => (
               <Select.Option key={option.id} value={option.value}>
-                {option.label}
+                <span style={{ color: `${option.color}`}}>{option.label}</span>
               </Select.Option>
             ))}
           </Select>
