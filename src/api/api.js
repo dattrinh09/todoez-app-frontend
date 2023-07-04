@@ -1,7 +1,7 @@
 import axios from "axios";
 import { errorResponse } from "@/utils/errorResponse";
 
-const baseURL = "http://localhost:8080/api/";
+const baseURL = "https://todoez-app-backend.vercel.app/api/";
 
 const refresh = async () => {
   const rToken = localStorage.getItem("refresh_token");
@@ -22,7 +22,12 @@ const refresh = async () => {
 
 const api = axios.create({
   baseURL: baseURL,
-  headers: { "Content-Type": "application/json" },
+  headers: { 
+    "Content-Type": "application/json" ,
+    "Access-Control-Allow-Origin": "*",
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'true'
+  },
   timeout: 15 * 1000,
 });
 
