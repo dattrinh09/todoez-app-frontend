@@ -4,7 +4,7 @@ import MyTooltip from "@/components/MyTooltip/MyTooltip";
 import { TitleBar, Content, SubContent } from "./my-task-styles";
 import { Link } from "react-router-dom";
 import {
-  getProjectDetailRoute,
+  getTaskListRoute,
   getSprintListRoute,
   getTaskDetailRoute,
 } from "@/utils/route";
@@ -72,7 +72,7 @@ const TaskList = ({ myTasks, myTasksRefetch }) => {
                       <Space>
                         <Tag color="blue">
                           <Link
-                            to={getProjectDetailRoute(item.sprint.project.id)}
+                            to={getTaskListRoute(item.sprint.project.id)}
                           >
                             {item.sprint.project.name}
                           </Link>

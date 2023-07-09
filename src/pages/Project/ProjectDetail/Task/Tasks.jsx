@@ -1,4 +1,4 @@
-import { Button, Dropdown, Modal, Space, Table, Tooltip } from "antd";
+import { Button, Dropdown, Modal, Space, Table } from "antd";
 import React from "react";
 import {
   PRIORITY_OPTIONS,
@@ -13,7 +13,7 @@ import MyTooltip from "@/components/MyTooltip/MyTooltip";
 import { useMutateTask } from "@/hooks/task";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
-import { Content } from "./task-styles";
+import { Content, UserName } from "./task-styles";
 import ErrorText from "@/components/ErrorText/ErrorText";
 
 const { confirm } = Modal;
@@ -117,11 +117,13 @@ const Tasks = ({
       dataIndex: "reporter",
       key: "reporter",
       render: (reporter) => (
-        <ErrorText
-          check={reporter.delete_at}
-          title={"No longer"}
-          content={reporter.user.fullname}
-        />
+        <UserName>
+          <ErrorText
+            check={reporter.delete_at}
+            title={reporter.user.fullname}
+            content={reporter.user.fullname}
+          />
+        </UserName>
       ),
     },
     {
@@ -129,11 +131,13 @@ const Tasks = ({
       dataIndex: "assignee",
       key: "assignee",
       render: (assignee) => (
-        <ErrorText
-          check={assignee.delete_at}
-          title={"No longer"}
-          content={assignee.user.fullname}
-        />
+        <UserName>
+          <ErrorText
+            check={assignee.delete_at}
+            title={assignee.user.fullname}
+            content={assignee.user.fullname}
+          />
+        </UserName>
       ),
     },
     {

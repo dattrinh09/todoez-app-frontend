@@ -1,15 +1,22 @@
 import React from "react";
-import { Button, Modal, Table, Tag } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Modal, Space, Table, Tag } from "antd";
+import { EllipsisOutlined } from "@ant-design/icons";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 import { useMutateTeamUser } from "@/hooks/team-user/useMutateTeamUser";
 import MyAvatar from "@/components/MyAvatar/MyAvatar";
+import { Link, useNavigate } from "react-router-dom";
+import { getUserProfileRoute } from "@/utils/route";
 
 const { confirm } = Modal;
 
 const UserList = ({ teamId, data, isLoading, teamUsersRefetch }) => {
+  const navigate = useNavigate();
   const { mutateTeamUserFn, isMutateTeamUserLoading } = useMutateTeamUser();
+
+  const goToUserProfile = (id) => {
+    navigate(getUserProfileRoute(id));
+  };
 
   const handleDelete = async (id) => {
     confirm({
@@ -42,15 +49,15 @@ const UserList = ({ teamId, data, isLoading, teamUsersRefetch }) => {
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
       key: "name",
+      render: ({ name, userId }) => (
+        <Link to={getUserProfileRoute(userId)}>{name}</Link>
+      ),
     },
     {
       title: "Avatar",
       key: "avatar",
-      render: ({ name, avatar }) => (
-        <MyAvatar src={avatar} name={name} />
-      ),
+      render: ({ name, avatar }) => <MyAvatar src={avatar} name={name} />,
     },
     {
       title: "Email",
@@ -68,18 +75,46 @@ const UserList = ({ teamId, data, isLoading, teamUsersRefetch }) => {
     {
       key: "action",
       align: "center",
-      render: ({ id }) => (
-        <>
-          {data.creator && (
-            <Button
-              danger
-              type="primary"
-              icon={<DeleteOutlined />}
-              size="small"
-              onClick={() => handleDelete(id)}
-            />
-          )}
-        </>
+      render: ({ id, userId }) => (
+        <Space size="small">
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  key: "view-profile",
+                  label: (
+                    <Button
+                      type="link"
+                      size="small"
+                      onClick={() => goToUserProfile(userId)}
+                    >
+                      View profile
+                    </Button>
+                  ),
+                },
+                {
+                  key: "delete-user",
+                  label: (
+                    <Button
+                      danger
+                      type="link"
+                      size="small"
+                      onClick={() => handleDelete(id)}
+                      disabled={!data.creator}
+                    >
+                      Delete user
+                    </Button>
+                  ),
+                },
+              ],
+            }}
+            trigger={["click"]}
+            placement="bottom"
+            arrow
+          >
+            <Button size="small" icon={<EllipsisOutlined />} />
+          </Dropdown>
+        </Space>
       ),
     },
   ];

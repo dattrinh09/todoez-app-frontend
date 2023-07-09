@@ -51,11 +51,11 @@ const TaskFilter = ({ filter, users }) => {
         defaultValue={filterData.type}
         onChange={(value) => changeSearchParam("type", value)}
         placeholder="Type"
-        style={{ width: "100px" }}
+        style={{ width: "150px" }}
       >
         {TYPE_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            <span style={{ color: `${option.color}`}}>{option.label}</span>
+            <span style={{ color: `${option.color}` }}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>
@@ -64,11 +64,11 @@ const TaskFilter = ({ filter, users }) => {
         defaultValue={filterData.status}
         onChange={(value) => changeSearchParam("status", value)}
         placeholder="Status"
-        style={{ width: "100px" }}
+        style={{ width: "150px" }}
       >
         {STATUS_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            <span style={{ color: `${option.color}`}}>{option.label}</span>
+            <span style={{ color: `${option.color}` }}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>
@@ -77,11 +77,11 @@ const TaskFilter = ({ filter, users }) => {
         defaultValue={filterData.priority}
         onChange={(value) => changeSearchParam("priority", value)}
         placeholder="Priority"
-        style={{ width: "100px" }}
+        style={{ width: "150px" }}
       >
         {PRIORITY_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            <span style={{ color: `${option.color}`}}>{option.label}</span>
+            <span style={{ color: `${option.color}` }}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>

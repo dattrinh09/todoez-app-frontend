@@ -2,11 +2,11 @@ import React from "react";
 import { Heading, Sub, SubIcon, SubText } from "./team-header-styles";
 import { Link } from "react-router-dom";
 import { CalendarOutlined, EditOutlined } from "@ant-design/icons";
-import { getTeamDetailRoute } from "@/utils/route";
 import { formatDate2 } from "@/utils/formatInfo";
 import { Button, Space } from "antd";
 import { useState } from "react";
 import EditTeam from "../Form/EditTeam";
+import { getNoteListRoute } from "@/utils/route";
 
 const TeamHeader = ({ team, teamRefetch }) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -15,7 +15,7 @@ const TeamHeader = ({ team, teamRefetch }) => {
       <Space>
         <Link
           style={{ fontSize: "20px", fontWeight: "500", color: "#1677ff" }}
-          to={getTeamDetailRoute(team.id)}
+          to={getNoteListRoute(team.id)}
         >
           {team.name}
         </Link>

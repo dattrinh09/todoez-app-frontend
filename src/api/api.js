@@ -22,11 +22,11 @@ const refresh = async () => {
 
 const api = axios.create({
   baseURL: baseURL,
-  headers: { 
-    "Content-Type": "application/json" ,
+  headers: {
+    "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
-    'Access-Control-Allow-Headers': '*',
-    'Access-Control-Allow-Credentials': 'true'
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Credentials": "true",
   },
   timeout: 15 * 1000,
 });

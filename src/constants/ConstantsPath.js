@@ -12,18 +12,17 @@ export const ConstantsPath = {
   MY_PAGE: "/",
   // User
   PROFILE: "/profile",
+  USER_PROFILE: "/user/:user_id",
   // My Task
   MY_TASK: "/my-task",
   // Project
   PROJECT_LIST: "/project",
-  PROJECT_DETAIL: "/project/:project_id",
   PROJECT_SPRINT_LIST: "/project/:project_id/sprint",
   PROJECT_TASK_LIST: "/project/:project_id/task",
   PROJECT_TASK_DETAIL: "/project/:project_id/task/:task_id",
   PROJECT_USER_LIST: "/project/:project_id/user",
   // Team:
   TEAM_LIST: "/team",
-  TEAM_DETAIL: "/team/:team_id",
   TEAM_NOTE_LIST: "/team/:team_id/note",
   TEAM_USER_LIST: "/team/:team_id/user",
 };

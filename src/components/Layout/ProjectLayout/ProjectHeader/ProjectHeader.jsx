@@ -3,7 +3,7 @@ import { Heading, Sub, SubIcon, SubText } from "./project-header-styles";
 import { CalendarOutlined, EditOutlined } from "@ant-design/icons";
 import { formatDate2 } from "@/utils/formatInfo";
 import { Link } from "react-router-dom";
-import { getProjectDetailRoute } from "@/utils/route";
+import { getTaskListRoute } from "@/utils/route";
 import { Button, Space } from "antd";
 import EditProject from "../Form/EditProject";
 
@@ -14,7 +14,7 @@ const ProjectHeader = ({ project, projectRefetch }) => {
       <Space>
         <Link
           style={{ fontSize: "20px", fontWeight: "500", color: "#1677ff" }}
-          to={getProjectDetailRoute(project.id)}
+          to={getTaskListRoute(project.id)}
         >
           {project.name}
         </Link>

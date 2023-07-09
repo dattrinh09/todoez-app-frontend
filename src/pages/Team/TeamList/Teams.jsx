@@ -3,7 +3,7 @@ import { Button, Dropdown, Modal, Space, Table } from "antd";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Content } from "./team-list-styles";
-import { getTeamDetailRoute } from "@/utils/route";
+import {getNoteListRoute } from "@/utils/route";
 import { useMutateTeam } from "@/hooks/team";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
@@ -15,8 +15,8 @@ const Teams = ({ data, isLoading, teamsRefetch }) => {
 
   const { mutateTeamFn, isMutateTeamLoading } = useMutateTeam();
 
-  const goToTeamDetail = (id) => {
-    navigate(getTeamDetailRoute(id));
+  const goToNoteList = (id) => {
+    navigate(getNoteListRoute(id));
   };
 
   const handleDeleteTeam = (id) => {
@@ -52,7 +52,7 @@ const Teams = ({ data, isLoading, teamsRefetch }) => {
       title: "Team",
       key: "name",
       render: ({ id, name }) => (
-        <Link to={getTeamDetailRoute(id)}>
+        <Link to={getNoteListRoute(id)}>
           <Content>{name}</Content>
         </Link>
       ),
@@ -88,7 +88,7 @@ const Teams = ({ data, isLoading, teamsRefetch }) => {
                     <Button
                       type="link"
                       size="small"
-                      onClick={() => goToTeamDetail(id)}
+                      onClick={() => goToNoteList(id)}
                     >
                       View team
                     </Button>

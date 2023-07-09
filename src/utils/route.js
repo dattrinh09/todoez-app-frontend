@@ -1,10 +1,5 @@
 import { ConstantsPath } from "@/constants/ConstantsPath";
 
-// Team detail
-export const getTeamDetailRoute = (teamId) => {
-  return ConstantsPath.TEAM_DETAIL.replace(":team_id", teamId);
-};
-
 // Note list
 export const getNoteListRoute = (teamId) => {
   return ConstantsPath.TEAM_NOTE_LIST.replace(":team_id", teamId);
@@ -13,11 +8,6 @@ export const getNoteListRoute = (teamId) => {
 // Team users list
 export const getTeamUsersRoute = (teamId) => {
   return ConstantsPath.TEAM_USER_LIST.replace(":team_id", teamId);
-};
-
-// Project detail
-export const getProjectDetailRoute = (projectId) => {
-  return ConstantsPath.PROJECT_DETAIL.replace(":project_id", projectId);
 };
 
 // Sprint list
@@ -41,4 +31,9 @@ export const getTaskDetailRoute = (projectId, taskId) => {
     ":project_id",
     projectId
   ).replace(":task_id", taskId);
+};
+
+// User profile
+export const getUserProfileRoute = (userId) => {
+  return ConstantsPath.USER_PROFILE.replace(":user_id", userId);
 };

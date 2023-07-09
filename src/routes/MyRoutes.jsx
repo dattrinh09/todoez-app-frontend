@@ -14,17 +14,15 @@ import Profile from "@/pages/Profile/Profile";
 import MyPage from "@/pages/MyPage/MyPage";
 import MyTask from "@/pages/MyTask/MyTask";
 import TeamList from "@/pages/Team/TeamList/TeamList";
-import TeamDetail from "@/pages/Team/TeamDetail/TeamDetail";
 import NoteList from "@/pages/Team/TeamDetail/Note/NoteList";
 import TeamUsers from "@/pages/Team/TeamDetail/TeamUser/TeamUsers";
 import ProjectList from "@/pages/Project/ProjectList/ProjectList";
-import ProjectDetail from "@/pages/Project/ProjectDetail/ProjectDetail";
 import ProjectUsers from "@/pages/Project/ProjectDetail/ProjectUser/ProjectUsers";
 import SprintList from "@/pages/Project/ProjectDetail/Sprint/SprintList";
 import TaskList from "@/pages/Project/ProjectDetail/Task/TaskList";
 import TaskDetail from "@/pages/Project/ProjectDetail/Task/TaskDetail";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
-
+import UserProfile from "@/pages/User/UserProfile";
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useCheckLogin();
@@ -62,14 +60,9 @@ const MyRoutes = () => {
           <Route path={ConstantsPath.PROFILE} element={<Profile />} />
           <Route path={ConstantsPath.MY_TASK} element={<MyTask />} />
           <Route path={ConstantsPath.TEAM_LIST} element={<TeamList />} />
-          <Route path={ConstantsPath.TEAM_DETAIL} element={<TeamDetail />} />
           <Route path={ConstantsPath.TEAM_NOTE_LIST} element={<NoteList />} />
           <Route path={ConstantsPath.TEAM_USER_LIST} element={<TeamUsers />} />
           <Route path={ConstantsPath.PROJECT_LIST} element={<ProjectList />} />
-          <Route
-            path={ConstantsPath.PROJECT_DETAIL}
-            element={<ProjectDetail />}
-          />
           <Route
             path={ConstantsPath.PROJECT_SPRINT_LIST}
             element={<SprintList />}
@@ -86,6 +79,7 @@ const MyRoutes = () => {
             path={ConstantsPath.PROJECT_USER_LIST}
             element={<ProjectUsers />}
           />
+          <Route path={ConstantsPath.USER_PROFILE} element={<UserProfile />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

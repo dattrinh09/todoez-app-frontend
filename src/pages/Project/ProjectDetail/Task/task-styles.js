@@ -24,13 +24,19 @@ export const Info = styled.div`
 `;
 
 export const Label = styled.div`
-  width: 100px;
   font-size: 16px;
   color: #1677ff;
 `;
 
 export const Content = styled.div`
   max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const UserName = styled.div`
+  max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -19,15 +19,11 @@ const ProjectLayout = ({ children }) => {
           <Loader />
         ) : (
           <>
-            {project && (
-              <>
-                <ProjectHeader
-                  project={project.information}
-                  projectRefetch={projectRefetch}
-                />
-                {children}
-              </>
-            )}
+            <ProjectHeader
+              project={project.information}
+              projectRefetch={projectRefetch}
+            />
+            {project && children}
           </>
         )}
       </Container>

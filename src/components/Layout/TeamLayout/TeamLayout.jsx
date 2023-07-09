@@ -17,12 +17,8 @@ const TeamLayout = ({ children }) => {
           <Loader />
         ) : (
           <>
-            {team && (
-              <>
-                <TeamHeader team={team.information} teamRefetch={teamRefetch} />
-                {children}
-              </>
-            )}
+            <TeamHeader team={team.information} teamRefetch={teamRefetch} />
+            {team && children}
           </>
         )}
       </Container>

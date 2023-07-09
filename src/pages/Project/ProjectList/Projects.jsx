@@ -3,7 +3,7 @@ import { Button, Dropdown, Modal, Space, Table } from "antd";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Content } from "./project-list-styles";
-import { getProjectDetailRoute } from "@/utils/route";
+import { getTaskListRoute } from "@/utils/route";
 import { useMutateProject } from "@/hooks/project";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
@@ -16,7 +16,7 @@ const Projects = ({ data, isLoading, projectsRefetch }) => {
   const { mutateProjectFn, isMutateProjectLoading } = useMutateProject();
 
   const goToProjectDetail = (id) => {
-    navigate(getProjectDetailRoute(id));
+    navigate(getTaskListRoute(id));
   };
 
   const handleDeleteProject = (id) => {
@@ -52,7 +52,7 @@ const Projects = ({ data, isLoading, projectsRefetch }) => {
       title: "Project",
       key: "name",
       render: ({ id, name }) => (
-        <Link to={getProjectDetailRoute(id)}>
+        <Link to={getTaskListRoute(id)}>
           <Content>{name}</Content>
         </Link>
       ),
@@ -89,7 +89,7 @@ const Projects = ({ data, isLoading, projectsRefetch }) => {
             menu={{
               items: [
                 {
-                  key: "1",
+                  key: "view-project",
                   label: (
                     <Button
                       type="link"
@@ -101,7 +101,7 @@ const Projects = ({ data, isLoading, projectsRefetch }) => {
                   ),
                 },
                 {
-                  key: "2",
+                  key: "delete-project",
                   label: (
                     <Button
                       type="link"

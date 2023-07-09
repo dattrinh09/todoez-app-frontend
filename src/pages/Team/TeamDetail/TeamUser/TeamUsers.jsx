@@ -25,6 +25,7 @@ const TeamUsers = () => {
             .map((value) => ({
               key: value.id,
               id: value.id,
+              userId: value.user.id,
               name: value.user.fullname,
               avatar: value.user.avatar,
               email: value.user.email,

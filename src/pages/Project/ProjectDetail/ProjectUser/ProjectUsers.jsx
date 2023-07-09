@@ -26,6 +26,7 @@ const ProjectUsers = () => {
               key: value.id,
               id: value.id,
               name: value.user.fullname,
+              userId: value.user.id,
               avatar: value.user.avatar,
               email: value.user.email,
               creator: value.is_creator,

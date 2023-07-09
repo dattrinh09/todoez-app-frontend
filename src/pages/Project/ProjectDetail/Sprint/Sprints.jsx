@@ -10,7 +10,7 @@ import {
   SubContent,
 } from "./sprint-styles";
 import { Button, Dropdown, List, Modal, Space, Tag } from "antd";
-import { EllipsisOutlined } from "@ant-design/icons";
+import { EllipsisOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import {
   PRIORITY_OPTIONS,
   STATUS_OPTIONS,
@@ -21,6 +21,7 @@ import MyTag from "@/components/MyTag/MyTag";
 import { Link } from "react-router-dom";
 import { getTaskDetailRoute } from "@/utils/route";
 import EditSprint from "./Form/EditSprint";
+import CreateTask from "./Form/CreateTask";
 import { useMutateSprint } from "@/hooks/sprint";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
@@ -29,6 +30,7 @@ import ErrorText from "@/components/ErrorText/ErrorText";
 const { confirm } = Modal;
 
 const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
+  const [create, setCreate] = useState(null);
   const [selected, setSelected] = useState(null);
   const { mutateSprintFn, isMutateSprintLoading } = useMutateSprint();
 
@@ -110,6 +112,7 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
                 <Button
                   size="small"
                   type="primary"
+                  shape="circle"
                   icon={<EllipsisOutlined />}
                 />
               </Dropdown>
@@ -123,66 +126,85 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
               />
             )}
           </BoxHeader>
-          <List
-            size="middle"
-            bordered
-            dataSource={sprint.tasks ?? []}
-            style={{ backgroundColor: "#fff" }}
-            renderItem={(item) => (
-              <List.Item
-                key={item.id}
-                extra={[
-                  <ItemExtra>
-                    <Tag
-                      color={item.assignee.delete_at ? "#ff4d4f" : "#1677ff"}
-                    >{`Assignee: ${item.assignee.user.fullname}`}</Tag>
-                    <Tag
-                      color={item.reporter.delete_at ? "#ff4d4f" : "#1677ff"}
-                    >{`Reporter: ${item.reporter.user.fullname}`}</Tag>
-                  </ItemExtra>,
-                ]}
-              >
-                <List.Item.Meta
-                  title={
-                    <Space>
-                      <MyTooltip
-                        tooltip={TYPE_OPTIONS.find(
-                          (t) => t.value === item.type
-                        )}
-                      />
-                      <Link to={getTaskDetailRoute(projectId, item.id)}>
-                        <Content>{item.content}</Content>
-                      </Link>
-                    </Space>
-                  }
-                  description={
-                    <SubContent>
+          <div>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={() => setCreate(sprint)}
+            >
+              Create task
+            </Button>
+            {create && (
+              <CreateTask
+                sprint={create}
+                onClose={() => setCreate(null)}
+                projectId={projectId}
+                sprintsRefetch={sprintsRefetch}
+              />
+            )}
+          </div>
+          {sprint.tasks.length > 0 && (
+            <List
+              size="middle"
+              bordered
+              dataSource={sprint.tasks}
+              style={{ backgroundColor: "#fff" }}
+              renderItem={(item) => (
+                <List.Item
+                  key={item.id}
+                  extra={[
+                    <ItemExtra>
+                      <Tag
+                        color={item.assignee.delete_at ? "#ff4d4f" : "#1677ff"}
+                      >{`Assignee: ${item.assignee.user.fullname}`}</Tag>
+                      <Tag
+                        color={item.reporter.delete_at ? "#ff4d4f" : "#1677ff"}
+                      >{`Reporter: ${item.reporter.user.fullname}`}</Tag>
+                    </ItemExtra>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={
                       <Space>
                         <MyTooltip
-                          tooltip={PRIORITY_OPTIONS.find(
-                            (p) => p.value === item.priority
+                          tooltip={TYPE_OPTIONS.find(
+                            (t) => t.value === item.type
                           )}
                         />
-                        <span>End at:</span>
-                        <ErrorText
-                          check={checkIsPassDue(item.end_at, item.status)}
-                          title="Over due"
-                          content={formatDate2(item.end_at, "LL")}
-                        />
+                        <Link to={getTaskDetailRoute(projectId, item.id)}>
+                          <Content>{item.content}</Content>
+                        </Link>
                       </Space>
-                      <div>
-                        <MyTag
-                          tag={STATUS_OPTIONS.find(
-                            (s) => s.value === item.status
-                          )}
-                        />
-                      </div>
-                    </SubContent>
-                  }
-                />
-              </List.Item>
-            )}
-          />
+                    }
+                    description={
+                      <SubContent>
+                        <Space>
+                          <MyTooltip
+                            tooltip={PRIORITY_OPTIONS.find(
+                              (p) => p.value === item.priority
+                            )}
+                          />
+                          <span>End at:</span>
+                          <ErrorText
+                            check={checkIsPassDue(item.end_at, item.status)}
+                            title="Over due"
+                            content={formatDate2(item.end_at, "LL")}
+                          />
+                        </Space>
+                        <div>
+                          <MyTag
+                            tag={STATUS_OPTIONS.find(
+                              (s) => s.value === item.status
+                            )}
+                          />
+                        </div>
+                      </SubContent>
+                    }
+                  />
+                </List.Item>
+              )}
+            />
+          )}
         </Box>
       ))}
     </ListBox>

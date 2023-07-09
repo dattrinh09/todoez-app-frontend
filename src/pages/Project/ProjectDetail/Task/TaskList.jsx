@@ -1,10 +1,14 @@
 import React, { useMemo, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Bar, Title } from "./task-styles";
 import Loader from "@/components/Loader/Loader";
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import CreateTask from "./Form/CreateTask";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import {
+  PlusCircleOutlined,
+  DatabaseOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 import { useGetProjectUsers } from "@/hooks/project-user";
 import { useGetSprints } from "@/hooks/sprint";
 import { useGetTasks } from "@/hooks/task";
@@ -12,9 +16,11 @@ import Tasks from "./Tasks";
 import { formatDate2, checkIsPassDue } from "@/utils/formatInfo";
 import ProjectLayout from "@/components/Layout/ProjectLayout/ProjectLayout";
 import TaskFilter from "./TaskFilter";
+import { getProjectUsersRoute, getSprintListRoute } from "@/utils/route";
 
 const TaskList = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const projectId = params["project_id"];
   const [isCreate, setIsCreate] = useState(false);
@@ -77,6 +83,14 @@ const TaskList = () => {
     };
   }, [tasks]);
 
+  const goToSprintList = () => {
+    navigate(getSprintListRoute(projectId));
+  };
+
+  const goToUserList = () => {
+    navigate(getProjectUsersRoute(projectId));
+  };
+
   const handleTableChange = (page) => {
     if (page.current !== 1) searchParams.set("page", page.current);
     else searchParams.delete("page");
@@ -93,13 +107,29 @@ const TaskList = () => {
           <>
             <Bar>
               <Title>Task list</Title>
-              <Button
-                type="primary"
-                icon={<PlusCircleOutlined />}
-                onClick={() => setIsCreate(true)}
-              >
-                Create task
-              </Button>
+              <Space>
+                <Button
+                  type="primary"
+                  icon={<DatabaseOutlined />}
+                  onClick={goToSprintList}
+                >
+                  Sprints
+                </Button>
+                <Button
+                  type="primary"
+                  icon={<TeamOutlined />}
+                  onClick={goToUserList}
+                >
+                  Users
+                </Button>
+                <Button
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  onClick={() => setIsCreate(true)}
+                >
+                  Create task
+                </Button>
+              </Space>
               {isCreate && (
                 <CreateTask
                   open={isCreate}
@@ -112,7 +142,11 @@ const TaskList = () => {
               )}
             </Bar>
             {USER_OPTIONS.length > 0 && (
-              <TaskFilter filter={filterParams} users={USER_OPTIONS} />
+              <TaskFilter
+                filter={filterParams}
+                users={USER_OPTIONS}
+                projectId={projectId}
+              />
             )}
             <section>
               {isTasksLoading ? (
