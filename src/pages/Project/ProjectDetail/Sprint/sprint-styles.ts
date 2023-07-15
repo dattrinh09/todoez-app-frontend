@@ -33,15 +33,15 @@ export const Box = styled.div`
   gap: 10px;
 `;
 
-export const BoxHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 export const BoxTitle = styled.p`
   font-size: 16px;
   font-weight: 700;
   color: #555;
+`;
+
+export const ButtonBar = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const Content = styled.div`

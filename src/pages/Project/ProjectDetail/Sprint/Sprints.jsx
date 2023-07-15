@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { formatRange, formatDate2, checkIsPassDue } from "@/utils/formatInfo";
 import {
   Box,
-  BoxHeader,
   BoxTitle,
+  ButtonBar,
   Content,
   ItemExtra,
   ListBox,
@@ -66,57 +66,59 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
     <ListBox>
       {sprints.map((sprint) => (
         <Box key={sprint.id}>
-          <BoxHeader>
-            <BoxTitle>
-              <span>{sprint.title}</span>
-              <span>{` (${formatRange(sprint.start_at, sprint.end_at)})`}</span>
-              <span
-                style={{ color: "#1677ff" }}
-              >{` ${sprint.tasks.length} tasks`}</span>
-            </BoxTitle>
-            <Space>
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: 1,
-                      label: (
-                        <Button
-                          type="link"
-                          size="small"
-                          onClick={() => setSelected(sprint)}
-                        >
-                          Edit
-                        </Button>
-                      ),
-                    },
-                    {
-                      key: 2,
-                      label: (
-                        <Button
-                          type="link"
-                          size="small"
-                          danger
-                          onClick={() => handleDeleteSprint(sprint.id)}
-                        >
-                          Delete
-                        </Button>
-                      ),
-                    },
-                  ],
-                }}
-                trigger={["click"]}
-                placement="bottomRight"
-                arrow
-              >
-                <Button
-                  size="small"
-                  type="primary"
-                  shape="circle"
-                  icon={<EllipsisOutlined />}
-                />
-              </Dropdown>
-            </Space>
+          <BoxTitle>
+            <span>{sprint.title}</span>
+            <span>{` (${formatRange(sprint.start_at, sprint.end_at)})`}</span>
+            <span
+              style={{ color: "#1677ff" }}
+            >{` ${sprint.tasks.length} tasks`}</span>
+          </BoxTitle>
+          <ButtonBar>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={() => setCreate(sprint)}
+            >
+              Create task
+            </Button>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 1,
+                    label: (
+                      <Button
+                        type="link"
+                        size="small"
+                        onClick={() => setSelected(sprint)}
+                      >
+                        Edit
+                      </Button>
+                    ),
+                  },
+                  {
+                    key: 2,
+                    label: (
+                      <Button
+                        type="link"
+                        size="small"
+                        danger
+                        onClick={() => handleDeleteSprint(sprint.id)}
+                      >
+                        Delete
+                      </Button>
+                    ),
+                  },
+                ],
+              }}
+              trigger={["click"]}
+              placement="bottomRight"
+              arrow
+            >
+              <Button size="small" type="primary" icon={<EllipsisOutlined />} />
+            </Dropdown>
+          </ButtonBar>
+          <>
             {selected && (
               <EditSprint
                 projectId={projectId}
@@ -125,15 +127,8 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
                 sprintsRefetch={sprintsRefetch}
               />
             )}
-          </BoxHeader>
-          <div>
-            <Button
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              onClick={() => setCreate(sprint)}
-            >
-              Create task
-            </Button>
+          </>
+          <>
             {create && (
               <CreateTask
                 sprint={create}
@@ -142,7 +137,7 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
                 sprintsRefetch={sprintsRefetch}
               />
             )}
-          </div>
+          </>
           {sprint.tasks.length > 0 && (
             <List
               size="middle"

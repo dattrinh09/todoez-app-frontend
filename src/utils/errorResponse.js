@@ -13,6 +13,8 @@ export const errorResponse = (response) => {
       break;
     case 403:
       notificationShow("error", "You need to sign in");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       break;
     case 404:
       notificationShow("error", "Api not found");
