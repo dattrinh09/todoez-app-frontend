@@ -1,5 +1,4 @@
 import TaskTypeIcon from "@/assets/images/task.svg";
-import SubTaskTypeIcon from "@/assets/images/sub-task.svg";
 import BugTypeIcon from "@/assets/images/bug.svg";
 import LowestIcon from "@/assets/images/lowest.svg";
 import LowIcon from "@/assets/images/low.svg";
@@ -24,13 +23,6 @@ export const TYPE_OPTIONS = [
   },
   {
     id: 2,
-    label: "Sub-Task",
-    value: "sub_task",
-    icon: SubTaskTypeIcon,
-    color: "green",
-  },
-  {
-    id: 3,
     label: "Bug",
     value: "bug",
     icon: BugTypeIcon,
