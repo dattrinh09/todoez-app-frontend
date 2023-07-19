@@ -48,7 +48,7 @@ const TaskList = () => {
   const USER_OPTIONS = useMemo(() => {
     return projectUsers
       ? projectUsers.list.map((user) => ({
-          id: user.id,
+          key: user.id,
           value: user.id,
           label: user.user.fullname,
         }))
@@ -57,7 +57,13 @@ const TaskList = () => {
 
   const assignees = useMemo(() => {
     return projectUsers
-      ? projectUsers.list.filter((user) => !user.delete_at)
+      ? projectUsers.list
+          .filter((user) => !user.delete_at)
+          .map((item) => ({
+            key: item.id,
+            value: item.id,
+            label: item.user.fullname,
+          }))
       : [];
   }, [projectUsers]);
 

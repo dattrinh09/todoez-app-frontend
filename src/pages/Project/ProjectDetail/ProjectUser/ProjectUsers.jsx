@@ -38,36 +38,38 @@ const ProjectUsers = () => {
 
   return (
     <ProjectLayout>
-      <Bar>
-        <Title>User list</Title>
-        <Button
-          type="primary"
-          icon={<UserAddOutlined />}
-          onClick={() => setIsAdd(true)}
-        >
-          Add user
-        </Button>
-        {isAdd && (
-          <AddUser
-            open={isAdd}
-            onClose={() => setIsAdd(false)}
-            projectId={projectId}
-            projectUsersRefetch={projectUsersRefetch}
-          />
-        )}
-      </Bar>
-      <section>
-        {isProjectUsersLoading ? (
-          <Loader />
-        ) : (
+      {isProjectUsersLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <Bar>
+            <Title>User list</Title>
+            {data.creator && (
+              <Button
+                type="primary"
+                icon={<UserAddOutlined />}
+                onClick={() => setIsAdd(true)}
+              >
+                Add user
+              </Button>
+            )}
+          </Bar>
+          {isAdd && (
+            <AddUser
+              open={isAdd}
+              onClose={() => setIsAdd(false)}
+              projectId={projectId}
+              projectUsersRefetch={projectUsersRefetch}
+            />
+          )}
           <UserList
             projectId={projectId}
             data={data}
             isLoading={isProjectUsersLoading}
             projectUsersRefetch={projectUsersRefetch}
           />
-        )}
-      </section>
+        </>
+      )}
     </ProjectLayout>
   );
 };

@@ -24,8 +24,8 @@ const UpdateTask = ({
   const { mutateTaskFn, isMutateTaskLoading } = useMutateTask();
 
   useEffect(() => {
-    const assignee = users.find((user) => user.id === task.assignee.id);
-    const reporter = users.find((user) => user.id === task.reporter.id);
+    const assignee = users.find((user) => user.value === task.assignee.id);
+    const reporter = users.find((user) => user.value === task.reporter.id);
 
     updateForm.setFieldsValue({
       content: task.content,
@@ -42,17 +42,17 @@ const UpdateTask = ({
   const handleUpdateTask = () => {
     updateForm.validateFields().then((values) => {
       const newTask = {
-        content: values.content || task.content,
-        description: values.description || task.description,
-        sprint_id: values.sprint_id || task.sprint.id,
+        content: values.content ? values.content : task.content,
+        description: values.description ? values.description : task.description,
+        sprint_id: values.sprint_id ? values.sprint_id : task.sprint.id,
         end_at: values.end_at
           ? new Date(values.end_at.$d).toString()
           : task.end_at,
-        type: values.type || task.type,
-        status: values.status || task.status,
-        priority: values.priority || task.priority,
-        assignee_id: values.assignee_id || task.assignee.id,
-        reporter_id: values.reporter_id || task.reporter.id,
+        type: values.type ? values.type : task.type,
+        status: values.status ? values.status : task.status,
+        priority: values.priority ? values.priority : task.priority,
+        assignee_id: values.assignee_id ? values.assignee_id : task.assignee.id,
+        reporter_id: values.reporter_id ? values.reporter_id : task.reporter.id,
       };
 
       mutateTaskFn(
@@ -136,13 +136,14 @@ const UpdateTask = ({
               />
             </Form.Item>
             <Form.Item name="reporter_id" label="Reporter">
-              <Select allowClear>
-                {users.map((option) => (
-                  <Select.Option key={option.id} value={option.id}>
-                    {option.user.fullname}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Select
+                allowClear
+                showSearch
+                filterOption={(input, option) =>
+                  (option?.label.toLocaleLowerCase() ?? "").includes(input)
+                }
+                options={users}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -150,7 +151,9 @@ const UpdateTask = ({
               <Select allowClear placeholder="Type">
                 {TYPE_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    <span style={{ color: `${option.color}`}}>{option.label}</span>
+                    <span style={{ color: `${option.color}` }}>
+                      {option.label}
+                    </span>
                   </Select.Option>
                 ))}
               </Select>
@@ -159,7 +162,9 @@ const UpdateTask = ({
               <Select allowClear>
                 {STATUS_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    <span style={{ color: `${option.color}`}}>{option.label}</span>
+                    <span style={{ color: `${option.color}` }}>
+                      {option.label}
+                    </span>
                   </Select.Option>
                 ))}
               </Select>
@@ -168,19 +173,22 @@ const UpdateTask = ({
               <Select allowClear>
                 {PRIORITY_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    <span style={{ color: `${option.color}`}}>{option.label}</span>
+                    <span style={{ color: `${option.color}` }}>
+                      {option.label}
+                    </span>
                   </Select.Option>
                 ))}
               </Select>
             </Form.Item>
             <Form.Item name="assignee_id" label="Assignee">
-              <Select allowClear>
-                {users.map((option) => (
-                  <Select.Option key={option.id} value={option.id}>
-                    {option.user.fullname}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Select
+                allowClear
+                showSearch
+                filterOption={(input, option) =>
+                  (option?.label.toLocaleLowerCase() ?? "").includes(input)
+                }
+                options={users}
+              />
             </Form.Item>
           </Col>
         </Row>

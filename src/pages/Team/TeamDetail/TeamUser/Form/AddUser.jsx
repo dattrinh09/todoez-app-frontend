@@ -1,5 +1,5 @@
-import { Input, Modal, List, Space, Button } from "antd";
-import React, { useMemo, useState } from "react";
+import { Input, Modal, List, Space, Button, Empty } from "antd";
+import React, { useState } from "react";
 import { useMutateTeamUser } from "@/hooks/team-user";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
@@ -8,28 +8,17 @@ import { useGetAllUsers } from "@/hooks/user";
 const { confirm } = Modal;
 
 const AddUser = ({ open, onClose, teamId, teamUsersRefetch }) => {
-  const [keyword, setKeyword] = useState("");
-  const { isAllUsersLoading, allUsers, allUsersRefetch } = useGetAllUsers();
-  const { mutateTeamUserFn, isMutateTeamUserLoading } =
-    useMutateTeamUser();
+  const [keyword, setKeyword] = useState(undefined);
+  const { isAllUsersLoading, allUsers, allUsersRefetch } = useGetAllUsers({
+    keyword,
+  });
+  const { mutateTeamUserFn, isMutateTeamUserLoading } = useMutateTeamUser();
 
-  const data = useMemo(() => {
-    return allUsers
-      ? allUsers
-          .filter(
-            (item) =>
-              !item.team_users.find((i) => {
-                return i.team_id === Number(teamId) && !i.delete_at;
-              })
-          )
-          .filter((user) => {
-            return (
-              user.fullname.toLowerCase().includes(keyword) ||
-              user.email.toLowerCase().includes(keyword)
-            );
-          })
-      : [];
-  }, [allUsers, keyword]);
+  const handleSearch = (value) => {
+    const text = value.replaceAll(" ", "%");
+    if (text) setKeyword(text);
+    else setKeyword(undefined);
+  };
 
   const handleAddUser = (email) => {
     confirm({
@@ -60,34 +49,29 @@ const AddUser = ({ open, onClose, teamId, teamUsersRefetch }) => {
     });
   };
 
-  const handleClose = () => {
-    setKeyword("");
-    onClose();
-  };
-
   return (
     <Modal
       title="Add user to team"
       open={open}
-      onCancel={handleClose}
+      onCancel={onClose}
       width={800}
       footer={null}
     >
-      <Input
+      <Input.Search
+        allowClear
         placeholder="Search name or email"
-        value={keyword}
         style={{ width: "100%" }}
-        onChange={(e) => setKeyword(e.target.value)}
+        onSearch={handleSearch}
       />
       <div style={{ marginTop: "10px", height: "400px", overflow: "auto" }}>
         {isAllUsersLoading ? (
           <span>Loading ...</span>
         ) : (
           <>
-            {data.length > 0 && (
+            {allUsers.length > 0 ? (
               <List
                 size="small"
-                dataSource={data}
+                dataSource={allUsers}
                 renderItem={(item) => (
                   <List.Item
                     key={item.id}
@@ -116,6 +100,8 @@ const AddUser = ({ open, onClose, teamId, teamUsersRefetch }) => {
                   </List.Item>
                 )}
               />
+            ) : (
+              <Empty description="No users" />
             )}
           </>
         )}

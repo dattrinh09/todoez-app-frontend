@@ -8,7 +8,7 @@ import { useState } from "react";
 import EditTeam from "../Form/EditTeam";
 import { getNoteListRoute } from "@/utils/route";
 
-const TeamHeader = ({ team, teamRefetch }) => {
+const TeamHeader = ({ team, creator, teamRefetch }) => {
   const [isEdit, setIsEdit] = useState(false);
   return (
     <Heading>
@@ -19,12 +19,14 @@ const TeamHeader = ({ team, teamRefetch }) => {
         >
           {team.name}
         </Link>
-        <Button
-          size="small"
-          shape="circle"
-          icon={<EditOutlined />}
-          onClick={() => setIsEdit(true)}
-        />
+        {creator && (
+          <Button
+            size="small"
+            shape="circle"
+            icon={<EditOutlined />}
+            onClick={() => setIsEdit(true)}
+          />
+        )}
       </Space>
       {isEdit && (
         <EditTeam

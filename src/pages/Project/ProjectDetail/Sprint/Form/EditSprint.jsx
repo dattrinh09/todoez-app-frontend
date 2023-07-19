@@ -16,7 +16,7 @@ const EditSprint = ({ sprint, projectId, onClose, sprintsRefetch }) => {
 
   const handleEditSprint = () => {
     editForm.validateFields().then((values) => {
-      const newSprint = { title: values.title ?? sprint.title };
+      const newSprint = { title: values.title ? values.title : sprint.title };
 
       mutateSprintFn(
         {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   HeaderLayout,
@@ -18,7 +18,9 @@ import MyAvatar from "../MyAvatar/MyAvatar";
 
 const Header = ({ info }) => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const handleLogout = async () => {
+    setIsLoading(true);
     try {
       await api.get("auth/signout");
       localStorage.removeItem("access_token");
@@ -26,6 +28,8 @@ const Header = ({ info }) => {
       navigate(ConstantsPath.SIGN_IN);
     } catch (e) {
       errorResponse(e.response);
+    } finally {
+      setIsLoading(false);
     }
   };
   const items = [
@@ -42,7 +46,12 @@ const Header = ({ info }) => {
     {
       key: "2",
       label: (
-        <Button type="ghost" icon={<LogoutOutlined />} onClick={handleLogout}>
+        <Button
+          type="ghost"
+          icon={<LogoutOutlined />}
+          onClick={handleLogout}
+          loading={isLoading}
+        >
           Sign out
         </Button>
       ),

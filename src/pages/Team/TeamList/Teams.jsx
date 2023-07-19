@@ -3,14 +3,14 @@ import { Button, Dropdown, Modal, Space, Table } from "antd";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Content } from "./team-list-styles";
-import {getNoteListRoute } from "@/utils/route";
+import { getNoteListRoute } from "@/utils/route";
 import { useMutateTeam } from "@/hooks/team";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 
 const { confirm } = Modal;
 
-const Teams = ({ data, isLoading, teamsRefetch }) => {
+const Teams = ({ data, isLoading, teamsRefetch, current, onTableChange }) => {
   const navigate = useNavigate();
 
   const { mutateTeamFn, isMutateTeamLoading } = useMutateTeam();
@@ -122,10 +122,16 @@ const Teams = ({ data, isLoading, teamsRefetch }) => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={data.list}
       loading={isLoading}
+      pagination={{
+        current: current,
+        pageSize: 10,
+        total: data.total,
+        position: ["bottomCenter"],
+      }}
+      onChange={onTableChange}
       bordered
-      pagination={false}
     />
   );
 };

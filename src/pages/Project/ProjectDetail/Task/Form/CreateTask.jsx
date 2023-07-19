@@ -134,7 +134,9 @@ const CreateTask = ({
               <Select allowClear>
                 {TYPE_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    <span style={{ color: `${option.color}`}}>{option.label}</span>
+                    <span style={{ color: `${option.color}` }}>
+                      {option.label}
+                    </span>
                   </Select.Option>
                 ))}
               </Select>
@@ -152,7 +154,9 @@ const CreateTask = ({
               <Select allowClear>
                 {PRIORITY_OPTIONS.map((option) => (
                   <Select.Option key={option.id} value={option.value}>
-                    <span style={{ color: `${option.color}`}}>{option.label}</span>
+                    <span style={{ color: `${option.color}` }}>
+                      {option.label}
+                    </span>
                   </Select.Option>
                 ))}
               </Select>
@@ -167,13 +171,14 @@ const CreateTask = ({
                 },
               ]}
             >
-              <Select allowClear>
-                {assignees.map((option) => (
-                  <Select.Option key={option.id} value={option.id}>
-                    {option.user.fullname}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Select
+                allowClear
+                showSearch
+                filterOption={(input, option) =>
+                  (option?.label.toLocaleLowerCase() ?? "").includes(input)
+                }
+                options={assignees}
+              />
             </Form.Item>
           </Col>
         </Row>

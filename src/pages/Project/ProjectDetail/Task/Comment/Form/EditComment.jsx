@@ -17,7 +17,7 @@ const EditComment = ({ comment, projectId, onClose, commentsRefetch }) => {
   const handleEditComment = () => {
     editForm.validateFields().then((values) => {
       const newComment = {
-        content: values.content ?? comment.content,
+        content: values.content ? values.content : comment.content,
       };
       mutateCommentFn(
         {

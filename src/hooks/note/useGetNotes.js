@@ -4,8 +4,9 @@ import { errorResponse } from "@/utils/errorResponse";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { formatDate2, formatDate3 } from "@/utils/formatInfo";
 
-const getData = async (id, page = 1) => {
+const getData = async (id, page = 1, filter) => {
   const params = {
+    ...filter,
     page,
     limit: 10,
   };
@@ -20,11 +21,11 @@ const getData = async (id, page = 1) => {
   return data;
 };
 
-export const useGetNotes = (teamId) => {
+export const useGetNotes = (teamId, filter) => {
   const { data, hasNextPage, fetchNextPage, isLoading, refetch } =
     useInfiniteQuery({
-      queryKey: ["note", "list", "infinite", teamId],
-      queryFn: ({ pageParam = 1 }) => getData(teamId, pageParam),
+      queryKey: ["note", "list", "infinite", teamId, filter],
+      queryFn: ({ pageParam = 1 }) => getData(teamId, pageParam, filter),
       getNextPageParam: (lastPage, allPages) => {
         const maxPage = lastPage.data.total / 10 + 1;
         const nextPage = allPages.length + 1;

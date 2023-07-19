@@ -50,7 +50,13 @@ const TaskDetail = () => {
 
   const users = useMemo(() => {
     return projectUsers
-      ? projectUsers.list.filter((user) => !user.delete_at)
+      ? projectUsers.list
+          .filter((user) => !user.delete_at)
+          .map((item) => ({
+            key: item.id,
+            value: item.id,
+            label: item.user.fullname,
+          }))
       : [];
   }, [projectUsers]);
 

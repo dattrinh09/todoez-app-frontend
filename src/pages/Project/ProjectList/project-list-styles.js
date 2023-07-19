@@ -15,9 +15,9 @@ export const Heading = styled.div`
   color: #1677ff;
 `;
 
-export const ButtonContainer = styled.div`
+export const Bar = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 export const Content = styled.div`

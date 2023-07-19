@@ -18,7 +18,7 @@ const UpdateTaskStatus = ({ task, onClose, myTasksRefetch }) => {
   const handleUpdateTaskStatus = () => {
     updateForm.validateFields().then((values) => {
       const newTask = {
-        status: values.status || task.status,
+        status: values.status ? values.status : task.status,
       };
 
       mutateTaskFn(

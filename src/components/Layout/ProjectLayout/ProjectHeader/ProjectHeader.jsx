@@ -7,7 +7,7 @@ import { getTaskListRoute } from "@/utils/route";
 import { Button, Space } from "antd";
 import EditProject from "../Form/EditProject";
 
-const ProjectHeader = ({ project, projectRefetch }) => {
+const ProjectHeader = ({ project, creator, projectRefetch }) => {
   const [isEdit, setIsEdit] = useState(false);
   return (
     <Heading>
@@ -18,12 +18,14 @@ const ProjectHeader = ({ project, projectRefetch }) => {
         >
           {project.name}
         </Link>
-        <Button
-          size="small"
-          shape="circle"
-          icon={<EditOutlined />}
-          onClick={() => setIsEdit(true)}
-        />
+        {creator && (
+          <Button
+            size="small"
+            shape="circle"
+            icon={<EditOutlined />}
+            onClick={() => setIsEdit(true)}
+          />
+        )}
       </Space>
       {isEdit && (
         <EditProject

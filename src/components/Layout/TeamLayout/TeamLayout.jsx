@@ -17,7 +17,11 @@ const TeamLayout = ({ children }) => {
           <Loader />
         ) : (
           <>
-            <TeamHeader team={team.information} teamRefetch={teamRefetch} />
+            <TeamHeader
+              team={team.information}
+              creator={team.creator}
+              teamRefetch={teamRefetch}
+            />
             {team && children}
           </>
         )}

@@ -87,30 +87,28 @@ const TaskFilter = ({ filter, users }) => {
       </Select>
       <Select
         allowClear
+        showSearch
         defaultValue={filterData.assignee}
         onChange={(value) => changeSearchParam("assignee", value)}
         placeholder="Assignee"
         style={{ width: "150px" }}
-      >
-        {users.map((option) => (
-          <Select.Option key={option.id} value={option.value}>
-            {option.label}
-          </Select.Option>
-        ))}
-      </Select>
+        filterOption={(input, option) =>
+          (option?.label.toLocaleLowerCase() ?? "").includes(input)
+        }
+        options={users}
+      />
       <Select
         allowClear
+        showSearch
         defaultValue={filterData.reporter}
         onChange={(value) => changeSearchParam("reporter", value)}
         placeholder="Reporter"
         style={{ width: "150px" }}
-      >
-        {users.map((option) => (
-          <Select.Option key={option.id} value={option.value}>
-            {option.label}
-          </Select.Option>
-        ))}
-      </Select>
+        filterOption={(input, option) =>
+          (option?.label.toLocaleLowerCase() ?? "").includes(input)
+        }
+        options={users}
+      />
     </FilterBar>
   );
 };

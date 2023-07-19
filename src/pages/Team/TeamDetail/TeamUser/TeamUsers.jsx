@@ -38,36 +38,38 @@ const TeamUsers = () => {
 
   return (
     <TeamLayout>
-      <Bar>
-        <Title>User list</Title>
-        <Button
-          type="primary"
-          icon={<UserAddOutlined />}
-          onClick={() => setIsAdd(true)}
-        >
-          Add user
-        </Button>
-        {isAdd && (
-          <AddUser
-            open={isAdd}
-            onClose={() => setIsAdd(false)}
-            teamId={teamId}
-            teamUsersRefetch={teamUsersRefetch}
-          />
-        )}
-      </Bar>
-      <section>
-        {isTeamUsersLoading ? (
-          <Loader />
-        ) : (
+      {isTeamUsersLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <Bar>
+            <Title>User list</Title>
+            {data.creator && (
+              <Button
+                type="primary"
+                icon={<UserAddOutlined />}
+                onClick={() => setIsAdd(true)}
+              >
+                Add user
+              </Button>
+            )}
+          </Bar>
+          {isAdd && (
+            <AddUser
+              open={isAdd}
+              onClose={() => setIsAdd(false)}
+              teamId={teamId}
+              teamUsersRefetch={teamUsersRefetch}
+            />
+          )}
           <UserList
             teamId={teamId}
             data={data}
             isLoading={isTeamUsersLoading}
             teamUsersRefetch={teamUsersRefetch}
           />
-        )}
-      </section>
+        </>
+      )}
     </TeamLayout>
   );
 };

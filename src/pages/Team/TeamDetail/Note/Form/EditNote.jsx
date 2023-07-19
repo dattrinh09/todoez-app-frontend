@@ -10,16 +10,16 @@ const EditNote = ({ note, onClose, teamId, notesRefetch }) => {
 
   useEffect(() => {
     editForm.setFieldsValue({
-      content: note.content || "",
-      description: note.description || "",
+      content: note.content,
+      description: note.description,
     });
   }, [editForm, note]);
 
   const handleUpdateNote = () => {
     editForm.validateFields().then((values) => {
       const newNote = {
-        content: values.content || note.content,
-        description: values.description || note.description,
+        content: values.content ? values.content : note.content,
+        description: values.description ? values.description : note.description,
       };
       mutateNoteFn(
         {
@@ -52,13 +52,14 @@ const EditNote = ({ note, onClose, teamId, notesRefetch }) => {
       }}
       onOk={handleUpdateNote}
       onCancel={onClose}
+      width={800}
     >
       <Form form={editForm} layout="vertical" name="edit_note">
         <Form.Item name="content" label="Content">
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input.TextArea rows={3} allowClear />
+          <Input.TextArea rows={5} allowClear />
         </Form.Item>
       </Form>
     </Modal>

@@ -22,8 +22,7 @@ const TaskFilter = ({ filter }) => {
   const changeSearchParam = (field, value) => {
     if (value) searchParams.set(field, value);
     else searchParams.delete(field);
-
-    searchParams.delete("page");
+    
     setSearchParams(searchParams);
   };
   return (
@@ -43,7 +42,7 @@ const TaskFilter = ({ filter }) => {
         defaultValue={filterData.type}
         onChange={(value) => changeSearchParam("type", value)}
         placeholder="Type"
-        style={{ width: "100px" }}
+        style={{ width: "150px" }}
       >
         {TYPE_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
@@ -56,7 +55,7 @@ const TaskFilter = ({ filter }) => {
         defaultValue={filterData.status}
         onChange={(value) => changeSearchParam("status", value)}
         placeholder="Status"
-        style={{ width: "100px" }}
+        style={{ width: "150px" }}
       >
         {STATUS_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
@@ -69,7 +68,7 @@ const TaskFilter = ({ filter }) => {
         defaultValue={filterData.priority}
         onChange={(value) => changeSearchParam("priority", value)}
         placeholder="Priority"
-        style={{ width: "100px" }}
+        style={{ width: "150px" }}
       >
         {PRIORITY_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>

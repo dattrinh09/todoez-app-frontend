@@ -10,7 +10,7 @@ import { errorResponse } from "@/utils/errorResponse";
 
 const { confirm } = Modal;
 
-const Projects = ({ data, isLoading, projectsRefetch }) => {
+const Projects = ({ data, isLoading, projectsRefetch, current, onTableChange }) => {
   const navigate = useNavigate();
 
   const { mutateProjectFn, isMutateProjectLoading } = useMutateProject();
@@ -128,10 +128,16 @@ const Projects = ({ data, isLoading, projectsRefetch }) => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={data.list}
       loading={isLoading}
+      pagination={{
+        current: current,
+        pageSize: 10,
+        total: data.total,
+        position: ["bottomCenter"],
+      }}
+      onChange={onTableChange}
       bordered
-      pagination={false}
     />
   );
 };

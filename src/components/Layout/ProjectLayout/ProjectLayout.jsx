@@ -21,6 +21,7 @@ const ProjectLayout = ({ children }) => {
           <>
             <ProjectHeader
               project={project.information}
+              creator={project.creator}
               projectRefetch={projectRefetch}
             />
             {project && children}
