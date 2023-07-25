@@ -30,7 +30,7 @@ const NoteFilter = ({ filter, users }) => {
           const text = value.replaceAll(" ", "%");
           changeSearchParam("keyword", text);
         }}
-        placeholder="Search task"
+        placeholder="Search note"
         style={{ width: "300px" }}
       />
       <Select

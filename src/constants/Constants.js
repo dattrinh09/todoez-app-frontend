@@ -13,6 +13,8 @@ export const GoogleConstants = {
 
 export const PhoneNumberFormat = /(84|0[1|3|5|7|8|9])+([0-9]{8})\b/g;
 
+export const PasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/g;
+
 export const TYPE_OPTIONS = [
   {
     id: 1,

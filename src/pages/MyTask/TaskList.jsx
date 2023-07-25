@@ -18,7 +18,14 @@ const TaskList = ({ myTasks, myTasksRefetch }) => {
     <>
       {myTasks.map((task) => (
         <div key={task.date}>
-          <Divider orientation="left">{task.date}</Divider>
+          <Divider orientation="left">
+            <Space>
+              <span>{task.date}</span>
+              <span>\</span>
+              <span>{task.list.length}</span>
+              <span>tasks</span>
+            </Space>
+          </Divider>
           <List
             bordered
             dataSource={task.list}

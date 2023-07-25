@@ -3,6 +3,7 @@ import React from "react";
 import { notificationShow } from "@/utils/notificationShow";
 import { errorResponse } from "@/utils/errorResponse";
 import { useMutateProfile } from "@/hooks/profile";
+import { PasswordRegex } from "@/constants/Constants";
 
 const ChangePassword = ({ open, onClose }) => {
   const [changeForm] = Form.useForm();
@@ -61,6 +62,18 @@ const ChangePassword = ({ open, onClose }) => {
               required: true,
               message: "Please enter your new password.",
             },
+            () => ({
+              validator(_, value) {
+                if (!value || value.match(PasswordRegex)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error(
+                    "Password must be at least eight characters, at least one letter and one number."
+                  )
+                );
+              },
+            }),
           ]}
           hasFeedback
         >

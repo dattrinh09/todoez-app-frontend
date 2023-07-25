@@ -9,7 +9,7 @@ import {
   ListBox,
   SubContent,
 } from "./sprint-styles";
-import { Button, Dropdown, List, Modal, Space, Tag } from "antd";
+import { Button, Dropdown, List, Modal, Space } from "antd";
 import { EllipsisOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import {
   PRIORITY_OPTIONS,
@@ -149,12 +149,14 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
                   key={item.id}
                   extra={[
                     <ItemExtra>
-                      <Tag
-                        color={item.assignee.delete_at ? "#ff4d4f" : "#1677ff"}
-                      >{`Assignee: ${item.assignee.user.fullname}`}</Tag>
-                      <Tag
-                        color={item.reporter.delete_at ? "#ff4d4f" : "#1677ff"}
-                      >{`Reporter: ${item.reporter.user.fullname}`}</Tag>
+                      <Space>
+                        <span style={{ color: "#1677ff" }}>Assignee:</span>
+                        <span>{item.assignee.user.fullname}</span>
+                      </Space>
+                      <Space>
+                        <span style={{ color: "#1677ff" }}>Reporter:</span>
+                        <span>{item.reporter.user.fullname}</span>
+                      </Space>
                     </ItemExtra>,
                   ]}
                 >

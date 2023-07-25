@@ -67,7 +67,7 @@ const CreateNote = ({ open, onClose, teamId, notesRefetch }) => {
             },
           ]}
         >
-          <Input.TextArea rows={5} allowClear />
+          <Input.TextArea rows={10} allowClear />
         </Form.Item>
       </Form>
     </Modal>

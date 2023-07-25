@@ -5,11 +5,11 @@ import {
   CalendarOutlined,
   EditOutlined,
   DeleteOutlined,
+  LockOutlined,
 } from "@ant-design/icons";
 import MainLayout from "@/components/Layout/MainLayout/MainLayout";
 import {
   ButtonGroup,
-  ChangePass,
   Container,
   EditProf,
   Header,
@@ -72,7 +72,7 @@ const Profile = () => {
         );
       },
     });
-  }
+  };
   return (
     <MainLayout>
       <Header />
@@ -121,8 +121,9 @@ const Profile = () => {
               <Label>
                 <PhoneOutlined /> Phone number:
               </Label>
-              {userInfo.phone_number &&
-                formatPhoneNumber(userInfo.phone_number)}
+              {userInfo.phone_number
+                ? formatPhoneNumber(userInfo.phone_number)
+                : "No phone number"}
             </InfoItem>
             <InfoItem>
               <Label>
@@ -137,23 +138,24 @@ const Profile = () => {
               {formatDate2(userInfo.update_at, "LL")}
             </InfoItem>
           </Info>
-          <ChangePass>
+        </Section>
+        <EditProf>
+          <Space>
             <Button
+              icon={<LockOutlined />}
               type="primary"
               onClick={() => setChange(true)}
               disabled={!userInfo.is_email_signin}
             >
               Change password
             </Button>
-            {change && (
-              <ChangePassword open={change} onClose={() => setChange(false)} />
-            )}
-          </ChangePass>
-        </Section>
-        <EditProf>
-          <Button icon={<EditOutlined />} onClick={() => setEdit(true)}>
-            Edit profile
-          </Button>
+            <Button icon={<EditOutlined />} onClick={() => setEdit(true)}>
+              Edit profile
+            </Button>
+          </Space>
+          {change && (
+            <ChangePassword open={change} onClose={() => setChange(false)} />
+          )}
           {edit && (
             <EditProfile
               open={edit}

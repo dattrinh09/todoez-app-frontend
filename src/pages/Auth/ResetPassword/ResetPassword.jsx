@@ -12,6 +12,7 @@ import Loader from "@/components/Loader/Loader";
 import { ConstantsPath } from "@/constants/ConstantsPath";
 import { useVerifyAccount, useResetPassword } from "@/hooks/auth";
 import { notificationShow } from "@/utils/notificationShow";
+import { PasswordRegex } from "@/constants/Constants";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -70,6 +71,18 @@ const ResetPassword = () => {
                         required: true,
                         message: "Please fill in your new password.",
                       },
+                      () => ({
+                        validator(_, value) {
+                          if (!value || value.match(PasswordRegex)) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error(
+                              "Password must be at least eight characters, at least one letter and one number."
+                            )
+                          );
+                        },
+                      }),
                     ]}
                     hasFeedback
                   >

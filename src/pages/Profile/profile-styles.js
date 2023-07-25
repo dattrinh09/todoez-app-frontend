@@ -65,10 +65,6 @@ export const Label = styled.div`
   font-weight: 600;
 `;
 
-export const ChangePass = styled.div`
-  margin-top: 50px;
-`;
-
 export const EditProf = styled.div`
   position: absolute;
   top: 60px;

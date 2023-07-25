@@ -54,6 +54,12 @@ const EditProfile = ({ open, onClose, info }) => {
         <Form.Item
           name="fullname"
           label="Full Name"
+          rules={[
+            {
+              required: true,
+              message: "Please enter your fullname.",
+            },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -61,12 +67,20 @@ const EditProfile = ({ open, onClose, info }) => {
           name="phone_number"
           label="Phone Nummber"
           rules={[
+            {
+              required: true,
+              message: "Please enter your phone number.",
+            },
             () => ({
               validator(_, value) {
                 if (!value || value.match(PhoneNumberFormat)) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error("Phone number not valid"));
+                return Promise.reject(
+                  new Error(
+                    "Phone number must be at least 10 character and start at 0, 1, 3, 5, 7, 8 or 9."
+                  )
+                );
               },
             }),
           ]}

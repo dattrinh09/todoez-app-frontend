@@ -2,7 +2,7 @@ import api from "@/api/api";
 import { useMemo } from "react";
 import { errorResponse } from "@/utils/errorResponse";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { formatDate4, formatDate3, checkIsPassDue } from "@/utils/formatInfo";
+import { formatDate2, formatDate3, checkIsPassDue } from "@/utils/formatInfo";
 import {
   PRIORITY_OPTIONS,
   STATUS_OPTIONS,
@@ -49,14 +49,13 @@ export const useGetMyTasks = (filter) => {
             type: TYPE_OPTIONS.find((t) => t.value === item.type),
             status: STATUS_OPTIONS.find((s) => s.value === item.status),
             priority: PRIORITY_OPTIONS.find((p) => p.value === item.priority),
-            create_at: formatDate3(item.create_at),
-            update_at: formatDate3(item.update_at),
-            end_at: formatDate4(item.end_at),
+            end_time: formatDate3(item.end_at),
+            end_at: formatDate2(item.end_at, "LL"),
             is_over: checkIsPassDue(item.end_at, item.status),
           }))
       : [];
     const group = list.reduce((prev, cur) => {
-      (prev[cur["create_at"]] = prev[cur["create_at"]] || []).push(cur);
+      (prev[cur["end_time"]] = prev[cur["end_time"]] || []).push(cur);
       return prev;
     }, {});
 

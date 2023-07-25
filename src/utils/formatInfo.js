@@ -31,6 +31,28 @@ export const formatDate2 = (date, format) => {
 export const formatDate3 = (date) => {
   const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
   const day = parseInt(formatDate2(date, "YYYYMMDD"));
+
+  if (day < now) return "Overdue";
+  if (day === now) return "Today";
+  if (day > now) {
+    const wd = parseInt(moment(Date.now()).format("W"));
+    const wn = parseInt(formatDate2(date, "W"));
+
+    if (wd === wn) return "This week";
+    if (wd - wn === 1) return "Next week";
+  }
+  return "Later";
+};
+
+export const formatDate4 = (date) => {
+  const d = convertDate(date);
+
+  return moment(d).calendar();
+};
+
+export const formatDate5 = (date) => {
+  const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
+  const day = parseInt(formatDate2(date, "YYYYMMDD"));
   let str = "";
 
   switch (now - day) {
@@ -45,12 +67,6 @@ export const formatDate3 = (date) => {
   }
 
   return str;
-};
-
-export const formatDate4 = (date) => {
-  const d = convertDate(date);
-
-  return moment(d).calendar();
 };
 
 export const formatRange = (start, end) => {
@@ -72,5 +88,5 @@ export const checkIsPassDue = (date, state) => {
   const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
   const due = parseInt(formatDate2(date, "YYYYMMDD"));
 
-  return now > due && state !== "resolve" && state !== "reject";
+  return now > due && state !== "resolve";
 };

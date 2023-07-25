@@ -59,7 +59,7 @@ const EditNote = ({ note, onClose, teamId, notesRefetch }) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input.TextArea rows={5} allowClear />
+          <Input.TextArea rows={10} allowClear />
         </Form.Item>
       </Form>
     </Modal>

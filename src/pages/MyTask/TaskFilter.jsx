@@ -22,7 +22,7 @@ const TaskFilter = ({ filter }) => {
   const changeSearchParam = (field, value) => {
     if (value) searchParams.set(field, value);
     else searchParams.delete(field);
-    
+
     setSearchParams(searchParams);
   };
   return (
@@ -46,7 +46,7 @@ const TaskFilter = ({ filter }) => {
       >
         {TYPE_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            <span style={{ color: `${option.color}`}}>{option.label}</span>
+            <span style={{ color: `${option.color}` }}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>
@@ -57,11 +57,13 @@ const TaskFilter = ({ filter }) => {
         placeholder="Status"
         style={{ width: "150px" }}
       >
-        {STATUS_OPTIONS.map((option) => (
-          <Select.Option key={option.id} value={option.value}>
-            <span style={{ color: `${option.color}`}}>{option.label}</span>
-          </Select.Option>
-        ))}
+        {STATUS_OPTIONS.filter((item) => item.value !== "resolve").map(
+          (option) => (
+            <Select.Option key={option.id} value={option.value}>
+              <span style={{ color: `${option.color}` }}>{option.label}</span>
+            </Select.Option>
+          )
+        )}
       </Select>
       <Select
         allowClear
@@ -72,7 +74,7 @@ const TaskFilter = ({ filter }) => {
       >
         {PRIORITY_OPTIONS.map((option) => (
           <Select.Option key={option.id} value={option.value}>
-            <span style={{ color: `${option.color}`}}>{option.label}</span>
+            <span style={{ color: `${option.color}` }}>{option.label}</span>
           </Select.Option>
         ))}
       </Select>
