@@ -35,8 +35,10 @@ export const formatDate3 = (date) => {
   if (day < now) return "Overdue";
   if (day === now) return "Today";
   if (day > now) {
-    const wd = parseInt(moment(Date.now()).format("W"));
-    const wn = parseInt(formatDate2(date, "W"));
+    const wn = parseInt(moment(Date.now()).format("W"));
+    const wd = parseInt(formatDate2(date, "W"));
+
+    console.log(wd, wn);
 
     if (wd === wn) return "This week";
     if (wd - wn === 1) return "Next week";
