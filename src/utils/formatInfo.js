@@ -38,8 +38,6 @@ export const formatDate3 = (date) => {
     const wn = parseInt(moment(Date.now()).format("W"));
     const wd = parseInt(formatDate2(date, "W"));
 
-    console.log(wd, wn);
-
     if (wd === wn) return "This week";
     if (wd - wn === 1) return "Next week";
   }
