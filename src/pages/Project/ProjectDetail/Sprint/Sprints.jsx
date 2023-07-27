@@ -118,26 +118,6 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
               <Button size="small" type="primary" icon={<EllipsisOutlined />} />
             </Dropdown>
           </ButtonBar>
-          <>
-            {selected && (
-              <EditSprint
-                projectId={projectId}
-                sprint={selected}
-                onClose={() => setSelected(null)}
-                sprintsRefetch={sprintsRefetch}
-              />
-            )}
-          </>
-          <>
-            {create && (
-              <CreateTask
-                sprint={create}
-                onClose={() => setCreate(null)}
-                projectId={projectId}
-                sprintsRefetch={sprintsRefetch}
-              />
-            )}
-          </>
           {sprint.tasks.length > 0 && (
             <List
               size="middle"
@@ -204,6 +184,24 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
           )}
         </Box>
       ))}
+      <>
+        {selected && (
+          <EditSprint
+            projectId={projectId}
+            sprint={selected}
+            onClose={() => setSelected(null)}
+            sprintsRefetch={sprintsRefetch}
+          />
+        )}
+        {create && (
+          <CreateTask
+            sprint={create}
+            onClose={() => setCreate(null)}
+            projectId={projectId}
+            sprintsRefetch={sprintsRefetch}
+          />
+        )}
+      </>
     </ListBox>
   );
 };
