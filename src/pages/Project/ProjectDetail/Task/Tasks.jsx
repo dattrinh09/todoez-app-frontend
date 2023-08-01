@@ -120,7 +120,7 @@ const Tasks = ({
         <UserName>
           <ErrorText
             check={reporter.delete_at}
-            title={reporter.user.fullname}
+            title="No longer"
             content={reporter.user.fullname}
           />
         </UserName>
@@ -134,7 +134,7 @@ const Tasks = ({
         <UserName>
           <ErrorText
             check={assignee.delete_at}
-            title={assignee.user.fullname}
+            title="No longer"
             content={assignee.user.fullname}
           />
         </UserName>

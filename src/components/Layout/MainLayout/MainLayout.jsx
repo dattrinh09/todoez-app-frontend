@@ -8,7 +8,7 @@ const MainLayout = ({ children }) => {
   const { userInfo } = useSelector(userSelector);
   return (
     <>
-      <Header info={userInfo ?? null} />
+      <Header info={userInfo ? userInfo : null} />
       <MainBody>
         {children}
       </MainBody>

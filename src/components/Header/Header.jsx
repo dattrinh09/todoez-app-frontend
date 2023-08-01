@@ -15,8 +15,11 @@ import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import api from "@/api/api";
 import { errorResponse } from "@/utils/errorResponse";
 import MyAvatar from "../MyAvatar/MyAvatar";
+import { useDispatch } from "react-redux";
+import { userInfoRemove } from "@/stores/reducers/userSlice";
 
 const Header = ({ info }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const handleLogout = async () => {
@@ -25,7 +28,8 @@ const Header = ({ info }) => {
       await api.get("auth/signout");
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
-      navigate(ConstantsPath.SIGN_IN);
+      dispatch(userInfoRemove());
+      navigate(ConstantsPath.HERO_PAGE);
     } catch (e) {
       errorResponse(e.response);
     } finally {
