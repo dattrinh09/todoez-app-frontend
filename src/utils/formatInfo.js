@@ -20,8 +20,12 @@ export const convertDate = (date) => {
 
 export const formatDate = (date) => {
   const d = convertDate(date);
+  const dn = parseInt(moment(d).format("YYYYMMDD"));
+  const n = parseInt(moment(Date.now()).format("YYYYMMDD"));
 
-  return moment(d).startOf("second").fromNow();
+  if (dn === n) return moment(d).startOf("second").fromNow();
+
+  return moment(d).format("LLL");
 };
 
 export const formatDate2 = (date, format) => {

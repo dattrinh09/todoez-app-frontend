@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const HeroLayout = styled.div`
     padding-top: 100px;
-    height: calc(100vh - 154px);
+    height: calc(100vh - 154px - 44px);
 `
 
 export const Container = styled.div`
