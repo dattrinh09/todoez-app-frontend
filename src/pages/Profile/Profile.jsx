@@ -129,13 +129,13 @@ const Profile = () => {
               <Label>
                 <CalendarOutlined /> Create at:
               </Label>
-              {formatDate2(userInfo.create_at, "LL")}
+              {formatDate2(userInfo.create_at, "LLL")}
             </InfoItem>
             <InfoItem>
               <Label>
                 <CalendarOutlined /> Update at:
               </Label>
-              {formatDate2(userInfo.update_at, "LL")}
+              {formatDate2(userInfo.update_at, "LLL")}
             </InfoItem>
           </Info>
         </Section>

@@ -76,11 +76,8 @@ const CreateTask = ({ sprint, onClose, projectId, sprintsRefetch }) => {
               >
                 <Input />
               </Form.Item>
-              <Form.Item
-                name="sprint_id"
-                label="Sprint"
-              >
-                <Select disabled placeholder={sprint.title} /> 
+              <Form.Item name="sprint_id" label="Sprint">
+                <Select disabled placeholder={sprint.title} />
               </Form.Item>
               <Form.Item
                 name="end_at"
@@ -109,7 +106,13 @@ const CreateTask = ({ sprint, onClose, projectId, sprintsRefetch }) => {
                   }),
                 ]}
               >
-                <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+                <DatePicker
+                  format="YYYY-MM-DD HH"
+                  style={{ width: "100%" }}
+                  showTime={{
+                    format: "HH",
+                  }}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>

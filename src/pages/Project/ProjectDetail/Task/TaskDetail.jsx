@@ -117,12 +117,12 @@ const TaskDetail = () => {
                     <MyTooltip tooltip={taskInfo.priority} />
                     <Space>
                       <span>Create at:</span>
-                      <span>{formatDate2(task.create_at, "LL")}</span>
+                      <span>{formatDate2(task.create_at, "LLL")}</span>
                       <span>|</span>
                     </Space>
                     <Space>
                       <span>Update at:</span>
-                      <span>{formatDate2(task.update_at, "LL")}</span>
+                      <span>{formatDate2(task.update_at, "LLL")}</span>
                       <span>|</span>
                     </Space>
                     <Space>
@@ -130,7 +130,7 @@ const TaskDetail = () => {
                       <ErrorText
                         check={checkIsPassDue(task.end_at, task.status)}
                         title="Over due"
-                        content={formatDate2(task.end_at, "LL")}
+                        content={formatDate2(task.end_at, "LLL")}
                       />
                     </Space>
                   </Space>

@@ -51,6 +51,7 @@ const EditComment = ({ comment, projectId, onClose, commentsRefetch }) => {
         loading: isMutateCommentLoading,
       }}
       onCancel={onClose}
+      width={800}
     >
       <Form form={editForm} layout="vertical" name="edit_comment">
         <Form.Item name="content" label="Content">

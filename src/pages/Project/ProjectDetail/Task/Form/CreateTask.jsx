@@ -117,7 +117,13 @@ const CreateTask = ({
                 }),
               ]}
             >
-              <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+              <DatePicker
+                format="YYYY-MM-DD HH"
+                style={{ width: "100%" }}
+                showTime={{
+                  format: "HH",
+                }}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>

@@ -50,7 +50,7 @@ export const useGetMyTasks = (filter) => {
             status: STATUS_OPTIONS.find((s) => s.value === item.status),
             priority: PRIORITY_OPTIONS.find((p) => p.value === item.priority),
             end_time: formatDate3(item.end_at),
-            end_at: formatDate2(item.end_at, "LL"),
+            end_at: formatDate2(item.end_at, "LLL"),
             is_over: checkIsPassDue(item.end_at, item.status),
           }))
       : [];

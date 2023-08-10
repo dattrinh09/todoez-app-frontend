@@ -67,13 +67,13 @@ const UserProfile = () => {
                     <Label>
                       <CalendarOutlined /> Create at:
                     </Label>
-                    {formatDate2(userProfile.create_at, "LL")}
+                    {formatDate2(userProfile.create_at, "LLL")}
                   </InfoItem>
                   <InfoItem>
                     <Label>
                       <CalendarOutlined /> Update at:
                     </Label>
-                    {formatDate2(userProfile.update_at, "LL")}
+                    {formatDate2(userProfile.update_at, "LLL")}
                   </InfoItem>
                 </Info>
               </Section>

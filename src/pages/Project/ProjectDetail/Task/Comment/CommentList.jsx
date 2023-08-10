@@ -167,7 +167,7 @@ const CommentList = ({ projectId, taskId }) => {
                       title={
                         <Space>
                           <span>{item.user.user.fullname}</span>
-                          <span style={{ color: "#1677ff", fontWeight: "500" }}>
+                          <span style={{ color: "#1677ff", fontWeight: "400" }}>
                             {formatDate(item.update_at)}
                           </span>
                         </Space>

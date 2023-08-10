@@ -9,7 +9,7 @@ export const Header = styled.div`
 export const Container = styled.div`
   width: 1000px;
   margin: 0 auto;
-  height: calc(100vh - 192px - 54px);
+  height: calc(100vh - 192px - 54px - 44px);
   position: relative;
 `;
 

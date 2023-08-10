@@ -165,7 +165,7 @@ const Sprints = ({ projectId, sprints, sprintsRefetch }) => {
                           <ErrorText
                             check={checkIsPassDue(item.end_at, item.status)}
                             title="Over due"
-                            content={formatDate2(item.end_at, "LL")}
+                            content={formatDate2(item.end_at, "LLL")}
                           />
                         </Space>
                         <div>

@@ -33,14 +33,14 @@ export const formatDate2 = (date, format) => {
 };
 
 export const formatDate3 = (date) => {
-  const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
-  const day = parseInt(formatDate2(date, "YYYYMMDD"));
+  const now = parseInt(moment(Date.now()).format("YYYYMMDDHHmmss"));
+  const day = parseInt(formatDate2(date, "YYYYMMDDHHmmss"));
 
   if (day < now) return "Overdue";
   if (day === now) return "Today";
   if (day > now) {
     const wn = parseInt(moment(Date.now()).format("W"));
-    const wd = parseInt(formatDate2(date, "W"));
+    const wd = parseInt(formatDate2(d, "W"));
 
     if (wd === wn) return "This week";
     if (wd - wn === 1) return "Next week";
@@ -74,23 +74,23 @@ export const formatDate5 = (date) => {
 };
 
 export const formatRange = (start, end) => {
-  const startDate = moment(start).format("LL");
-  const endDate = moment(end).format("LL");
+  const startDate = formatDate2(start, "LL");
+  const endDate = formatDate2(end, "LL");
 
   return startDate + " ~ " + endDate;
 };
 
 export const checkDateInRange = (date, start, end) => {
-  const d = parseInt(moment(date).format("YYYYMMDD"));
-  const st = parseInt(moment(start).format("YYYYMMDD"));
-  const en = parseInt(moment(end).format("YYYYMMDD"));
+  const d = parseInt(formatDate2(date, "YYYYMMDD"));
+  const st = parseInt(formatDate2(start, "YYYYMMDD"));
+  const en = parseInt(formatDate2(end, "YYYYMMDD"));
 
   return d >= st && d <= en;
 };
 
 export const checkIsPassDue = (date, state) => {
-  const now = parseInt(moment(Date.now()).format("YYYYMMDD"));
-  const due = parseInt(formatDate2(date, "YYYYMMDD"));
+  const now = parseInt(moment(Date.now()).format("YYYYMMDDHHmmss"));
+  const due = parseInt(formatDate2(date, "YYYYMMDDHHmmss"));
 
   return now > due && state !== "resolve";
 };

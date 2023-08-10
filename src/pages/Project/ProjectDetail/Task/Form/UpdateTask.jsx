@@ -130,9 +130,12 @@ const UpdateTask = ({
               ]}
             >
               <DatePicker
-                placeholder={moment(task.end_at).format("YYYY-MM-DD")}
-                format="YYYY-MM-DD"
+                placeholder={moment(task.end_at).format("YYYY-MM-DD HH")}
+                format="YYYY-MM-DD HH"
                 style={{ width: "100%" }}
+                showTime={{
+                  format: "HH",
+                }}
               />
             </Form.Item>
             <Form.Item name="reporter_id" label="Reporter">
