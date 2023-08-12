@@ -23,6 +23,7 @@ import TaskList from "@/pages/Project/ProjectDetail/Task/TaskList";
 import TaskDetail from "@/pages/Project/ProjectDetail/Task/TaskDetail";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
 import UserProfile from "@/pages/User/UserProfile";
+import VerifyAccount from "@/pages/Auth/VerifyAccount/VerifyAccount";
 
 const PrivateRoute = () => {
   const { isLogin, isChecking } = useCheckLogin();
@@ -46,7 +47,8 @@ const MyRoutes = () => {
         <Route path={ConstantsPath.SIGN_IN} element={<SignIn />} />
         <Route path={ConstantsPath.SIGN_UP} element={<SignUp />} />
         <Route path={ConstantsPath.SUCCESS} element={<SuccessPage />} />
-        <Route path={ConstantsPath.VERIFY_EMAIL} element={<VerifyEmail />} />
+        <Route path={ConstantsPath.VERIFY_ACCOUNT} element={<VerifyEmail />} />
+        <Route path={ConstantsPath.VERIFY} element={<VerifyAccount />} />
         <Route
           path={ConstantsPath.FORGOT_PASSWORD}
           element={<ForgotPassword />}

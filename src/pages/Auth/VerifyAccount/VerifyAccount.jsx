@@ -11,18 +11,18 @@ import { useNavigate } from "react-router-dom";
 import api from "@/api/api";
 import { ConstantsPath } from "@/constants/ConstantsPath";
 
-const ForgotPassword = () => {
+const VerifyAccount = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleFinish = async (values) => {
     setIsLoading(true);
     try {
-      await api.post("auth/forgot", values);
+      await api.post("auth/verify-account", values);
       navigate(ConstantsPath.SUCCESS, {
         state: {
           title: "Send link to your email",
-          sub: "PLease check your email to get link reset your password",
+          sub: "PLease check your email to get link verify your account",
         },
       });
     } catch (e) {
@@ -35,10 +35,10 @@ const ForgotPassword = () => {
   return (
     <FormLayout>
       <FormContainer>
-        <FormHeading>Forgot Password</FormHeading>
+        <FormHeading>Verify Account</FormHeading>
         <Form
           layout="vertical"
-          name="forgot_password_form"
+          name="verify_account_form"
           style={{ marginTop: "20px" }}
           onFinish={handleFinish}
           onFocus={() => setError("")}
@@ -73,4 +73,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default VerifyAccount;

@@ -69,7 +69,6 @@ const SignIn = () => {
         <Form
           name="signin_form"
           onFinish={handleFinish}
-          onFocus={() => setErrorMsg("")}
           style={{ marginTop: "20px" }}
         >
           <Form.Item
@@ -89,7 +88,7 @@ const SignIn = () => {
               prefix={<MailOutlined />}
               type="email"
               placeholder="E-mail"
-              autoComplete="username"
+              onFocus={() => setErrorMsg("")}
             />
           </Form.Item>
           <Form.Item
@@ -101,18 +100,29 @@ const SignIn = () => {
               },
             ]}
           >
-            <Input
+            <Input.Password
               prefix={<LockOutlined />}
-              type="password"
               placeholder="Password"
-              autoComplete="current-password"
+              onFocus={() => setErrorMsg("")}
             />
           </Form.Item>
           <ForgotPassLink>
             <Link to={ConstantsPath.FORGOT_PASSWORD}>Forgot password?</Link>
           </ForgotPassLink>
           <ErrorMessage>
-            {errorMsg && <span style={{ color: "red" }}>{errorMsg}</span>}
+            {errorMsg && (
+              <>
+                {errorMsg === "ACCOUNT_NOT_VERIFY" ? (
+                  <span style={{ color: "red" }}>
+                    Your account is not verify. Click{" "}
+                    <Link to={ConstantsPath.VERIFY}>here</Link> to verify your
+                    account.
+                  </span>
+                ) : (
+                  <span style={{ color: "red" }}>{errorMsg}</span>
+                )}
+              </>
+            )}
           </ErrorMessage>
           <Form.Item>
             <SubmitBtn

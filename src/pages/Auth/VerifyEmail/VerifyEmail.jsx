@@ -25,7 +25,7 @@ const VerifyEmail = () => {
             {isAccountVerified ? (
               <Result
                 status="success"
-                title="Verify e-mail success!"
+                title="Verify account success!"
                 subTitle="You can sign in now."
                 extra={
                   <Link to={ConstantsPath.SIGN_IN}>
@@ -36,7 +36,7 @@ const VerifyEmail = () => {
             ) : (
               <Result
                 status="error"
-                title="Verify e-mail failed!"
+                title="Verify account failed!"
                 subTitle="This link is not valid. Please try on another link or sign up again."
                 extra={
                   <Link to={ConstantsPath.SIGN_UP}>

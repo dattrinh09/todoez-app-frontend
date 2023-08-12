@@ -5,7 +5,8 @@ export const ConstantsPath = {
   SIGN_IN: "/auth/sign-in",
   SIGN_UP: "/auth/sign-up",
   SUCCESS: "/auth/success",
-  VERIFY_EMAIL: "/auth/verify-email",
+  VERIFY_ACCOUNT: "/auth/verify-account",
+  VERIFY: "/auth/verify",
   FORGOT_PASSWORD: "/auth/forgot-password",
   RESET_PASSWORD: "/auth/reset-password",
   /* Private page */
