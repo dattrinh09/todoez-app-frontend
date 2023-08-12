@@ -40,7 +40,7 @@ export const formatDate3 = (date) => {
   if (day === now) return "Today";
   if (day > now) {
     const wn = parseInt(moment(Date.now()).format("W"));
-    const wd = parseInt(formatDate2(d, "W"));
+    const wd = parseInt(formatDate2(date, "W"));
 
     if (wd === wn) return "This week";
     if (wd - wn === 1) return "Next week";
@@ -81,9 +81,9 @@ export const formatRange = (start, end) => {
 };
 
 export const checkDateInRange = (date, start, end) => {
-  const d = parseInt(formatDate2(date, "YYYYMMDD"));
-  const st = parseInt(formatDate2(start, "YYYYMMDD"));
-  const en = parseInt(formatDate2(end, "YYYYMMDD"));
+  const d = parseInt(formatDate2(date, "YYYYMMDDHHmmss"));
+  const st = parseInt(formatDate2(start, "YYYYMMDDHHmmss"));
+  const en = parseInt(formatDate2(end, "YYYYMMDDHHmmss"));
 
   return d >= st && d <= en;
 };
