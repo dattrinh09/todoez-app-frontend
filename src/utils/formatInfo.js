@@ -36,9 +36,13 @@ export const formatDate3 = (date) => {
   const now = parseInt(moment(Date.now()).format("YYYYMMDDHHmmss"));
   const day = parseInt(formatDate2(date, "YYYYMMDDHHmmss"));
 
-  if (day < now) return "Overdue";
-  if (day === now) return "Today";
+  if (day <= now) return "Overdue";
   if (day > now) {
+    const dn = parseInt(moment(Date.now()).format("DD"));
+    const dd = parseInt(formatDate2(date, "DD"));
+
+    if (dn === dd) return "Today";
+
     const wn = parseInt(moment(Date.now()).format("W"));
     const wd = parseInt(formatDate2(date, "W"));
 
