@@ -88,7 +88,7 @@ const SignUp = () => {
                   }
                   return Promise.reject(
                     new Error(
-                      "Phone number must be at least 10 character and start at 0, 1, 3, 5, 7, 8 or 9."
+                      "Phone number must be at least 10 character and start at 0."
                     )
                   );
                 },
